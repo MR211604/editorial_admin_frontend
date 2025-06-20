@@ -1,12 +1,15 @@
-# React + Vite
+# Frontend Panel Administrativo  UDB
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositorio contiene el desarrollo del frontend de la pagina de la Editorial UDB 2025 haciendo uso de ReactJS, React-Router-DOM, Bootstrap 5.
 
-Currently, two official plugins are available:
+Para correrlo, unicamente debes de instalar las dependencias necesarias, y correr localmente haciendo uso de los siguientes comandos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Instalando dependencias (se recomienda usar ```pnpm``` aunque puedes usar cualquier manejador de paquetes):
+```
+pnpm install
+```
+Correr localmente en el puerto 5173
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+pnpm run dev
+```
