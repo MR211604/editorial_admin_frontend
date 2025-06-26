@@ -1,5 +1,49 @@
+import { useState } from "react";
+import Table from "../components/ui/table/Table";
+import { useGetPublishings } from "../hooks/useGetPublishings";
 
 export default function BooksPage() {
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  });
+
+  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2);
+
+  const booksColumns = [
+    {
+      header: 'ID',
+      accessorKey: 'id',
+    },
+    {
+      header: 'Titulo',
+      accessorKey: 'title',
+    },
+    {
+      header: 'Autor',
+      accessorKey: 'author',
+    },
+    {
+      header: 'ISBN',
+      accessorKey: 'isbn',
+    },
+    {
+      header: 'Año y Pag',
+      accessorKey: 'year_and_pages',      
+    },
+    {
+      header: 'Operaciones',
+      accessorKey: 'operations',
+      cell: ({ row }) => (
+        <div id={row.id} className="d-flex gap-2">
+          <button className="btn btn-primary btn-sm" onClick={() => console.log(row)}>Editar</button>
+          <button className="btn btn-danger btn-sm">Eliminar</button>
+        </div>
+      )
+    }
+  ]
+
   return (
     <>
       <h1>Libros</h1>
@@ -20,7 +64,7 @@ export default function BooksPage() {
           <div className="d-flex align-items-center pb-3">
             <span className="fs-5 fw-bold">Categoria</span>
             <select className="form-select form-select-md w-50 ms-2">
-              <option selected>Todas las categorias</option>
+              <option value={""}>Todas las categorias</option>
               <optgroup label="Coleccion institucional">
                 <option value="1">One</option>
                 <option value="2">Two</option>
@@ -30,95 +74,8 @@ export default function BooksPage() {
             <input type="text" className="form-control form-control-md mx-2" placeholder="Buscar libro..." />
             <button className="btn btn-primary ms-auto">Buscar</button>
           </div>
-
-          <table className="table table-hover table-bordered table-striped">
-            <thead>
-              <tr className='table-primary'>
-                <th scope="col">ID</th>
-                <th scope="col">Titulo</th>
-                <th scope="col">Autor</th>
-                <th scope="col">ISBN</th>
-                <th scope="col">Año y Pag</th>
-                <th scope="col">Operaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td className="d-flex justify-content-center">
-                  <button className="btn btn-sm btn-primary me-2">Editar</button>
-                  <button className="btn btn-sm btn-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td className="d-flex justify-content-center">
-                  <button className="btn btn-sm btn-primary me-2">Editar</button>
-                  <button className="btn btn-sm btn-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td className="d-flex justify-content-center">
-                  <button className="btn btn-sm btn-primary me-2">Editar</button>
-                  <button className="btn btn-sm btn-danger">Eliminar</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td className="d-flex justify-content-center">
-                  <button className="btn btn-sm btn-primary me-2">Editar</button>
-                  <button className="btn btn-sm btn-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr className='table-primary'>
-                <th scope="col">ID</th>
-                <th scope="col">Titulo</th>
-                <th scope="col">Autor</th>
-                <th scope="col">ISBN</th>
-                <th scope="col">Año y Pag</th>
-                <th scope="col">Operaciones</th>
-              </tr>
-              <td colSpan="1" className="p-0 border-0">
-                <div className="d-flex justify-content-left align-items-center h-100">
-                  <span className="text-muted">Mostrando 1-4 de 4 resultados</span>
-                </div>
-              </td>
-              <td colSpan="6" className="p-0 border-0">
-                <nav aria-label="Page navigation example" className="d-flex justify-content-end p-3">
-                  <ul className="pagination mb-0">
-                    <li className="page-item disabled">
-                      <a className="page-link">Previous</a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">Next</a>
-                    </li>
-                  </ul>
-                </nav>
-              </td>
-            </tfoot>
-          </table>
+          {/*  paginatedTableData, columns, publishing_type, pagination, setPagination, isTableDataLoading */}
+          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} />
         </div>
 
 
