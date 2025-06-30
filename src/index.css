@@ -1,3 +1,14 @@
-#table-pagination {
+/* altura completa para el layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+.page-item {
   cursor: pointer;
 }
