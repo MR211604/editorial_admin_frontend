@@ -13,7 +13,7 @@ export default function TablePagination({ table }) {
             onClick={() => pageIndex === 0 ? null : table.previousPage()}
             href="#"
           >
-            Previous
+            Anterior
           </a>
         </li>
 
@@ -85,7 +85,7 @@ export default function TablePagination({ table }) {
             className={`page-link ${pageIndex === pageCount - 1 ? 'disabled' : ''}`}
             onClick={() => pageIndex === pageCount - 1 ? null : table.nextPage()}
           >
-            Next
+            Siguiente
           </a>
         </li>
       </ul>

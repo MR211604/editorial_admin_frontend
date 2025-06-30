@@ -32,6 +32,7 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
   });
 
   return (
+
     <table className="table table-hover table-bordered table-striped">
       {isTableDataLoading ? (
         <thead>
@@ -40,14 +41,29 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
           </tr>
         </thead>
       ) : (
-        <>
+        <>          
           <TableBody table={table} />
-          <tfoot>
-            <tr>
-              <td colSpan="6" className="p-0 border-0">
-                <TablePagination table={table} />
-              </td>
-            </tr>
+          <TableHeader table={table} />
+          <tfoot className="table-footer">
+            <td colSpan="1" className='p-0'>
+              <div className="d-flex align-content-center align-items-center justify-content-start">
+                <span className="form-label">Mostrando</span>
+                <select
+                  name='pageSize'
+                  className="form-select w-auto mx-2"
+                  value={pagination.pageSize}
+                  onChange={(e) => setPagination((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+                <span className="form-label">Entradas</span>
+              </div>
+            </td>
+            <td colSpan="6" className="p-0">
+              <TablePagination table={table} />
+            </td>
           </tfoot>
         </>
       )}
