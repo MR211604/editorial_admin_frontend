@@ -74,7 +74,7 @@ export default function BooksPage() {
             <input type="text" className="form-control form-control-md mx-2" placeholder="Buscar libro..." />
             <button className="btn btn-primary ms-auto">Buscar</button>
           </div>
-          {/*  paginatedTableData, columns, publishing_type, pagination, setPagination, isTableDataLoading */}
+
           <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} />
         </div>
 
