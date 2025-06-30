@@ -15,23 +15,28 @@ export default function UserAccountsPage() {
   const usersColumns = [
     {
       header: 'ID',
-      accessorKey: 'id'
+      accessorKey: 'id',
+      enableSorting: true
     },
     {
       header: 'Nombre',
-      accessorKey: 'name'
+      accessorKey: 'name',
+      enableSorting: true
     },
     {
       header: 'Token/Usuario',
-      accessorKey: 'token'
+      accessorKey: 'token',
+      enableSorting: true
     },
     {
       header: 'Rol',
-      accessorKey: 'rol.name'
+      accessorKey: 'rol.name',
+      enableSorting: true
     },
     {
       header: 'Ultimo acceso',
-      accessorKey: 'last_login_date'
+      accessorKey: 'last_login_date',
+      enableSorting: true
     },
     // {
     //   Header: 'Operaciones',

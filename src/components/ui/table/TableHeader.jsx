@@ -1,7 +1,18 @@
 import { flexRender } from '@tanstack/react-table'
-import React from 'react'
+
+//TODO: Agregar sorting desde el server para que ordenemos todos los datos y no solo los visibles
+
+const getSortIcon = (sortDirection) => {
+  const iconMap = {
+    'desc': <i className="bi bi-sort-alpha-down-alt" />,
+    'asc': <i className="bi bi-sort-alpha-up" />,
+    false: <i className="bi bi-filter" />
+  }
+  return iconMap[sortDirection] || <i className="bi bi-filter" />
+}
 
 export default function TableHeader({ table }) {
+
   return (
     <thead>
       {
@@ -17,6 +28,16 @@ export default function TableHeader({ table }) {
                           header.column.columnDef.header,
                           header.getContext()
                         )
+                      }
+                      {
+                        header.column.getCanSort() ? (
+                          <div
+                            style={{ cursor: 'pointer' }}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {getSortIcon(header.column.getIsSorted())}
+                          </div>
+                        ) : null
                       }
                     </div>
                   )
