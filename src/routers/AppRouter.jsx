@@ -4,6 +4,8 @@ import Dashboard from '../pages/Dashboard';
 import AuthorsPage from '../pages/AuthorsPage';
 import BooksPage from '../pages/BooksPage';
 import LoginPage from '../pages/LoginPage';
+import UserAccountsPage from '../pages/UserAccountsPage';
+import RolPage from '../pages/RolPage';
 
 export default function AppRouter() {
 
@@ -16,6 +18,11 @@ export default function AppRouter() {
         <Route index element={<Dashboard />} />
         <Route path='authors' element={<AuthorsPage />} />
         <Route path='books' element={<BooksPage />} />
+        <Route path='magazines' element={<BooksPage />} />
+        <Route path='userAccounts' element={<UserAccountsPage />} />
+        <Route path='categories' element={<BooksPage />} />
+        <Route path='rol' element={<RolPage />} />
+        <Route path='privileges' element={<BooksPage />} />
       </Route>
     </Routes>
   )
