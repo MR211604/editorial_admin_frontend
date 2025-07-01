@@ -5,10 +5,10 @@ import { getPublishings } from "../api/books/publishingService";
 //Rows: cantidad de filas por pagina
 //Publishing_type: tipo de publicacion (1: libros, 2: revistas, 3: manuales)
 
-export const useGetPublishings = (pagination, rows, publishing_type) => {
+export const useGetPublishings = (pagination, rows, publishing_type, sorting) => {
   const { data: allPublishings, isLoading: isAllPublishingsLoading } = useQuery({
-    queryKey: ['publishings', pagination, rows, publishing_type],
-    queryFn: () => getPublishings(pagination, rows, publishing_type)
+    queryKey: ['publishings', pagination, rows, publishing_type, sorting],
+    queryFn: () => getPublishings(pagination, rows, publishing_type, sorting)
   });
 
   return {

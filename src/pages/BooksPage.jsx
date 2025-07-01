@@ -9,7 +9,9 @@ export default function BooksPage() {
     pageSize: 10
   });
 
-  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2);
+  const [sorting, setSorting] = useState([]);
+
+  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting);
 
   const booksColumns = [
     {
@@ -75,7 +77,7 @@ export default function BooksPage() {
             <button className="btn btn-primary ms-auto">Buscar</button>
           </div>
 
-          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} />
+          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} />
         </div>
 
 

@@ -13,6 +13,12 @@ const getSortIcon = (sortDirection) => {
 
 export default function TableHeader({ table }) {
 
+  const sortToggler = (header) => {
+    if (header.column.getCanSort()) {
+      header.column.toggleSorting(undefined, true);     
+    }
+  }
+
   return (
     <thead>
       {
@@ -33,7 +39,7 @@ export default function TableHeader({ table }) {
                         header.column.getCanSort() ? (
                           <div
                             style={{ cursor: 'pointer' }}
-                            onClick={header.column.getToggleSortingHandler()}
+                            onClick={() => sortToggler(header)}
                           >
                             {getSortIcon(header.column.getIsSorted())}
                           </div>

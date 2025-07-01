@@ -1,12 +1,10 @@
 import { useReactTable} from '@tanstack/react-table'
-import { getCoreRowModel, getPaginationRowModel, getSortedRowModel } from '@tanstack/react-table'
-import { useState } from 'react'
+import { getCoreRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import TablePagination from './TablePagination';
 import TableBody from './TableBody';
 import TableHeader from './TableHeader';
 
-export default function Table({ paginatedTableData, columns, pagination, setPagination, isTableDataLoading }) {
-  const [sorting, setSorting] = useState([])
+export default function Table({ paginatedTableData, columns, pagination, setPagination, isTableDataLoading, setSorting, sorting }) {
 
   const table = useReactTable({
     data: paginatedTableData?.data || [],
@@ -16,8 +14,8 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
     onSortingChange: setSorting,
     enableSorting: true,
     enableMultiSort: true,
-    getSortedRowModel: getSortedRowModel(),
-
+    manualSorting: true,
+    sortDescFirst: true,
     // Filter configuration
     // onColumnFiltersChange: setColumnFilters,
     // manualFiltering: true,
