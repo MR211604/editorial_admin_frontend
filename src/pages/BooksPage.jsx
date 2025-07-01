@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Table from "../components/ui/table/Table";
 import { useGetPublishings } from "../hooks/useGetPublishings";
+import { useDebounce } from "../hooks/utils/useDebounce";
 
 export default function BooksPage() {
 
@@ -10,8 +11,14 @@ export default function BooksPage() {
   });
 
   const [sorting, setSorting] = useState([]);
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 1000) // You can implement a debounce hook if needed
 
-  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting);
+  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting, debouncedSearch);
+
+  const searchHandler = (e) => {
+    setSearch(e.target.value);
+  }
 
   const booksColumns = [
     {
@@ -32,7 +39,7 @@ export default function BooksPage() {
     },
     {
       header: 'Año y Pag',
-      accessorKey: 'year_and_pages',      
+      accessorKey: 'year_and_pages',
     },
     {
       header: 'Operaciones',
@@ -73,11 +80,11 @@ export default function BooksPage() {
               </optgroup>
               <option value="3">Four</option>
             </select>
-            <input type="text" className="form-control form-control-md mx-2" placeholder="Buscar libro..." />
-            <button className="btn btn-primary ms-auto">Buscar</button>
+            <input type="text" className="form-control form-control-md mx-2" placeholder="Buscar libro..." value={search} onChange={searchHandler} />
+            {/* <button className="btn btn-primary ms-auto">Buscar</button> */}
           </div>
 
-          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} />
+          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} setSearch={setSearch} />
         </div>
 
 
