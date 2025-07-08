@@ -1,20 +1,40 @@
-import { Route, Routes } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute';
-import Dashboard from '../pages/Dashboard';
+import { useContext, useEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 import AuthorsPage from '../pages/AuthorsPage';
 import BooksPage from '../pages/BooksPage';
-import LoginPage from '../pages/LoginPage';
-import UserAccountsPage from '../pages/UserAccountsPage';
+import Dashboard from '../pages/Dashboard';
 import RolPage from '../pages/RolPage';
+import UserAccountsPage from '../pages/UserAccountsPage';
+import LoginPage from '../pages/auth/LoginPage';
+import ProtectedRoute from './ProtectedRoute';
 
 export default function AppRouter() {
 
-  const user = 'authenticated';
+  const { auth, verifyToken } = useContext(AuthContext)
+
+  useEffect(() => {
+    verifyToken()
+  }, [verifyToken])
+
+  if (auth.checking) {
+    return (
+      <div className="d-flex items-center justify-center min-h-screen">
+        <div></div>
+      </div>
+    )
+  }
+  console.log("Auth Context:", auth)
+  const isAuthenticated = auth.logged
 
   return (
     <Routes>
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/dashboard' element={<ProtectedRoute user={user} redirectPath='/login' />}>
+      <Route
+        path='/*'
+        element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />}
+      />
+      <Route path='/login' element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+      <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={isAuthenticated} redirectPath='/login' />}>
         <Route index element={<Dashboard />} />
         <Route path='authors' element={<AuthorsPage />} />
         <Route path='books' element={<BooksPage />} />
@@ -24,6 +44,8 @@ export default function AppRouter() {
         <Route path='rol' element={<RolPage />} />
         <Route path='privileges' element={<BooksPage />} />
       </Route>
+
+
     </Routes>
   )
 }
