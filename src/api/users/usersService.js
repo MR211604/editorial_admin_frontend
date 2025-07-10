@@ -13,3 +13,11 @@ export const getUsers = async (page = 1, limit = 10) => {
     throw error;
   }
 }
+
+export const createUser = async (userData) => {
+  return userData;
+}
+
+export const updateUser = async (userData) => {
+  return userData;
+}

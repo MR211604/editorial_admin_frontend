@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Table from "../components/ui/table/Table";
-import { useGetPublishings } from "../hooks/useGetPublishings";
+import { usePublishings } from "../hooks/usePublishings";
 import { useDebounce } from "../hooks/utils/useDebounce";
 
 export default function BooksPage() {
@@ -14,7 +14,7 @@ export default function BooksPage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 1000) // You can implement a debounce hook if needed
 
-  const { allPublishings, isAllPublishingsLoading } = useGetPublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting, debouncedSearch);
+  const { allPublishings, isAllPublishingsLoading } = usePublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting, debouncedSearch);
 
   const searchHandler = (e) => {
     setSearch(e.target.value);

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useGetUsers } from '../hooks/useGetUsers'
+import { useUsers } from '../hooks/useUsers'
 import Table from '../components/ui/table/Table'
 
 export default function UserAccountsPage() {
@@ -10,7 +10,7 @@ export default function UserAccountsPage() {
     pageSize: 10
   })
 
-  const { allUsers, isAllUsersLoading } = useGetUsers(pagination.pageIndex + 1, pagination.pageSize)
+  const { allUsers, isAllUsersLoading } = useUsers(pagination.pageIndex + 1, pagination.pageSize)
 
   const usersColumns = [
     {

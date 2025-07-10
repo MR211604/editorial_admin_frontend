@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGetUserRoles } from "../hooks/useGetUserRoles";
+import { useUserRoles } from "../hooks/useUserRoles";
 import Table from "../components/ui/table/Table";
 
 export default function RolPage() {
@@ -9,7 +9,7 @@ export default function RolPage() {
     pageSize: 10
   });
 
-  const { allRoles, isAllRolesLoading } = useGetUserRoles(pagination.pageIndex + 1, pagination.pageSize);
+  const { allRoles, isAllRolesLoading } = useUserRoles(pagination.pageIndex + 1, pagination.pageSize);
 
   const rolesColumns = [
     {
