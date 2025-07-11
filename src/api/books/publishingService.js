@@ -1,7 +1,9 @@
-const backend_url = import.meta.env.VITE_EDITORIAL_LOCAL_API_URL;
+import { fetchWithToken } from "../../helpers/fetch";
 
 export const getPublishings = async (page = 1, limit = 10, $publishing_type = null, sorting, search) => {
   try {
+
+    console.log('sorting', sorting)
 
     //backend_url/api/publishings?limit=10&page=1&publishing_type=2&sort=title&direction=desc
     let sortParam = '';
@@ -11,12 +13,12 @@ export const getPublishings = async (page = 1, limit = 10, $publishing_type = nu
       sortOrder = sorting.map(sort => sort.desc ? 'desc' : 'asc').join(',');
     }
 
-    const response = await fetch(`${backend_url}/api/publishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search}`);
+    const response = await fetchWithToken(`api/publishings/getPublishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search}`);
+    console.log('Response from getPublishings:', response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);
     }
-    const data = await response.json();
-    return data;
+    return response;
   } catch (error) {
     console.error('Error fetching publishings:', error);
     throw error;

@@ -8,6 +8,7 @@ import RolPage from '../pages/RolPage';
 import UserAccountsPage from '../pages/UserAccountsPage';
 import LoginPage from '../pages/auth/LoginPage';
 import ProtectedRoute from './ProtectedRoute';
+import CreateAuthor from '../pages/authors/CreateAuthor';
 
 export default function AppRouter() {
 
@@ -36,7 +37,10 @@ export default function AppRouter() {
       <Route path='/login' element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
       <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={isAuthenticated} redirectPath='/login' />}>
         <Route index element={<Dashboard />} />
-        <Route path='authors' element={<AuthorsPage />} />
+        <Route path='authors' element={<AuthorsPage />}>
+          <Route path='create' element={<CreateAuthor />} />
+          <Route path='edit/:id' element={<div>Editar Autor</div>} />
+        </Route>
         <Route path='books' element={<BooksPage />} />
         <Route path='magazines' element={<BooksPage />} />
         <Route path='userAccounts' element={<UserAccountsPage />} />

@@ -1,0 +1,38 @@
+import { fetchWithToken } from "../../helpers/fetch";
+
+export const getAuthors = async (page = 1, limit = 10, sorting, search) => {
+  try {
+
+    console.log('sorting', sorting)
+
+    let sortParam = '';
+    let sortOrder = '';
+    if (Array.isArray(sorting) && sorting.length > 0) {
+      sortParam = sorting.map(sort => sort.id).join(',');
+      sortOrder = sorting.map(sort => sort.desc ? 'desc' : 'asc').join(',');
+    }
+
+    const response = await fetchWithToken(`api/authors/getAuthors?limit=${limit}&page=${page}&sort=${sortParam}&direction=${sortOrder}&search=${search}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error}`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+}
+
+//?authorData: { name: string, lastname: string }
+export const createAuthor = async (authorData) => {
+  try {
+    const response = await fetchWithToken('api/authors/createAuthor', authorData, 'POST');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error}`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error creating author:', error);
+    throw error;
+  }
+}

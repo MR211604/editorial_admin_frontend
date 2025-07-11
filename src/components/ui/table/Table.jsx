@@ -1,4 +1,4 @@
-import { useReactTable} from '@tanstack/react-table'
+import { useReactTable } from '@tanstack/react-table'
 import { getCoreRowModel, getPaginationRowModel } from '@tanstack/react-table'
 import TablePagination from './TablePagination';
 import TableBody from './TableBody';
@@ -34,7 +34,7 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
 
   return (
 
-    <table className="table table-hover table-bordered table-striped">
+    <table className="table table-responsive table-hover table-bordered table-striped">
       {isTableDataLoading ? (
         <thead>
           <tr>
@@ -42,29 +42,31 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
           </tr>
         </thead>
       ) : (
-        <>          
+        <>
           <TableBody table={table} />
           <TableHeader table={table} />
           <tfoot className="table-footer">
-            <td colSpan="1" className='p-0'>
-              <div className="d-flex align-content-center align-items-center justify-content-start">
-                <span className="form-label">Mostrando</span>
-                <select
-                  name='pageSize'
-                  className="form-select w-auto mx-2"
-                  value={pagination.pageSize}
-                  onChange={(e) => setPagination((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-                <span className="form-label">Entradas</span>
-              </div>
-            </td>
-            <td colSpan="6" className="p-0">
-              <TablePagination table={table} />
-            </td>
+            <tr>
+              <td colSpan="6" className='pt-3 pb-3'>
+                <div className="d-flex align-items-center justify-content-between">
+                  <div className='d-flex align-items-center'>
+                    <span className="form-label me-2">Mostrando</span>
+                    <select
+                      name='pageSize'
+                      className="form-select w-auto me-2"
+                      value={pagination.pageSize}
+                      onChange={(e) => setPagination((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                    <span className="form-label">Entradas</span>
+                  </div>
+                  <TablePagination table={table} />
+                </div>
+              </td>
+            </tr>
           </tfoot>
         </>
       )}

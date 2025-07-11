@@ -5,8 +5,7 @@ export default function TablePagination({ table }) {
   const pageCount = table.getPageCount();
 
   return (
-    <nav aria-label="Page navigation example" id="table-pagination" className="d-flex justify-content-end p-3">
-      <ul className="pagination">
+      <ul className="pagination mb-0">
         <li className="page-item">
           <a
             className={`page-link ${pageIndex === 0 ? 'disabled' : ''}`}
@@ -89,7 +88,6 @@ export default function TablePagination({ table }) {
           </a>
         </li>
       </ul>
-    </nav>
   );
 }
 

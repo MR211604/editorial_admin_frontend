@@ -29,7 +29,7 @@ export default function Navbar() {
                 <i className="d-sm-none d-lg-inline bi bi-person me-1"></i>{name}
               </a>
               <ul className="dropdown-menu dropdown-menu-lg-end text-left">
-                <li><a className="dropdown-item"> <i className="bi bi-gear"></i> Configuración</a></li>
+                <li><button className="dropdown-item"> <i className="bi bi-gear"></i> Configuración</button></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item" onClick={handleLogout}> <i className="bi bi-box-arrow-right"></i> Cerrar sesión</button></li>
               </ul>
