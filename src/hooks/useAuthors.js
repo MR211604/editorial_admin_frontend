@@ -23,7 +23,7 @@ export const useAuthors = (pagination, rows, sorting, search) => {
     allAuthors,
     isAllAuthorsLoading,
     // Mutations
-    createAuthorMutation: createAuthorMutation.mutate,
+    createAuthor: createAuthorMutation.mutate,
 
     //States
     isCreating: createAuthorMutation.isPending,

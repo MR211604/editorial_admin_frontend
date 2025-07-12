@@ -8,7 +8,7 @@ import RolPage from '../pages/RolPage';
 import UserAccountsPage from '../pages/UserAccountsPage';
 import LoginPage from '../pages/auth/LoginPage';
 import ProtectedRoute from './ProtectedRoute';
-import CreateAuthor from '../pages/authors/CreateAuthor';
+import CreateAuthor from '../components/authors/CreateAuthor';
 
 export default function AppRouter() {
 
