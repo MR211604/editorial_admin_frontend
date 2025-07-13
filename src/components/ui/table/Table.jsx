@@ -47,7 +47,7 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
           <TableHeader table={table} />
           <tfoot className="table-footer">
             <tr>
-              <td colSpan="6" className='pt-3 pb-3'>
+              <td colSpan={columns.length} className='pt-3 pb-3'>
                 <div className="d-flex align-items-center justify-content-between">
                   <div className='d-flex align-items-center'>
                     <span className="form-label me-2">Mostrando</span>

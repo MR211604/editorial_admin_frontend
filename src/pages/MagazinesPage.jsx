@@ -54,6 +54,8 @@ export default function MagazinesPage() {
             onSearchChange={searchHandler}
             createButtonText="Agregar nueva revista"
             searchPlaceholder="Buscar revista..."
+            hasSelect={true}
+            optionSelectedValue='Todas las revistas'
           />
 
           <Table

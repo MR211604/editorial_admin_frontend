@@ -29,6 +29,7 @@ export const AuthorColumns = (onEdit, onDelete) => [
           Eliminar
         </button>
       </div>
-    )
+    ),
+    enableSorting: false,
   }
 ];
