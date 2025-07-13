@@ -1,5 +1,6 @@
 import { AuthorColumns } from "../components/authors/AuthorColumns";
 import CreateAuthor from "../components/authors/CreateAuthor";
+import UpdateAuthor from "../components/authors/UpdateAuthor";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { useAuthorsPage } from "./hooks/useAuthorsPage";
@@ -18,7 +19,7 @@ export default function AuthorsPage() {
     // Datos
     allAuthors,
     isAllAuthorsLoading,
-    // selectedAuthor,
+    selectedAuthor,
 
     // Modal handlers
     isModalOpen,
@@ -32,12 +33,12 @@ export default function AuthorsPage() {
 
     // Callbacks de éxito
     onCreateSuccess,
-    // onEditSuccess,
+    onEditSuccess,
     // onDeleteSuccess
   } = useAuthorsPage();
 
   const authorColumns = AuthorColumns(handleEditAuthor, handleDeleteAuthor);
-
+  
   return (
     <div>
       <h1>Autores</h1>
@@ -75,6 +76,13 @@ export default function AuthorsPage() {
         isOpen={isModalOpen('create')}
         onClose={() => closeModal('create')}
         onSuccess={onCreateSuccess}
+      />
+
+      <UpdateAuthor
+        isOpen={isModalOpen('update')}
+        onClose={() => closeModal('update')}
+        onSuccess={onEditSuccess}
+        author={selectedAuthor}
       />
 
     </div>

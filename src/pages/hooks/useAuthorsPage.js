@@ -34,7 +34,7 @@ export const useAuthorsPage = () => {
   // Funciones para manejar modales
   const openModal = (modalType, author = null) => {
     setModals(prev => ({ ...prev, [modalType]: true }));
-    if (author) setSelectedAuthor(author);
+    if (author) setSelectedAuthor(author); //! Guarda el autor seleccionado en selectedAuthor
   };
 
   const closeModal = (modalType) => {
@@ -46,7 +46,9 @@ export const useAuthorsPage = () => {
 
   // Handlers específicos
   const handleCreateAuthor = () => openModal('create');
-  const handleEditAuthor = (author) => openModal('edit', author);
+  const handleEditAuthor = (author) => {
+    openModal('update', author);    
+  };
   const handleDeleteAuthor = (author) => openModal('delete', author);
 
   // Callbacks para las acciones

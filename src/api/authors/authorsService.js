@@ -36,3 +36,16 @@ export const createAuthor = async (authorData) => {
     throw error;
   }
 }
+//?authorData: { id: string, name: string, lastname: string }
+export const updateAuthor = async (authorData) => {
+  try {
+    const response = await fetchWithToken('api/authors/updateAuthor', authorData, 'POST');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error}`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error updating author:', error);
+    throw error;
+  }
+}

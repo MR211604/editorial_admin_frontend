@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAuthor, getAuthors } from "../api/authors/authorsService";
+import { createAuthor, getAuthors, updateAuthor } from "../api/authors/authorsService";
 
 export const useAuthors = (pagination, rows, sorting, search) => {
 
@@ -19,16 +19,27 @@ export const useAuthors = (pagination, rows, sorting, search) => {
     }
   })
 
+  const updateAuthorMutation = useMutation({
+    mutationFn: (authorData) => updateAuthor(authorData), 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['authors']
+      })
+    }
+  })
+
   return {
     allAuthors,
     isAllAuthorsLoading,
     // Mutations
     createAuthor: createAuthorMutation.mutate,
-
+    updateAuthor: updateAuthorMutation.mutate,
     //States
     isCreating: createAuthorMutation.isPending,
+    isUpdating: updateAuthorMutation.isPending,
 
     // Errors
     createError: createAuthorMutation.error,
+    updateError: updateAuthorMutation.error,
   };
 }

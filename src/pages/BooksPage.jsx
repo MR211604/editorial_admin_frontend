@@ -49,7 +49,8 @@ export default function BooksPage() {
           <button className="btn btn-primary btn-sm" onClick={() => console.log(row)}>Editar</button>
           <button className="btn btn-danger btn-sm">Eliminar</button>
         </div>
-      )
+      ),
+      enableSorting: false,
     }
   ]
 

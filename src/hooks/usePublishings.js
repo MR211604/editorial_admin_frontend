@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPublishings } from "../api/books/publishingService";
+import { getPublishings } from "../api/publishings/publishingService";
 
 //Pagination: la pagina actual
 //Rows: cantidad de filas por pagina
