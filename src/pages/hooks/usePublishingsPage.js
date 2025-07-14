@@ -10,6 +10,7 @@ export const usePublishingsPage = (publishing_type) => {
 
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   // Estados para diferentes modales dentro de la misma pagina
   const [modals, setModals] = useState({
@@ -20,17 +21,22 @@ export const usePublishingsPage = (publishing_type) => {
 
   const [selectedMagazine, setSelectedMagazine] = useState(null);
 
-  const debouncedSearch = useDebounce(search, 1000);
+  const debouncedSearch = useDebounce(search, 500);
 
   const { allPublishings, isAllPublishingsLoading } = usePublishings(pagination.pageIndex + 1,
     pagination.pageSize,
     publishing_type,
     sorting,
-    debouncedSearch
+    debouncedSearch,
+    selectedCategory
   )
 
   const searchHandler = (e) => {
     setSearch(e.target.value);
+  }
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
   }
 
   // Funciones para manejar modales
@@ -77,6 +83,7 @@ export const usePublishingsPage = (publishing_type) => {
     setSorting,
     search,
     setSearch,
+    selectedCategory,
 
     // Datos
     allPublishings,
@@ -92,6 +99,7 @@ export const usePublishingsPage = (publishing_type) => {
     handleCreatePublishing,
     handleEditPublishing,
     handleDeletePublishing,
+    handleCategoryChange,
 
     // Callbacks de éxito
     onCreateSuccess,

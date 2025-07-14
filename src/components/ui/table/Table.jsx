@@ -4,7 +4,7 @@ import TablePagination from './TablePagination';
 import TableBody from './TableBody';
 import TableHeader from './TableHeader';
 
-export default function Table({ paginatedTableData, columns, pagination, setPagination, isTableDataLoading, setSorting, sorting, setSearch }) {
+export default function Table({ paginatedTableData, columns, pagination, setPagination, isTableDataLoading, setSorting, sorting, setSearch, categoryFilter }) {
 
   const table = useReactTable({
     data: paginatedTableData?.data || [],
@@ -28,7 +28,8 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
     manualPagination: true,
     state: {
       pagination,
-      sorting,
+      sorting,      
+      columnFilters: categoryFilter ? [{ id: 'category_id', value: categoryFilter }] : [],
     },
   });
 

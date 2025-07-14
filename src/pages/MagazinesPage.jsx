@@ -2,6 +2,8 @@ import { usePublishingsPage } from './hooks/usePublishingsPage';
 import { MagazineColumns } from '../components/magazines/MagazineColumns';
 import Table from '../components/ui/table/Table';
 import ToolBar from '../components/ui/ToolBar';
+import SelectCategories from '../components/magazines/SelectCategories';
+import { useState } from 'react';
 
 export default function MagazinesPage() {
 
@@ -13,6 +15,7 @@ export default function MagazinesPage() {
     setSorting,
     search,
     setSearch,
+    selectedCategory,
 
     // Datos
     allPublishings,
@@ -28,6 +31,7 @@ export default function MagazinesPage() {
     handleCreateMagazine,
     handleEditMagazine,
     handleDeleteMagazine,
+    handleCategoryChange,
 
     // Callbacks de éxito
     onCreateSuccess,
@@ -56,7 +60,9 @@ export default function MagazinesPage() {
             searchPlaceholder="Buscar revista..."
             hasSelect={true}
             optionSelectedValue='Todas las revistas'
-          />
+          >
+            <SelectCategories onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
+          </ToolBar>
 
           <Table
             paginatedTableData={allPublishings}

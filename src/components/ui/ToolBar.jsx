@@ -6,9 +6,7 @@ export default function ToolBar({
   searchPlaceholder = "Buscar...",
   hasSelect = false,
   selectName = "Categoria",
-  optionSelectedValue = "Todas",
-  selectOptions = []
-  // selectOptions = []
+  children
 }) {
   return (
     <div className="">
@@ -20,14 +18,7 @@ export default function ToolBar({
             </div>
             <div className="d-flex align-items-center pb-3">
               <span className="fs-5 fw-bold">{selectName}</span>
-              <select className="form-select form-select-md w-50 ms-2">
-                <option value={""}>{optionSelectedValue}</option>
-                <optgroup label="Coleccion institucional">
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                </optgroup>
-                <option value="3">Four</option>
-              </select>
+              {children}
               <input
                 type="text"
                 className="form-control form-control-md mx-2"
