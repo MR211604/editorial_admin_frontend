@@ -28,7 +28,7 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
     manualPagination: true,
     state: {
       pagination,
-      sorting,      
+      sorting: sorting ? sorting : [],
       columnFilters: categoryFilter ? [{ id: 'category_id', value: categoryFilter }] : [],
     },
   });

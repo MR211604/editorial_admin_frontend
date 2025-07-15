@@ -11,7 +11,7 @@ export const getPublishings = async (page = 1, limit = 10, $publishing_type = nu
       sortOrder = sorting.map(sort => sort.desc ? 'desc' : 'asc').join(',');
     }
 
-    const response = await fetchWithToken(`api/publishings/getPublishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search}&category=${categoryFilter}`);
+    const response = await fetchWithToken(`api/publishings/getPublishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search | ""}&category=${categoryFilter | ""}`);
     console.log('Response from getPublishings:', response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);

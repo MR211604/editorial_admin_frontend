@@ -9,6 +9,7 @@ import UserAccountsPage from '../pages/UserAccountsPage';
 import LoginPage from '../pages/auth/LoginPage';
 import ProtectedRoute from './ProtectedRoute';
 import MagazinesPage from '../pages/MagazinesPage';
+import UserPrivileges from '../pages/UserPrivileges';
 
 export default function AppRouter() {
 
@@ -43,7 +44,7 @@ export default function AppRouter() {
         <Route path='userAccounts' element={<UserAccountsPage />} />
         <Route path='categories' element={<BooksPage />} />
         <Route path='rol' element={<RolPage />} />
-        <Route path='privileges' element={<BooksPage />} />
+        <Route path='privileges' element={<UserPrivileges />} />
       </Route>
 
 
