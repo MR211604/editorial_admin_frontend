@@ -12,7 +12,7 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  const { allAuthors, isAllAuthorsPending } = useAuthors(1, 20, null, debouncedSearch);
+  const { allAuthors } = useAuthors(1, 20, null, debouncedSearch);
   const [selectedAuthorsData, setSelectedAuthorsData] = useState([]);
   const { isOpen, openModal, closeModal } = useModal();
   const availableAuthors = useMemo(() => {
@@ -77,10 +77,9 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
           </tfoot>
         </table>
       </div>
-      
+
       <Modal
         isOpen={isOpen}
-        isLoading={isAllAuthorsPending}
         onClose={handleCancelAddAuthors}
         title="Agregar autores"
         onSave={handleAddAuthors}

@@ -4,7 +4,6 @@ import { useState } from 'react';
 export default function Modal({
   isOpen,
   onClose,
-  isLoading,
   title = "Modal",
   children,
   onSave,
@@ -19,11 +18,8 @@ export default function Modal({
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  console.log(isLoading, 'isLoading en el Modal')
-
   useEffect(() => {    
     if (isOpen) {
-      console.log('renderizadooooooo')      
       setIsVisible(true);
       setTimeout(() => setIsAnimating(true), 10);
       document.body.style.overflow = 'hidden';
