@@ -1,9 +1,7 @@
 import { fetchWithToken } from "../../helpers/fetch";
 
-export const getAuthors = async (page = 1, limit = 10, sorting, search) => {
+export const getAuthors = async (page = 1, limit = 10, sorting = null, search = '') => {
   try {
-
-    console.log('sorting', sorting)
 
     let sortParam = '';
     let sortOrder = '';
@@ -12,7 +10,7 @@ export const getAuthors = async (page = 1, limit = 10, sorting, search) => {
       sortOrder = sorting.map(sort => sort.desc ? 'desc' : 'asc').join(',');
     }
 
-    const response = await fetchWithToken(`api/authors/getAuthors?limit=${limit}&page=${page}&sort=${sortParam}&direction=${sortOrder}&search=${search}`);
+    const response = await fetchWithToken(`api/authors/getAuthors?limit=${limit}&page=${page}&sort=${sortParam}&direction=${sortOrder}&search=${search || ''}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);
     }

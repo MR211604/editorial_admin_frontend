@@ -1,5 +1,6 @@
 
-export default function SelectCategories({ onCategoryChange, selectedCategory }) {
+export default function SelectCategories({ onCategoryChange, selectedCategory, ...props }) {
+
 
   const selectOptions = [
     { id: 1, value: 1, label: "Científica" },
@@ -7,10 +8,9 @@ export default function SelectCategories({ onCategoryChange, selectedCategory })
     { id: 3, value: 3, label: "Diá-logos" },
     { id: 4, value: 4, label: "Teoría y Praxis" }
   ]
-
   return (
-    <select className="form-select form-select-md w-50 ms-2" defaultValue={selectedCategory} onChange={onCategoryChange}>
-      <option value={""}>Todas las categorias</option>
+    <select {...props} value={selectedCategory} onChange={onCategoryChange}>
+      <option value="">Todas las categorias</option>
       <optgroup label="Revistas">
         {
           selectOptions.map(option => (

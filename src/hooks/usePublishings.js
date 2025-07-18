@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPublishings } from "../api/publishings/publishingService";
+import { getPublishingById, getPublishings } from "../api/publishings/publishingService";
 
 //Pagination: la pagina actual
 //Rows: cantidad de filas por pagina
@@ -14,5 +14,17 @@ export const usePublishings = (pagination, rows, publishing_type, sorting, searc
   return {
     allPublishings,
     isAllPublishingsLoading
+  };
+}
+
+export const usePublishing = (id) => {
+  const { data: publishing, isLoading: isPublishingLoading } = useQuery({
+    queryKey: ['publishing', id],
+    queryFn: () => getPublishingById(id)
+  });
+
+  return {
+    publishing,
+    isPublishingLoading
   };
 }

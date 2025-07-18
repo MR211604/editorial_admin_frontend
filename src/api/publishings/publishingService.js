@@ -12,13 +12,25 @@ export const getPublishings = async (page = 1, limit = 10, $publishing_type = nu
     }
 
     const response = await fetchWithToken(`api/publishings/getPublishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search | ""}&category=${categoryFilter | ""}`);
-    console.log('Response from getPublishings:', response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);
     }
     return response;
   } catch (error) {
     console.error('Error fetching publishings:', error);
+    throw error;
+  }
+}
+
+export const getPublishingById = async (id) => {
+  try {
+    const response = await fetchWithToken(`api/publishings/getPublishing/${id}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error}`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching publishing by ID:', error);
     throw error;
   }
 }

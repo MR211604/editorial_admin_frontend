@@ -18,7 +18,7 @@ export default function Modal({
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (isOpen) {
       setIsVisible(true);
       setTimeout(() => setIsAnimating(true), 10);
@@ -30,7 +30,6 @@ export default function Modal({
         document.body.style.overflow = 'unset';
       }, 300); // 300ms coincide con la duración de la animación de Bootstrap
     }
-
     return () => {
       document.body.style.overflow = 'unset';
     };

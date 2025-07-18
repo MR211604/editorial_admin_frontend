@@ -1,9 +1,9 @@
-import { usePublishingsPage } from './hooks/usePublishingsPage';
+import { useNavigate } from 'react-router-dom';
 import { MagazineColumns } from '../components/magazines/MagazineColumns';
+import SelectCategories from '../components/magazines/SelectCategories';
 import Table from '../components/ui/table/Table';
 import ToolBar from '../components/ui/ToolBar';
-import SelectCategories from '../components/magazines/SelectCategories';
-import { useState } from 'react';
+import { usePublishingsPage } from './hooks/usePublishingsPage';
 
 export default function MagazinesPage() {
 
@@ -20,26 +20,31 @@ export default function MagazinesPage() {
     // Datos
     allPublishings,
     isAllPublishingsLoading,
-    selectedPublishing,
+    // selectedPublishing,
 
     // Modal handlers
-    isModalOpen,
-    closeModal,
+    // isModalOpen,
+    // closeModal,
 
     // Handlers específicos
     searchHandler,
-    handleCreateMagazine,
-    handleEditMagazine,
-    handleDeleteMagazine,
+    handleCreatePublishing,
+    // handleDeletePublishing,
     handleCategoryChange,
 
     // Callbacks de éxito
-    onCreateSuccess,
-    onEditSuccess,
+    // onCreateSuccess,
+    // onEditSuccess,
     // onDeleteSuccess
   } = usePublishingsPage(2);
 
-  const magazineColumns = MagazineColumns(handleEditMagazine, handleDeleteMagazine);
+  const navigate = useNavigate();
+
+  const handleUpdateMagazine = (row) => navigate(`/dashboard/magazines/edit/${row.original.id}`);
+
+  const handleDeleteMagazine = (row) => console.log('Eliminar revista:', row.original.id);
+
+  const magazineColumns = MagazineColumns(handleUpdateMagazine, handleDeleteMagazine);
 
   return (
     <div>
@@ -53,7 +58,7 @@ export default function MagazinesPage() {
         </div>
         <div className='card-body'>
           <ToolBar
-            onCreateClick={handleCreateMagazine}
+            onCreateClick={handleCreatePublishing}
             search={search}
             onSearchChange={searchHandler}
             createButtonText="Agregar nueva revista"
@@ -61,7 +66,7 @@ export default function MagazinesPage() {
             hasSelect={true}
             optionSelectedValue='Todas las revistas'
           >
-            <SelectCategories onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
+            <SelectCategories className="form-select form-select-md w-50 ms-2" onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
           </ToolBar>
 
           <Table
@@ -84,12 +89,12 @@ export default function MagazinesPage() {
             onSuccess={onCreateSuccess}
           /> */}
 
-      {/* <UpdateAuthor
-            isOpen={isModalOpen('update')}
-            onClose={() => closeModal('update')}
-            onSuccess={onEditSuccess}
-            author={selectedMagazine}
-          /> */}
+      {/* <
+        isOpen={isModalOpen('update')}
+        onClose={() => closeModal('update')}
+        onSuccess={onEditSuccess}
+        author={selectedPublishing}
+      /> */}
 
     </div>
   )

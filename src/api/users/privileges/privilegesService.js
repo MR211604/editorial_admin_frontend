@@ -13,5 +13,18 @@ export const getPrivileges = async (page = 1, limit = 10) => {
     console.error('Error fetching privileges:', error);
     throw error;
   }
+}
 
+export const getPrivilegeById = async (id) => {
+  try {
+    const response = await fetchWithToken(`api/privileges/getPrivilegeById/${id}`);
+    if(!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error}`);
+    }
+    return response;
+
+  } catch (error) {
+    console.error('Error fetching privilege by ID:', error);
+    throw error;
+  }
 }

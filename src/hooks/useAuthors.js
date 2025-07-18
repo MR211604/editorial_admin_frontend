@@ -7,7 +7,7 @@ export const useAuthors = (pagination, rows, sorting, search) => {
 
   const { data: allAuthors, isLoading: isAllAuthorsLoading } = useQuery({
     queryKey: ['authors', pagination, rows, sorting, search],
-    queryFn: () => getAuthors(pagination, rows, sorting, search)
+    queryFn: () => getAuthors(pagination, rows, sorting, search)    
   });
 
   const createAuthorMutation = useMutation({
@@ -20,7 +20,7 @@ export const useAuthors = (pagination, rows, sorting, search) => {
   })
 
   const updateAuthorMutation = useMutation({
-    mutationFn: (authorData) => updateAuthor(authorData), 
+    mutationFn: (authorData) => updateAuthor(authorData),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['authors']

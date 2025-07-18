@@ -19,7 +19,7 @@ export const usePublishingsPage = (publishing_type) => {
     delete: false
   })
 
-  const [selectedMagazine, setSelectedMagazine] = useState(null);
+  const [selectedPublishing, setSelectedPublishing] = useState(null);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -40,14 +40,14 @@ export const usePublishingsPage = (publishing_type) => {
   }
 
   // Funciones para manejar modales
-  const openModal = (modalType, magazine = null) => {
+  const openModal = (modalType, publishing = null) => {
     setModals(prev => ({ ...prev, [modalType]: true }));
-    if (magazine) setSelectedMagazine(magazine);
+    if (publishing) setSelectedPublishing(publishing);
   };
 
   const closeModal = (modalType) => {
     setModals(prev => ({ ...prev, [modalType]: false }));
-    setSelectedMagazine(null);
+    setSelectedPublishing(null);
   };
 
   const isModalOpen = (modalType) => modals[modalType];
@@ -88,7 +88,7 @@ export const usePublishingsPage = (publishing_type) => {
     // Datos
     allPublishings,
     isAllPublishingsLoading,
-    selectedMagazine,
+    selectedPublishing,
 
     // Modales
     isModalOpen,
