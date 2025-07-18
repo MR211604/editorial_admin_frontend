@@ -5,7 +5,7 @@ export const useAuthors = (pagination, rows, sorting, search) => {
 
   const queryClient = useQueryClient();
 
-  const { data: allAuthors, isLoading: isAllAuthorsLoading } = useQuery({
+  const { data: allAuthors, isLoading: isAllAuthorsLoading, isPending: isAllAuthorsPending } = useQuery({
     queryKey: ['authors', pagination, rows, sorting, search],
     queryFn: () => getAuthors(pagination, rows, sorting, search)    
   });
@@ -31,6 +31,7 @@ export const useAuthors = (pagination, rows, sorting, search) => {
   return {
     allAuthors,
     isAllAuthorsLoading,
+    isAllAuthorsPending,
     // Mutations
     createAuthor: createAuthorMutation.mutate,
     updateAuthor: updateAuthorMutation.mutate,

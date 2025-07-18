@@ -12,10 +12,9 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  const { allAuthors, isAllAuthorsLoading } = useAuthors(1, 20, null, debouncedSearch);
+  const { allAuthors, isAllAuthorsPending } = useAuthors(1, 20, null, debouncedSearch);
   const [selectedAuthorsData, setSelectedAuthorsData] = useState([]);
   const { isOpen, openModal, closeModal } = useModal();
-
   const availableAuthors = useMemo(() => {
     return allAuthors?.data?.filter(author =>
       !publishing?.data.authors.some(existing => existing.id === author.id)
@@ -44,10 +43,6 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
     setSearch("");
     closeModal();
   }, [closeModal]);
-
-  if (isAllAuthorsLoading) {
-    return <div className="text-center">Cargando autores...</div>;
-  }
 
   return (
     <>
@@ -82,9 +77,10 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
           </tfoot>
         </table>
       </div>
-
+      
       <Modal
         isOpen={isOpen}
+        isLoading={isAllAuthorsPending}
         onClose={handleCancelAddAuthors}
         title="Agregar autores"
         onSave={handleAddAuthors}
@@ -102,6 +98,7 @@ const MagazineAuthorsTable = memo(({ publishing }) => {
         // setShowAuthorSelect={setShowAuthorSelect}
         />
       </Modal>
+
     </>
   )
 });
