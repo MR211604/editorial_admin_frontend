@@ -10,7 +10,7 @@ export const MagazineColumns = (onEdit, onDelete) => [
   {
     header: 'Autor',
     accessorKey: 'authors',
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const authors = row.original.authors;
       if (!authors || !Array.isArray(authors)) return '-';
       return authors.map(author => author.name || author).join(', ');
@@ -22,7 +22,12 @@ export const MagazineColumns = (onEdit, onDelete) => [
   },
   {
     header: 'Año',
-    accessorKey: 'time',
+    accessorKey: 'publish_date',
+    cell: ({ row }) => {
+      if (!row.original.publish_date) return '-';
+      const date = new Date(row.original.publish_date);
+      return date.getFullYear();
+    }
   },
   {
     header: 'Páginas',
@@ -33,14 +38,14 @@ export const MagazineColumns = (onEdit, onDelete) => [
     accessorKey: 'operations',
     cell: ({ row }) => (
       <div className="d-flex gap-2">
-        <button 
-          className="btn btn-primary btn-sm" 
+        <button
+          className="btn btn-primary btn-sm"
           onClick={() => onEdit(row)}
         >
           Editar
         </button>
-        <button 
-          className="btn btn-danger btn-sm" 
+        <button
+          className="btn btn-danger btn-sm"
           onClick={() => onDelete(row)}
         >
           Eliminar

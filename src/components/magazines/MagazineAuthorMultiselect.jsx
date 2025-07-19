@@ -55,12 +55,12 @@ const MagazineAuthorMultiselect = memo(({ allAuthors,
                 placeholder="Buscar autores por nombre..." value={search} onChange={handleSearchChange} />
             </div>
 
-            <select multiple className='form-select' value={[]} onChange={handleSelectChange}>
+            <select multiple className='form-select' style={{marginBottom: '0.5rem', height: '15rem'}} value={[]} onChange={handleSelectChange}>
               {availableAuthors.map(author => (
                 <option key={author.id} value={author.id} onClick={() => handleDoubleClick(author.id)}
                   style={{
                     backgroundColor: isAuthorSelected(author.id) ? '#007bff' : 'transparent',
-                    color: isAuthorSelected(author.id) ? 'white' : 'inherit'
+                    color: isAuthorSelected(author.id) ? 'white' : 'inherit',                    
                   }}>
                   {author.name} {author.lastname}
                 </option>

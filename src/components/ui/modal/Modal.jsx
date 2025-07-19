@@ -71,12 +71,12 @@ export default function Modal({
         // aria-hidden={!isOpen}
         style={{
           display: 'block',
-          zIndex: 1050
+          zIndex: 1050,          
         }}
         onClick={handleBackdropClick}
       >
-        <div className={`modal-dialog ${size}`}>
-          <div className="modal-content">
+        <div className={`modal-dialog modal-dialog-centered ${size}`}>
+          <div className="modal-content" >
             <div className="modal-header">
               <h1 className="modal-title fs-5" id={`${modalId}Label`}>
                 {title}

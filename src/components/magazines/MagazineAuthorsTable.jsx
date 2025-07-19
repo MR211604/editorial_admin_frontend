@@ -30,15 +30,20 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
 
   useImperativeHandle(ref, () => ({
     getAuthorsData: () => {
+
+      const temporalAuthors = getAuthorsByStatus('temporal');
+      const removedAuthors = authorsState.filter(author => author.action === 'remove');
+      
       return {
         originalAuthors: publishing?.data.authors || [],
         visibleAuthors: displayedAuthors,
+        hasChanges: temporalAuthors.length > 0 || removedAuthors.length > 0
       };
     },
     clearTemporalAuthors: () => {
       setAuthorsState(prev => prev.filter(author => author.status === 'original'));
     }
-  }), [setAuthorsState, displayedAuthors, publishing?.data.authors]);
+  }), [setAuthorsState, displayedAuthors, publishing?.data.authors, getAuthorsByStatus, authorsState]);
 
 
   // Obtener contadores para los botones
@@ -118,6 +123,7 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
         saveButtonText={"Agregar autor(es)"}
         closeButtonText="Cancelar"
         showFooter={true}
+        size='modal-xl'
       >
         <MagazineAuthorMultiselect
           allAuthors={allAuthors}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 export default function TablePagination({ table }) {
 
@@ -7,38 +8,40 @@ export default function TablePagination({ table }) {
   return (
       <ul className="pagination mb-0">
         <li className="page-item">
-          <a
+          <Link
             className={`page-link ${pageIndex === 0 ? 'disabled' : ''}`}
-            onClick={() => pageIndex === 0 ? null : table.previousPage()}
-            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              pageIndex === 0 ? null : table.previousPage()
+            }}            
           >
             Anterior
-          </a>
+          </Link>
         </li>
 
         {pageIndex >= 3 && (
           <>
             <li className="page-item">
-              <a className="page-link" onClick={() => table.setPageIndex(0)}>1</a>
+              <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(0); }}>1</Link>
             </li>
             {pageIndex > 3 && (
-              <a className="page-item" onClick={() => table.setPageIndex(pageIndex - 3)}><span className="page-link">...</span></a>
+              <Link className="page-item" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex - 3); }}><span className="page-link">...</span></Link>
             )}
           </>
         )}
 
         {pageIndex - 2 >= 0 && (
           <li className="page-item">
-            <a className="page-link" onClick={() => table.setPageIndex(pageIndex - 2)}>
+            <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex - 2); }}>
               {pageIndex - 1}
-            </a>
+            </Link>
           </li>
         )}
         {pageIndex - 1 >= 0 && (
           <li className="page-item">
-            <a className="page-link" onClick={() => table.setPageIndex(pageIndex - 1)}>
+            <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex - 1); }}>
               {pageIndex}
-            </a>
+            </Link>
           </li>
         )}
 
@@ -53,39 +56,39 @@ export default function TablePagination({ table }) {
 
         {pageIndex + 1 < pageCount && (
           <li className="page-item">
-            <a className="page-link" onClick={() => table.setPageIndex(pageIndex + 1)}>
+            <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex + 1); }}>
               {pageIndex + 2}
-            </a>
+            </Link>
           </li>
         )}
         {pageIndex + 2 < pageCount && (
           <li className="page-item">
-            <a className="page-link" onClick={() => table.setPageIndex(pageIndex + 2)}>
+            <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex + 2); }}>
               {pageIndex + 3}
-            </a>
+            </Link>
           </li>
         )}
 
         {pageIndex + 3 < pageCount && (
           <>
             {pageIndex + 3 < pageCount - 1 && (
-              <li className="page-item"><span className="page-link" onClick={() => table.setPageIndex(pageIndex + 3)}>...</span></li>
+              <li className="page-item"><span className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageIndex + 3); }}>...</span></li>
             )}
             <li className="page-item">
-              <a className="page-link" onClick={() => table.setPageIndex(pageCount - 1)}>
+              <Link className="page-link" onClick={(e) => { e.preventDefault(); table.setPageIndex(pageCount - 1); }}>
                 {pageCount}
-              </a>
+              </Link>
             </li>
           </>
         )}
 
         <li className="page-item">
-          <a
+          <Link
             className={`page-link ${pageIndex === pageCount - 1 ? 'disabled' : ''}`}
-            onClick={() => pageIndex === pageCount - 1 ? null : table.nextPage()}
+            onClick={(e) => { e.preventDefault(); pageIndex === pageCount - 1 ? null : table.nextPage(); }}
           >
             Siguiente
-          </a>
+          </Link>
         </li>
       </ul>
   );

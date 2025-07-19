@@ -1,14 +1,13 @@
+import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import MagazineAuthorsTable from './MagazineAuthorsTable'
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import MagazineAuthorsTable from './MagazineAuthorsTable';
 import SelectCategories from './SelectCategories';
 
 export default function MagazineUpdateForm({ publishing }) {
 
   const authorsTableRef = useRef();
 
-  const { register, handleSubmit, control, reset, formState: { errors, isDirty } } = useForm({
+  const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
     defaultValues: {
       title: publishing?.data.title || '',
       pages: publishing?.data.details?.pages || '',
@@ -16,7 +15,6 @@ export default function MagazineUpdateForm({ publishing }) {
       publish_code: publishing?.data.publish_code || '',
       age: publishing?.data.age || '',
       age_number: publishing?.data.age_number || '',
-      time: publishing?.data.time || '',
       volume: publishing?.data.volume || '',
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       category_id: publishing?.data.category_id || undefined,
@@ -30,7 +28,6 @@ export default function MagazineUpdateForm({ publishing }) {
         pages: publishing.data.details?.pages || '',
         publish_date: publishing.data.publish_date || '',
         publish_code: publishing.data.publish_code || '',
-        time: publishing.data.time || '',
         volume: publishing.data.volume || '',
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || undefined,
@@ -42,16 +39,11 @@ export default function MagazineUpdateForm({ publishing }) {
     const authorsData = authorsTableRef.current?.getAuthorsData();
     const updateData = {
       ...data,
-      author_ids: authorsData?.visibleAuthors.map(author => author.id) || [],
-      authors: authorsData?.allAuthors || [],
+      publishing_type: publishing?.data.publishing_type,
+      authors: authorsData?.visibleAuthors.map(author => author.id) || [],
     }
     console.log('Datos actualizados:', updateData);
   }
-
-  const hasAnyChanges = () => {
-    const authorsData = authorsTableRef.current?.getAuthorsData();
-    return isDirty || authorsData?.hasChanges;
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -202,7 +194,6 @@ export default function MagazineUpdateForm({ publishing }) {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={!hasAnyChanges()}
           >
             Actualizar Revista
           </button>
