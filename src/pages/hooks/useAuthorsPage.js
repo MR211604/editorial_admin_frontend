@@ -54,17 +54,14 @@ export const useAuthorsPage = () => {
   // Callbacks para las acciones
   const onCreateSuccess = () => {
     closeModal('create');
-    // Refrescar datos si es necesario
   };
 
   const onEditSuccess = () => {
     closeModal('edit');
-    // Refrescar datos si es necesario
   };
 
   const onDeleteSuccess = () => {
     closeModal('delete');
-    // Refrescar datos si es necesario
   };
 
   return {

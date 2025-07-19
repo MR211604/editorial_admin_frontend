@@ -1,14 +1,7 @@
-import { Fragment, useState } from 'react';
-import { useAuthors } from '../../hooks/useAuthors';
-import { useDebounce } from '../../hooks/utils/useDebounce';
-import MagazineAuthorMultiselect from './MagazineAuthorMultiselect';
+import { forwardRef, memo, useImperativeHandle } from 'react';
+import { useMagazineAuthorsTable } from '../../pages/hooks/useMagazineAuthorsTable';
 import Modal from '../ui/modal/Modal';
-import { useModal } from '../../hooks/utils/useModal';
-import { useMemo } from 'react';
-import { useCallback } from 'react';
-import { memo } from 'react';
-import { forwardRef } from 'react';
-import { useImperativeHandle } from 'react';
+import MagazineAuthorMultiselect from './MagazineAuthorMultiselect';
 
 /**
  * @param {Object} publishing - La publicacion en la que se esta trabajando.
@@ -16,67 +9,41 @@ import { useImperativeHandle } from 'react';
 
 const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
 
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
-
-  // Autores que apareceren en el multiselect
-  const { allAuthors } = useAuthors(1, 20, null, debouncedSearch);
-
-  const [selectedAuthorsData, setSelectedAuthorsData] = useState([]);
-  const [temporalAuthorsData, setTemporalAuthorsData] = useState([]);
-  const { isOpen, openModal, closeModal } = useModal();
-
-  const displayedAuthors = useMemo(() => {
-    return [...(publishing?.data.authors || []), ...temporalAuthorsData];
-  }, [publishing?.data.authors, temporalAuthorsData]);
-
-  const availableAuthors = useMemo(() => {
-    // Se filtran los autores que ya estan en la publicacion
-    return allAuthors?.data.filter(author =>
-      !displayedAuthors.some(existing => existing.id === author.id)
-    ) || [];
-  }, [allAuthors?.data, displayedAuthors]);
+  const {
+    search,
+    setSearch,
+    allAuthors,
+    selectedAuthorsData,
+    setSelectedAuthorsData,
+    displayedAuthors,
+    availableAuthors,
+    authorsState,
+    setAuthorsState,
+    isOpen,
+    handleAddAuthors,
+    handleOpenAddAuthor,
+    handleCancelAddAuthors,
+    handleRemoveAuthor,
+    handleDiscardTemporalChanges,
+    getAuthorsByStatus
+  } = useMagazineAuthorsTable(publishing);
 
   useImperativeHandle(ref, () => ({
-    getAuthorsData: () => ({
-      originalAuthors: publishing?.data.authors || [],
-      temporalAuthors: temporalAuthorsData,
-      allAuthors: displayedAuthors,
-      hasChanges: temporalAuthorsData.length > 0
-    }),
-    clearTemporalAuthors: () => setTemporalAuthorsData([]),
-  }), [publishing?.data.authors, temporalAuthorsData, displayedAuthors]);
+    getAuthorsData: () => {
+      return {
+        originalAuthors: publishing?.data.authors || [],
+        visibleAuthors: displayedAuthors,
+      };
+    },
+    clearTemporalAuthors: () => {
+      setAuthorsState(prev => prev.filter(author => author.status === 'original'));
+    }
+  }), [setAuthorsState, displayedAuthors, publishing?.data.authors]);
 
-  const handleOpenAddAuthor = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openModal();
-  }, [openModal]);
 
-  const handleAddAuthors = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTemporalAuthorsData(prev => [...prev, ...selectedAuthorsData]);
-    setSelectedAuthorsData([]);
-    setSearch("");
-    closeModal();
-  }, [selectedAuthorsData, closeModal]);
-
-  const handleCancelAddAuthors = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedAuthorsData([]);
-    setSearch("");
-    closeModal();
-  }, [closeModal]);
-
-  const handleRemoveTemporalAuthor = useCallback((authorId) => {
-    setTemporalAuthorsData(prev => prev.filter(author => author.id !== +authorId));
-  }, []);
-
-  const handleRemoveAuthor = useCallback((authorId) => {
-    console.log('Autor eliminado', authorId);
-  }, []);
+  // Obtener contadores para los botones
+  const temporalCount = getAuthorsByStatus('temporal').length;
+  const removedCount = authorsState.filter(a => a.action === 'remove').length;
 
   return (
     <>
@@ -91,52 +58,52 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
             </tr>
           </thead>
           <tbody>
-            {displayedAuthors.map((author, index) => {
-              const isOriginal = publishing?.data.authors.some(orig => orig.id === author.id);
-              const isTemporary = temporalAuthorsData.some(temp => temp.id === author.id);
-
-              return (
-                <tr key={author.id} className="align-middle">
-                  <td>{index + 1}</td>
-                  <td>{author.name} {author.lastname}</td>
-                  <td>
-                    {isOriginal && (
-                      <span className="badge bg-primary">Guardado</span>
-                    )}
-                    {isTemporary && (
-                      <span className="badge bg-warning">Pendiente</span>
-                    )}
-                  </td>
-                  <td>
-                    {isTemporary ? (
-                      <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => handleRemoveTemporalAuthor(author.id)}
-                      >
-                        Quitar
-                      </button>
-                    ) : (
-                      <button className="btn btn-danger btn-sm" onClick={() => handleRemoveAuthor(author.id)}>
-                        Quitar
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+            {displayedAuthors.map((author, index) => (
+              <tr key={author.id} className="align-middle">
+                <td>{index + 1}</td>
+                <td>{author.name} {author.lastname}</td>
+                <td>
+                  {author.status === 'original' && (
+                    <span className="badge bg-primary">Guardado</span>
+                  )}
+                  {author.status === 'temporal' && (
+                    <span className="badge bg-warning">Pendiente</span>
+                  )}
+                </td>
+                <td>
+                  {author.status === 'temporal' ? (
+                    <button
+                      className="btn btn-warning btn-sm"
+                      onClick={() => handleRemoveAuthor(author.id)}
+                    >
+                      Quitar
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleRemoveAuthor(author.id)}
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
           <tfoot>
             <tr>
               <td className="text-end" colSpan="4">
-                {temporalAuthorsData.length > 0 && (
+                {(temporalCount > 0 || removedCount > 0) && (
                   <button
                     className="btn btn-outline-secondary btn-sm me-2"
-                    onClick={() => setTemporalAuthorsData([])}
+                    onClick={handleDiscardTemporalChanges}
                   >
-                    Descartar autores seleccionados ({temporalAuthorsData.length})
+                    Descartar cambios
                   </button>
                 )}
-                <button type='button' className="btn btn-success btn-sm" onClick={handleOpenAddAuthor}>Agregar Autor</button>
+                <button type='button' className="btn btn-success btn-sm" onClick={handleOpenAddAuthor}>
+                  Agregar Autor
+                </button>
               </td>
             </tr>
           </tfoot>
@@ -159,7 +126,6 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
           setSearch={setSearch}
           setSelectedAuthorsData={setSelectedAuthorsData}
           selectedAuthorsData={selectedAuthorsData}
-        // setShowAuthorSelect={setShowAuthorSelect}
         />
       </Modal>
 
