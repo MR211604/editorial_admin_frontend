@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import SelectCategories from "../../components/magazines/SelectCategories";
 import { usePublishing } from "../../hooks/usePublishings";
 import MagazineAuthorsTable from "../../components/magazines/MagazineAuthorsTable";
+import { useRef } from "react";
 
 
 export default function MagazineUpdate() {
@@ -54,6 +55,7 @@ export default function MagazineUpdate() {
   // },
 
   const { id } = useParams();
+  const authorsTableRef = useRef();
 
   const { publishing, isPublishingLoading } = usePublishing(id)
 
@@ -88,14 +90,24 @@ export default function MagazineUpdate() {
   }, [publishing, reset])
 
   const onSubmit = (data) => {
-    console.log('Datos del formulario:', data);
+    const authorsData = authorsTableRef.current?.getAuthorsData();
+    const updateData = {
+      ...data,
+      authors: authorsData?.allAuthors || [],
+    }
+
+    // author_ids: authorsData?.allAuthors.map(author => author.id) || []
+    console.log('Datos actualizados:', updateData);
   }
+
+  const hasAnyChanges = () => {
+    const authorsData = authorsTableRef.current?.getAuthorsData();
+    return isDirty || authorsData?.hasChanges;
+  };
 
   if (isPublishingLoading) {
     return <div>Cargando revista...</div>;
   }
-
-
 
   return (
     <>
@@ -284,7 +296,7 @@ export default function MagazineUpdate() {
 
                   {/* Tabla de autores */}
                   <div className="row mt-4">
-                    <MagazineAuthorsTable publishing={publishing} />
+                    <MagazineAuthorsTable publishing={publishing} ref={authorsTableRef} />
                   </div>
                 </div>
                 <div className="row mt-4">
@@ -293,7 +305,7 @@ export default function MagazineUpdate() {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={!isDirty}
+                      disabled={!hasAnyChanges()}
                     >
                       Actualizar Revista
                     </button>
