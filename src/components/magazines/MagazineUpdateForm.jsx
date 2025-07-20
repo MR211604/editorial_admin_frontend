@@ -1,11 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useUpdatePublishing } from '../../hooks/usePublishings';
 import MagazineAuthorsTable from './MagazineAuthorsTable';
 import SelectCategories from './SelectCategories';
+import { useNavigate } from 'react-router-dom';
 
 export default function MagazineUpdateForm({ publishing }) {
 
   const authorsTableRef = useRef();
+
+  const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
+
+  const navigate = useNavigate();
 
   const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
     defaultValues: {
@@ -39,10 +45,21 @@ export default function MagazineUpdateForm({ publishing }) {
     const authorsData = authorsTableRef.current?.getAuthorsData();
     const updateData = {
       ...data,
+      id: publishing?.data.id,
       publishing_type: publishing?.data.publishing_type,
       authors: authorsData?.visibleAuthors.map(author => author.id) || [],
     }
     console.log('Datos actualizados:', updateData);
+
+    updatePublishing(updateData, {
+      onSuccess: () => {
+        console.log('Revista actualizada exitosamente');
+        navigate(0);
+      },
+      onError: (error) => {
+        console.log('Error actualizando revista:', error);
+      }
+    })
   }
 
   return (
@@ -92,7 +109,7 @@ export default function MagazineUpdateForm({ publishing }) {
           </div>
           <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
             <label className="form-label">ISBN</label>
-            <input className={`form-control ${errors.publish_code ? 'is-invalid' : ''}`} type="text" {...register('publish_code', {
+            <input className={`form-control ${errors.publish_code ? 'is-invalid' : ''}`} type="number" {...register('publish_code', {
               required: 'El ISBN es obligatorio'
             })} />
             {errors.publish_code && (

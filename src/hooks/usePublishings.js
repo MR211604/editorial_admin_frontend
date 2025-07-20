@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
-import { getPublishingById, getPublishings } from "../api/publishings/publishingService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getPublishingById, getPublishings, updatePublishing } from "../api/publishings/publishingService";
 
 //Pagination: la pagina actual
 //Rows: cantidad de filas por pagina
 //Publishing_type: tipo de publicacion (1: libros, 2: revistas, 3: manuales)
-
 export const usePublishings = (pagination, rows, publishing_type, sorting, search, categoryFilter) => {
+
   const { data: allPublishings, isLoading: isAllPublishingsLoading } = useQuery({
     queryKey: ['publishings', pagination, rows, publishing_type, sorting, search, categoryFilter],
     queryFn: () => getPublishings(pagination, rows, publishing_type, sorting, search, categoryFilter)
@@ -13,7 +13,28 @@ export const usePublishings = (pagination, rows, publishing_type, sorting, searc
 
   return {
     allPublishings,
-    isAllPublishingsLoading
+    isAllPublishingsLoading,
+  };
+}
+
+export const useUpdatePublishing = (id) => {
+  const queryClient = useQueryClient();
+
+  const updatePublishingMutation = useMutation({
+    queryKey: ['publishing', id],
+    mutationFn: (publishingData) => updatePublishing(id, publishingData),
+    onSuccess: () => {
+      // Invalidate the query to refetch the updated data
+      queryClient.invalidateQueries({
+        queryKey: ['publishing', id]
+      });
+    }
+  });
+
+  return {
+    updatePublishing: updatePublishingMutation.mutate,
+    isUpdating: updatePublishingMutation.isPending,
+    updateError: updatePublishingMutation.error,
   };
 }
 

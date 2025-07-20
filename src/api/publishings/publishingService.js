@@ -1,6 +1,6 @@
 import { fetchWithToken } from "../../helpers/fetch";
 
-export const getPublishings = async (page = 1, limit = 10, $publishing_type = null, sorting, search, categoryFilter) => {
+export const getPublishings = async (page = 1, limit = 10, $publishing_type = null, sorting, search = "", categoryFilter) => {
   try {
     console.log('search que viene', search)
     //backend_url/api/publishings?limit=10&page=1&publishing_type=2&sort=title&direction=desc
@@ -35,11 +35,13 @@ export const getPublishingById = async (id) => {
   }
 }
 
-export const updatePublishings = async (id, data) => {
+export const updatePublishing = async (id, data) => {
   try {
+    console.log('Updating publishing with ID:', id);
+    console.log('Updateing publishing with data:', data);
     const response = await fetchWithToken(`api/publishings/updatePublishing/${id}`, data, 'POST');
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error}`);
+      throw new Error(`HTTP error! status: ${response.message} - ${JSON.stringify(response.errors)}`);
     }
     return response;
   } catch (error) {

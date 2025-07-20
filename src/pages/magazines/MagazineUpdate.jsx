@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { usePublishing } from "../../hooks/usePublishings";
 import MagazineUpdateForm from "../../components/magazines/MagazineUpdateForm";
+import { usePublishing } from "../../hooks/usePublishings";
 
 export default function MagazineUpdate() {
 

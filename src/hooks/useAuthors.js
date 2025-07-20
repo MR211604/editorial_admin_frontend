@@ -7,7 +7,8 @@ export const useAuthors = (pagination, rows, sorting, search) => {
 
   const { data: allAuthors, isLoading: isAllAuthorsLoading, isPending: isAllAuthorsPending } = useQuery({
     queryKey: ['authors', pagination, rows, sorting, search],
-    queryFn: () => getAuthors(pagination, rows, sorting, search)    
+    queryFn: () => getAuthors(pagination, rows, sorting, search),
+    keepPreviousData: true,
   });
 
   const createAuthorMutation = useMutation({
