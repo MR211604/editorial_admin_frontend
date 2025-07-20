@@ -1,7 +1,7 @@
-import React from 'react'
 import { useContext } from 'react'
-import { AuthContext } from '../context/authContext'
+import { Navbar as BootstrapNavbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/authContext'
 
 export default function Navbar() {
 
@@ -15,29 +15,21 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary border-bottom border-1 ">
-      <div className="container-fluid">
-        <img src="https://www.udb.edu.sv/editorial/admin/images/logomini.png" alt="logo editorial udb" className='navbar-brand object-fit-contain' />
-        <a className="navbar-brand" href="/dashboard"> Editorial Universidad Don Bosco - Panel de Control</a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mb-lg-0 ms-auto">
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i className="d-sm-none d-lg-inline bi bi-person me-1"></i>{name}
-              </a>
-              <ul className="dropdown-menu dropdown-menu-lg-end text-left">
-                <li><button className="dropdown-item"> <i className="bi bi-gear"></i> Configuración</button></li>
-                <li><hr className="dropdown-divider" /></li>
-                <li><button className="dropdown-item" onClick={handleLogout}> <i className="bi bi-box-arrow-right"></i> Cerrar sesión</button></li>
-              </ul>
-            </li>
-          </ul>
-
-        </div>
-      </div>
-    </nav>
+    <BootstrapNavbar expand="lg" className="bg-body-tertiary">
+      <Container fluid>
+        <BootstrapNavbar.Brand href="/dashboard">
+          <img src="https://www.udb.edu.sv/editorial/admin/images/logomini.png" alt="logo editorial udb" className='navbar-brand object-fit-contain' />
+          Editorial Universidad Don Bosco - Panel de Control
+        </BootstrapNavbar.Brand>
+        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
+        <BootstrapNavbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <NavDropdown align={'end'} title={<><i className="bi bi-person"></i> {name}</>} id="basic-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1" onClick={handleLogout}> <i className="bi bi-box-arrow-right"></i> Cerrar sesión</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </BootstrapNavbar.Collapse>
+      </Container>
+    </BootstrapNavbar>
   )
 }

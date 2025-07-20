@@ -5,12 +5,10 @@ export const useModal = () => {
 
   const openModal = () => {
     setIsOpen(true);
-    console.log('Modal abierto');
   };
   const closeModal = () => {
     setIsOpen(false);
-    console.log('Modal cerrado');
-  }
+  };
 
   return {
     isOpen,

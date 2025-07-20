@@ -11,6 +11,7 @@ import ProtectedRoute from './ProtectedRoute';
 import MagazinesPage from '../pages/MagazinesPage';
 import UserPrivileges from '../pages/UserPrivileges';
 import MagazineUpdate from '../pages/magazines/MagazineUpdate';
+import MagazineArticles from '../pages/magazines/MagazineArticles';
 
 export default function AppRouter() {
 
@@ -44,6 +45,7 @@ export default function AppRouter() {
         <Route path='magazines'>
           <Route index element={<MagazinesPage />} />
           <Route path='edit/:id' element={<MagazineUpdate />} />
+          <Route path='articles/:id' element={<MagazineArticles />} />
         </Route>
         <Route path='userAccounts' element={<UserAccountsPage />} />
         <Route path='categories' element={<BooksPage />} />

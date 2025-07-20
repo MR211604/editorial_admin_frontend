@@ -44,7 +44,9 @@ export default function MagazinesPage() {
 
   const handleDeleteMagazine = (row) => console.log('Eliminar revista:', row.original.id);
 
-  const magazineColumns = MagazineColumns(handleUpdateMagazine, handleDeleteMagazine);
+  const handleEditArticles = (row) => navigate(`/dashboard/magazines/articles/${row.original.id}`);
+
+  const magazineColumns = MagazineColumns(handleUpdateMagazine, handleDeleteMagazine, handleEditArticles);
 
   return (
     <div>

@@ -1,4 +1,6 @@
-export const MagazineColumns = (onEdit, onDelete) => [
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
+export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
   {
     header: 'ID',
     accessorKey: 'id',
@@ -8,7 +10,7 @@ export const MagazineColumns = (onEdit, onDelete) => [
     accessorKey: 'title',
   },
   {
-    header: 'Autor',
+    header: 'Autor(es)',
     accessorKey: 'authors',
     cell: ({ row }) => {
       const authors = row.original.authors;
@@ -37,19 +39,42 @@ export const MagazineColumns = (onEdit, onDelete) => [
     header: 'Operaciones',
     accessorKey: 'operations',
     cell: ({ row }) => (
-      <div className="d-flex gap-2">
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onEdit(row)}
+      <div className="d-flex gap-2 align-items-center justify-content-center">
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id={`tooltip-edit-${row.original.id}`}>Editar</Tooltip>}
         >
-          Editar
-        </button>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => onDelete(row)}
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => onEdit(row)}
+          >
+            <i className="bi bi-pencil-square"></i>
+          </button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id={`tooltip-delete-${row.original.id}`}>Eliminar</Tooltip>}
         >
-          Eliminar
-        </button>
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => onDelete(row)}
+          >
+            <i className="bi bi-trash"></i>
+          </button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip id={`tooltip-articles-${row.original.id}`}>Editar artículos</Tooltip>}
+        >
+          <button
+            className="btn btn-success btn-sm"
+            onClick={() => onEditArticles(row)}
+          >
+            <i className="bi bi-file-earmark-ruled"></i>
+          </button>
+        </OverlayTrigger>
       </div>
     ),
     enableSorting: false,

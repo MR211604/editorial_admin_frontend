@@ -1,10 +1,7 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuthors } from "../../hooks/useAuthors";
 import { useDebounce } from "../../hooks/utils/useDebounce";
 import { useModal } from "../../hooks/utils/useModal";
-import { useEffect } from "react";
-import { useCallback } from "react";
-import { useMemo } from "react";
 
 export const useMagazineAuthorsTable = (publishing) => {
 
@@ -65,9 +62,7 @@ export const useMagazineAuthorsTable = (publishing) => {
     closeModal();
   }, [selectedAuthorsData, closeModal]);
 
-  const handleCancelAddAuthors = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleCancelAddAuthors = useCallback(() => {    
     setSelectedAuthorsData([]);
     setSearch("");
     closeModal();
