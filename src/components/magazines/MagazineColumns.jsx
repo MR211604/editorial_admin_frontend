@@ -33,7 +33,7 @@ export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
   },
   {
     header: 'Páginas',
-    accessorKey: 'details.pages',
+    accessorKey: 'pages',
   },
   {
     header: 'Operaciones',
@@ -42,6 +42,7 @@ export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
       <div className="d-flex gap-2 align-items-center justify-content-center">
         <OverlayTrigger
           placement="top"
+          key={`tooltip-edit-key-${row.original.id}`}
           overlay={<Tooltip id={`tooltip-edit-${row.original.id}`}>Editar</Tooltip>}
         >
           <button
@@ -54,6 +55,7 @@ export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
 
         <OverlayTrigger
           placement="top"
+          key={`tooltip-delete-key-${row.original.id}`}
           overlay={<Tooltip id={`tooltip-delete-${row.original.id}`}>Eliminar</Tooltip>}
         >
           <button
@@ -66,6 +68,7 @@ export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
 
         <OverlayTrigger
           placement="top"
+          key={`tooltip-articles-key-${row.original.id}`}
           overlay={<Tooltip id={`tooltip-articles-${row.original.id}`}>Editar artículos</Tooltip>}
         >
           <button

@@ -17,29 +17,27 @@ const MagazineAuthorMultiselect = memo(({ allAuthors,
 
   const handleSearchChange = (e) => {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
     setSearch(e.target.value);
   };
 
-  const handleDoubleClick = (authorId) => {
-    // tener acceso a todos los autores
+  const addAuthor = (authorId) => {
     const allAuthorsData = allAuthors?.data || [];
     let author = allAuthorsData.find(a => a.id === +authorId);
+    setSelectedAuthorsData(prev => [...prev, author]);
+  };
 
-    if (!author) {
-      author = selectedAuthorsData.find(a => a.id === +authorId);
-    }
+  const removeAuthor = (authorId) => {
+    setSelectedAuthorsData(prev => prev.filter(a => a.id !== +authorId));
+  };
 
-    //Verificar si el autor ya está seleccionado
-    // Si está seleccionado, lo eliminamos, si no, lo agregamos
+  const handleClick = (authorId) => {
     const isSelected = selectedAuthorsData.some(a => a.id === +authorId);
 
     if (isSelected) {
-      setSelectedAuthorsData(prev => prev.filter(a => a.id !== +authorId));
+      removeAuthor(authorId);
     } else {
-      if (author) {
-        setSelectedAuthorsData(prev => [...prev, author]);
-      }
+      addAuthor(authorId);
     }
   };
 
@@ -55,12 +53,12 @@ const MagazineAuthorMultiselect = memo(({ allAuthors,
                 placeholder="Buscar autores por nombre..." value={search} onChange={handleSearchChange} />
             </div>
 
-            <select multiple className='form-select' style={{marginBottom: '0.5rem', height: '15rem'}} value={[]} onChange={handleSelectChange}>
+            <select multiple className='form-select' style={{ marginBottom: '0.5rem', height: '15rem' }} value={[]} onChange={handleSelectChange}>
               {availableAuthors.map(author => (
-                <option key={author.id} value={author.id} onClick={() => handleDoubleClick(author.id)}
+                <option key={author.id} value={author.id} onClick={() => handleClick(author.id)}
                   style={{
                     backgroundColor: isAuthorSelected(author.id) ? '#007bff' : 'transparent',
-                    color: isAuthorSelected(author.id) ? 'white' : 'inherit',                    
+                    color: isAuthorSelected(author.id) ? 'white' : 'inherit',
                   }}>
                   {author.name} {author.lastname}
                 </option>
@@ -81,7 +79,7 @@ const MagazineAuthorMultiselect = memo(({ allAuthors,
                         type="button"
                         className="btn-close btn-close-white ms-1"
                         style={{ fontSize: '10px' }}
-                        onClick={() => handleDoubleClick(author.id)}
+                        onClick={() => removeAuthor(author.id)}
                       ></button>
                     </span>
                   ))}

@@ -62,7 +62,7 @@ export const useMagazineAuthorsTable = (publishing) => {
     closeModal();
   }, [selectedAuthorsData, closeModal]);
 
-  const handleCancelAddAuthors = useCallback(() => {    
+  const handleCancelAddAuthors = useCallback(() => {
     setSelectedAuthorsData([]);
     setSearch("");
     closeModal();

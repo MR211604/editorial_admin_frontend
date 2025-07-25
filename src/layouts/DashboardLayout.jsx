@@ -3,13 +3,13 @@ import Sidebar from '../components/Sidebar'
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className='d-flex flex-column' style={{ minHeight: '100vh' }}>
+    <div style={{ height: '100%' }}>
       <Navbar />
-      <div className='d-flex flex-row flex-grow-1'>
-        <div className='flex-shrink-0' style={{ width: '15%' }}>
+      <div className='d-flex flex-row' style={{ height: '100%' }}>
+        <div style={{ width: 'auto' }}>
           <Sidebar />
         </div>
-        <main className='container pt-4 flex-grow-1'>{children}</main>
+        <main className='container pt-4'>{children}</main>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import { useParams } from "react-router-dom";
 import MagazineUpdateForm from "../../components/magazines/MagazineUpdateForm";
 import { usePublishing } from "../../hooks/usePublishings";
+import { Card } from 'react-bootstrap';
 
 export default function MagazineUpdate() {
 
@@ -23,14 +24,19 @@ export default function MagazineUpdate() {
       <hr />
       <p>Esta es la pagina de actualizacion de revistas</p>
 
-      <Tabs defaultActiveKey="basic-info" id="magazineTabs" className="mb-3">
-        <Tab eventKey="basic-info" title="Español">
-          <MagazineUpdateForm publishing={publishing} />
-        </Tab>
-        <Tab eventKey="authors" title="Inglés">
-          <MagazineUpdateForm publishing={publishing} />
-        </Tab>
-      </Tabs>
+      <Card className="mb-3">
+        <Card.Header>Actualizando informacion de la revista</Card.Header>
+        <Card.Body>
+          <Tabs defaultActiveKey="basic-info" id="magazineTabs" className="mb-3">
+            <Tab eventKey="basic-info" title="Español">
+              <MagazineUpdateForm publishing={publishing} />
+            </Tab>
+            <Tab eventKey="authors" title="Inglés">
+              <MagazineUpdateForm publishing={publishing} />
+            </Tab>
+          </Tabs>
+        </Card.Body>
+      </Card>
 
     </>
   )

@@ -16,7 +16,7 @@ export default function MagazineUpdateForm({ publishing }) {
   const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
     defaultValues: {
       title: publishing?.data.title || '',
-      pages: publishing?.data.details?.pages || '',
+      pages: publishing?.data.pages || '',
       publish_date: publishing?.data.publish_date || '',
       publish_code: publishing?.data.publish_code || '',
       age: publishing?.data.age || '',
@@ -31,7 +31,7 @@ export default function MagazineUpdateForm({ publishing }) {
     if (publishing?.data) {
       reset({
         title: publishing.data.title,
-        pages: publishing.data.details?.pages || '',
+        pages: publishing.data.pages || '',
         publish_date: publishing.data.publish_date || '',
         publish_code: publishing.data.publish_code || '',
         volume: publishing.data.volume || '',
