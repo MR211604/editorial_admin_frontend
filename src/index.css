@@ -1,5 +1,5 @@
-/* altura completa para el layout */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -11,4 +11,12 @@ html, body {
 
 .page-item {
   cursor: pointer;
+}
+
+.nav-item[id^="link-"] {
+  transition: 0.2s background-color;
+}
+
+.nav-item[id^="link-"]:hover {
+  background-color: rgb(218, 218, 218);
 }
