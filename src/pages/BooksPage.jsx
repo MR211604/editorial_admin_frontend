@@ -1,5 +1,8 @@
 import { BookColumns } from "../components/books/BookColumns";
+import BookCreate from "../components/books/BookCreate";
+import SelectBookCategories from "../components/books/SelectBookCategories";
 import Table from "../components/ui/table/Table";
+import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 
 export default function BooksPage() {
@@ -18,11 +21,17 @@ export default function BooksPage() {
     // selectedPublishing,
 
     // Modal handlers
-    // isModalOpen,
-    // closeModal,
+    isModalOpen,
+    closeModal,
 
     // Handlers específicos
     searchHandler,
+    handleCreateValue,
+    handleCategoryChange,
+    selectedCategory,
+
+    //Callbacks
+    onCreateSuccess,
   } = usePublishingsPage(1)
 
 
@@ -39,29 +48,37 @@ export default function BooksPage() {
           Listado de Libros
         </div>
 
-        <div className="card-body">
+        <div className='card-body'>
+          <ToolBar
+            onCreateClick={handleCreateValue}
+            search={search}
+            onSearchChange={searchHandler}
+            createButtonText="Agregar nuevo libro"
+            searchPlaceholder="Buscar libro..."
+            hasSelect={true}
+            optionSelectedValue='Todos los libros'
+          >
+            <SelectBookCategories className="form-select form-select-md w-50 ms-2" onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
+          </ToolBar>
 
-          <div className="d-flex align-items-center mb-3">
-            <button className="btn btn-success">Agregar nuevo Libro</button>
-          </div>
-
-          <div className="d-flex align-items-center pb-3">
-            <span className="fs-5 fw-bold">Categoria</span>
-            <select className="form-select form-select-md w-50 ms-2">
-              <option value={""}>Todas las categorias</option>
-              <optgroup label="Coleccion institucional">
-                <option value="1">One</option>
-                <option value="2">Two</option>
-              </optgroup>
-              <option value="3">Four</option>
-            </select>
-            <input type="text" className="form-control form-control-md mx-2" placeholder="Buscar libro..." value={search} onChange={searchHandler} />
-            {/* <button className="btn btn-primary ms-auto">Buscar</button> */}
-          </div>
-
-          <Table paginatedTableData={allPublishings} columns={bookColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} setSearch={setSearch} />
+          <Table
+            paginatedTableData={allPublishings}
+            columns={bookColumns}
+            pagination={pagination}
+            setPagination={setPagination}
+            isTableDataLoading={isAllPublishingsLoading}
+            sorting={sorting}
+            setSorting={setSorting}
+            setSearch={setSearch}
+          />
         </div>
 
+        {/* Aquí se puede agregar el modal de creación de libro */}
+        <BookCreate
+          isOpen={isModalOpen('create')}
+          onClose={() => closeModal('create')}
+          onSuccess={onCreateSuccess}
+        />
 
       </div>
     </>

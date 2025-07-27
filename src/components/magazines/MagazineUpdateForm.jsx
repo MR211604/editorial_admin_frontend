@@ -4,6 +4,7 @@ import { useUpdatePublishing } from '../../hooks/usePublishings';
 import MagazineAuthorsTable from './MagazineAuthorsTable';
 import SelectCategories from './SelectCategories';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 export default function MagazineUpdateForm({ publishing }) {
 
@@ -63,159 +64,229 @@ export default function MagazineUpdateForm({ publishing }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-6 col-sm-12">
-            <label className="form-label">Titulo de revista</label>
-            <input className={`form-control ${errors.title ? 'is-invalid' : ''}`} type="text" {...register('title', {
-              required: 'El título es obligatorio',
-              minLength: {
-                value: 3,
-                message: 'El título debe tener al menos 3 caracteres'
-              }
-            })} />
-            {errors.title && (
-              <div className="invalid-feedback">{errors.title.message}</div>
-            )}
-            <div className="form-text">Ingrese un nombre de publicación</div>
-          </div>
-          <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
-            <label className="form-label">Numero de paginas</label>
-            <input className={`form-control ${errors.pages ? 'is-invalid' : ''}`} type="number" {...register('pages', {
-              required: 'El número de páginas es obligatorio',
-              min: {
-                value: 1,
-                message: 'El número de páginas debe ser al menos 1'
-              }
-            })} />
-            {errors.pages && (
-              <div className="invalid-feedback">{errors.pages.message}</div>
-            )}
-            <div className="form-text">Ingrese el numero de paginas de la publicación</div>
-          </div>
-        </div>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Container>
+        <Row>
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Titulo de revista</Form.Label>
+              <Form.Control 
+                type="text" 
+                isInvalid={!!errors.title}
+                {...register('title', {
+                  required: 'El título es obligatorio',
+                  minLength: {
+                    value: 3,
+                    message: 'El título debe tener al menos 3 caracteres'
+                  }
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.title?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese un nombre de publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
+            <Form.Group className="mb-3">
+              <Form.Label>Numero de paginas</Form.Label>
+              <Form.Control 
+                type="number" 
+                isInvalid={!!errors.pages}
+                {...register('pages', {
+                  required: 'El número de páginas es obligatorio',
+                  min: {
+                    value: 1,
+                    message: 'El número de páginas debe ser al menos 1'
+                  }
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.pages?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese el numero de paginas de la publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <div className="row mt-4">
-          <div className="col-lg-6 col-sm-12">
-            <label className="form-label">Fecha de publicación</label>
-            <input className={`form-control ${errors.publish_date ? 'is-invalid' : ''}`} type="date" {...register('publish_date', {
-              required: 'La fecha de publicación es obligatoria'
-            })} />
-            {errors.publish_date && (
-              <div className="invalid-feedback">{errors.publish_date.message}</div>
-            )}
-            <div className="form-text">Ingrese la fecha de publicación de la revista</div>
-          </div>
-          <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
-            <label className="form-label">ISBN</label>
-            <input className={`form-control ${errors.publish_code ? 'is-invalid' : ''}`} type="number" {...register('publish_code', {
-              required: 'El ISBN es obligatorio'
-            })} />
-            {errors.publish_code && (
-              <div className="invalid-feedback">{errors.publish_code.message}</div>
-            )}
-            <div className="form-text">Ingrese el ISBN de la publicación</div>
-          </div>
-        </div>
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Fecha de publicación</Form.Label>
+              <Form.Control 
+                type="date" 
+                isInvalid={!!errors.publish_date}
+                {...register('publish_date', {
+                  required: 'La fecha de publicación es obligatoria'
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.publish_date?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese la fecha de publicación de la revista
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
+            <Form.Group className="mb-3">
+              <Form.Label>ISBN</Form.Label>
+              <Form.Control 
+                type="number" 
+                isInvalid={!!errors.publish_code}
+                {...register('publish_code', {
+                  required: 'El ISBN es obligatorio'
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.publish_code?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese el ISBN de la publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <div className="row mt-4">
-          <div className="col-lg-6 col-sm-12">
-            <label className="form-label">Categoria de publicación</label>
-            <Controller
-              name="category_id"
-              control={control}
-              rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
-              render={({ field }) => (
-                <SelectCategories
-                  onCategoryChange={(e) => field.onChange(e.target.value)}
-                  selectedCategory={field.value}
-                  className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
-                />
-              )}
-            />
-            {errors.category_id && (
-              <div className="invalid-feedback">{errors.category_id.message}</div>
-            )}
-            <div className="form-text">Seleccione la categoría de la publicación</div>
-          </div>
-          <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
-            <label className="form-label">Imagen de portada</label>
-            <input className="form-control" type="file" />
-            <div className="form-text">Seleccione la imagen de portada</div>
-          </div>
-        </div>
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Categoria de publicación</Form.Label>
+              <Controller
+                name="category_id"
+                control={control}
+                rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
+                render={({ field }) => (
+                  <>
+                    <SelectCategories
+                      onCategoryChange={(e) => field.onChange(e.target.value)}
+                      selectedCategory={field.value}
+                      className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
+                    />
+                    {errors.category_id && (
+                      <div className="invalid-feedback">{errors.category_id.message}</div>
+                    )}
+                  </>
+                )}
+              />
+              <Form.Text className="text-muted">
+                Seleccione la categoría de la publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
+            <Form.Group className="mb-3">
+              <Form.Label>Imagen de portada</Form.Label>
+              <Form.Control type="file" />
+              <Form.Text className="text-muted">
+                Seleccione la imagen de portada
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <div className="row mt-4">
-          <div className="col-lg-6 col-sm-12">
-            <label className="form-label">Epoca</label>
-            <input className={`form-control ${errors.age ? 'is-invalid' : ''}`} type="number" {...register('age', {
-              required: 'La época es obligatoria',
-            })} />
-            {errors.age && (
-              <div className="invalid-feedback">{errors.age.message}</div>
-            )}
-            <div className="form-text">Ingrese la época de la publicación</div>
-          </div>
-          <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
-            <label className="form-label">Numero de epoca</label>
-            <input className={`form-control ${errors.age_number ? 'is-invalid' : ''}`} type="text" {...register('age_number', {
-              required: 'El número de época es obligatorio',
-            })} />
-            {errors.age_number && (
-              <div className="invalid-feedback">{errors.age_number.message}</div>
-            )}
-            <div className="form-text">Ingrese el número de época de la publicación</div>
-          </div>
-        </div>
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Epoca</Form.Label>
+              <Form.Control 
+                type="number" 
+                isInvalid={!!errors.age}
+                {...register('age', {
+                  required: 'La época es obligatoria',
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.age?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese la época de la publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
+            <Form.Group className="mb-3">
+              <Form.Label>Numero de epoca</Form.Label>
+              <Form.Control 
+                type="text" 
+                isInvalid={!!errors.age_number}
+                {...register('age_number', {
+                  required: 'El número de época es obligatorio',
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.age_number?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese el número de época de la publicación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <div className="row mt-4">
-          <div className="col-lg-6 col-sm-12">
-            <label className="form-label">Numero de volumen</label>
-            <input className={`form-control ${errors.volume ? 'is-invalid' : ''}`} type="number" {...register('volume', {
-              required: 'El número de volumen es obligatorio',
-              min: {
-                value: 1,
-                message: 'El número de volumen debe ser al menos 1'
-              }
-            })} />
-            {errors.volume && (
-              <div className="invalid-feedback">{errors.volume.message}</div>
-            )}
-            <div className="form-text">Ingrese el número de volumen</div>
-          </div>
-          <div className="col-lg-6 mt-sm-3 mt-lg-0 col-sm-12">
-            <label className="form-label">Mostrar en novedades</label>
-            <Controller
-              name="is_new_arrival"
-              control={control}
-              render={({ field }) => (
-                <select {...field} className="form-control">
-                  <option value={1}>Sí</option>
-                  <option value={0}>No</option>
-                </select>
-              )}
-            />
-            <div className="form-text">Mostrar publicación en novedades</div>
-          </div>
-        </div>
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Numero de volumen</Form.Label>
+              <Form.Control 
+                type="number" 
+                isInvalid={!!errors.volume}
+                {...register('volume', {
+                  required: 'El número de volumen es obligatorio',
+                  min: {
+                    value: 1,
+                    message: 'El número de volumen debe ser al menos 1'
+                  }
+                })} 
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.volume?.message}
+              </Form.Control.Feedback>
+              <Form.Text className="text-muted">
+                Ingrese el número de volumen
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
+            <Form.Group className="mb-3">
+              <Form.Label>Mostrar en novedades</Form.Label>
+              <Controller
+                name="is_new_arrival"
+                control={control}
+                render={({ field }) => (
+                  <Form.Select {...field}>
+                    <option value={1}>Sí</option>
+                    <option value={0}>No</option>
+                  </Form.Select>
+                )}
+              />
+              <Form.Text className="text-muted">
+                Mostrar publicación en novedades
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
 
         {/* Tabla de autores */}
-        <div className="row mt-4">
+        <Row className="mt-4">
           <MagazineAuthorsTable publishing={publishing} ref={authorsTableRef} />
-        </div>
-      </div>
-      <div className="row mt-4">
-        <div className="col-12 d-flex justify-content-end gap-2">
-          <button type="button" className="btn btn-secondary">Cancelar</button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-          >
+        </Row>
+      </Container>
+      
+      <Row className="mt-4">
+        <Col xs={12} className="d-flex justify-content-end gap-2">
+          <Button variant="secondary" type="button">
+            Cancelar
+          </Button>
+          <Button variant="primary" type="submit">
             Actualizar Revista
-          </button>
-        </div>
-      </div>
-    </form>
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   )
 }

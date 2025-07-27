@@ -1,9 +1,9 @@
+import { Card } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useParams } from "react-router-dom";
 import MagazineUpdateForm from "../../components/magazines/MagazineUpdateForm";
 import { usePublishing } from "../../hooks/usePublishings";
-import { Card } from 'react-bootstrap';
 
 export default function MagazineUpdate() {
 

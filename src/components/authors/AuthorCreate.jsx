@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Modal from "../ui/modal/Modal";
 import { useAuthors } from "../../hooks/useAuthors";
+import Modal from "../ui/modal/Modal";
+import { Form } from "react-bootstrap";
 
-export default function CreateAuthor({ isOpen, onClose, onSuccess }) {
+export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
 
   const [authorForm, setAuthorForm] = useState({
     name: '',
@@ -55,32 +56,30 @@ export default function CreateAuthor({ isOpen, onClose, onSuccess }) {
       closeButtonText="Cancelar"
       showFooter={true}
     >
-      <form>
-        <div className="mb-3">
-          <label htmlFor="createAuthorName" className="form-label">Nombre</label>
-          <input
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="createAuthorName">Nombre</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             id="createAuthorName"
             name="name"
             value={authorForm.name}
             onChange={handleFormChange}
             disabled={isCreating}
           />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="createAuthorLastname" className="form-label">Apellido</label>
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="createAuthorLastname">Apellido</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             id="createAuthorLastname"
             name="lastname"
             value={authorForm.lastname}
             onChange={handleFormChange}
             disabled={isCreating}
           />
-        </div>
-      </form>
+        </Form.Group>
+      </Form>
     </Modal>
   )
 }

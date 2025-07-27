@@ -1,6 +1,6 @@
 import { AuthorColumns } from "../components/authors/AuthorColumns";
-import CreateAuthor from "../components/authors/CreateAuthor";
-import UpdateAuthor from "../components/authors/UpdateAuthor";
+import AuthorCreate from "../components/authors/AuthorCreate";
+import AuthorUpdate from "../components/authors/AuthorUpdate";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { useAuthorsPage } from "./hooks/useAuthorsPage";
@@ -72,13 +72,13 @@ export default function AuthorsPage() {
       </div>
 
       {/* Modales separados */}
-      <CreateAuthor
+      <AuthorCreate
         isOpen={isModalOpen('create')}
         onClose={() => closeModal('create')}
         onSuccess={onCreateSuccess}
       />
 
-      <UpdateAuthor
+      <AuthorUpdate
         isOpen={isModalOpen('edit')}
         onClose={() => closeModal('edit')}
         onSuccess={onEditSuccess}
