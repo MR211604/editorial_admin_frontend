@@ -4,6 +4,7 @@ import SelectCategories from '../components/magazines/SelectCategories';
 import Table from '../components/ui/table/Table';
 import ToolBar from '../components/ui/ToolBar';
 import { usePublishingsPage } from './hooks/usePublishingsPage';
+import MagazineCreate from './magazines/MagazineCreate';
 
 export default function MagazinesPage() {
 
@@ -28,14 +29,15 @@ export default function MagazinesPage() {
 
     // Handlers específicos
     searchHandler,
-    handleCreatePublishing,
-    // handleDeletePublishing,
+    handleCreateValue,
     handleCategoryChange,
+    isModalOpen,
+    closeModal,
 
     // Callbacks de éxito
-    // onCreateSuccess,
-    // onEditSuccess,
-    // onDeleteSuccess
+    onCreateSuccess,
+    //onEditSuccess,
+    //onDeleteSuccess
   } = usePublishingsPage(2);
 
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ export default function MagazinesPage() {
         </div>
         <div className='card-body'>
           <ToolBar
-            onCreateClick={handleCreatePublishing}
+            onCreateClick={handleCreateValue}
             search={search}
             onSearchChange={searchHandler}
             createButtonText="Agregar nueva revista"
@@ -85,18 +87,11 @@ export default function MagazinesPage() {
       </div>
 
       {/* Modales separados */}
-      {/* <CreateAuthor
-            isOpen={isModalOpen('create')}
-            onClose={() => closeModal('create')}
-            onSuccess={onCreateSuccess}
-          /> */}
-
-      {/* <
-        isOpen={isModalOpen('update')}
-        onClose={() => closeModal('update')}
-        onSuccess={onEditSuccess}
-        author={selectedPublishing}
-      /> */}
+      <MagazineCreate
+        isOpen={isModalOpen('create')}
+        onClose={() => closeModal('create')}
+        onSuccess={onCreateSuccess}
+      />
 
     </div>
   )

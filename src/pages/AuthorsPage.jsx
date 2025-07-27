@@ -19,7 +19,7 @@ export default function AuthorsPage() {
     // Datos
     allAuthors,
     isAllAuthorsLoading,
-    selectedAuthor,
+    selectedValue,
 
     // Modal handlers
     isModalOpen,
@@ -27,9 +27,9 @@ export default function AuthorsPage() {
 
     // Handlers específicos
     searchHandler,
-    handleCreateAuthor,
-    handleEditAuthor,
-    handleDeleteAuthor,
+    handleCreateValue,
+    handleEditValue,
+    handleDeleteValue,
 
     // Callbacks de éxito
     onCreateSuccess,
@@ -37,8 +37,8 @@ export default function AuthorsPage() {
     // onDeleteSuccess
   } = useAuthorsPage();
 
-  const authorColumns = AuthorColumns(handleEditAuthor, handleDeleteAuthor);
-  
+  const authorColumns = AuthorColumns(handleEditValue, handleDeleteValue);
+
   return (
     <div>
       <h1>Autores</h1>
@@ -51,7 +51,7 @@ export default function AuthorsPage() {
         </div>
         <div className='card-body'>
           <ToolBar
-            onCreateClick={handleCreateAuthor}
+            onCreateClick={handleCreateValue}
             search={search}
             onSearchChange={searchHandler}
             createButtonText="Agregar nuevo autor"
@@ -79,10 +79,10 @@ export default function AuthorsPage() {
       />
 
       <UpdateAuthor
-        isOpen={isModalOpen('update')}
-        onClose={() => closeModal('update')}
+        isOpen={isModalOpen('edit')}
+        onClose={() => closeModal('edit')}
         onSuccess={onEditSuccess}
-        author={selectedAuthor}
+        author={selectedValue}
       />
 
     </div>

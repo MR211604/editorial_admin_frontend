@@ -1,0 +1,59 @@
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
+export const BookColumns = (onEdit, onDelete) => [
+  {
+    header: 'ID',
+    accessorKey: 'id',
+  },
+  {
+    header: 'Titulo',
+    accessorKey: 'title',
+  },
+  {
+    header: 'Autor(es)',
+    accessorKey: 'author',
+  },
+  {
+    header: 'ISBN',
+    accessorKey: 'publish_code',
+  },
+  {
+    header: 'Año y Pag',
+    accessorKey: 'year_and_pages',
+  },
+  {
+    header: 'Operaciones',
+    accessorKey: 'operations',
+    cell: ({ row }) => (
+      <div className="d-flex gap-2 align-items-center justify-content-center">
+        <OverlayTrigger
+          placement="top"
+          key={`tooltip-edit-key-${row.original.id}`}
+          overlay={<Tooltip id={`tooltip-edit-${row.original.id}`}>Editar</Tooltip>}
+        >
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => onEdit(row)}
+          >
+            <i className="bi bi-pencil-square"></i>
+          </button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement="top"
+          key={`tooltip-delete-key-${row.original.id}`}
+          overlay={<Tooltip id={`tooltip-delete-${row.original.id}`}>Eliminar</Tooltip>}
+        >
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => onDelete(row)}
+          >
+            <i className="bi bi-trash"></i>
+          </button>
+        </OverlayTrigger>
+        
+      </div>
+    ),
+    enableSorting: false,
+  }
+]

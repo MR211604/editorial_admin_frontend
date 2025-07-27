@@ -14,7 +14,7 @@ export default function ToolBar({
         hasSelect ? (
           <>
             <div className="d-flex align-items-center mb-3">
-              <button className="btn btn-success">{createButtonText}</button>
+              <button className="btn btn-success" onClick={() => onCreateClick()}>{createButtonText}</button>
             </div>
             <div className="d-flex align-items-center pb-3">
               <span className="fs-5 fw-bold">{selectName}</span>
@@ -30,7 +30,7 @@ export default function ToolBar({
           </>
         ) : (
           <div className="d-flex flex-row pb-4">
-            <button className='btn btn-success' onClick={onCreateClick}>
+            <button className='btn btn-success' onClick={() => onCreateClick()}>
               {createButtonText}
             </button>
             <input

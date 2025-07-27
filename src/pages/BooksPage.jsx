@@ -1,58 +1,32 @@
-import { useState } from "react";
+import { BookColumns } from "../components/books/BookColumns";
 import Table from "../components/ui/table/Table";
-import { usePublishings } from "../hooks/usePublishings";
-import { useDebounce } from "../hooks/utils/useDebounce";
+import { usePublishingsPage } from "./hooks/usePublishingsPage";
 
 export default function BooksPage() {
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10
-  });
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
 
-  const [sorting, setSorting] = useState([]);
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 1000) // You can implement a debounce hook if needed
+    // Datos
+    allPublishings,
+    isAllPublishingsLoading,
+    // selectedPublishing,
 
-  const { allPublishings, isAllPublishingsLoading } = usePublishings(pagination.pageIndex + 1, pagination.pageSize, 2, sorting, debouncedSearch);
+    // Modal handlers
+    // isModalOpen,
+    // closeModal,
 
-  const searchHandler = (e) => {
-    setSearch(e.target.value);
-  }
+    // Handlers específicos
+    searchHandler,
+  } = usePublishingsPage(1)
 
-  const booksColumns = [
-    {
-      header: 'ID',
-      accessorKey: 'id',
-    },
-    {
-      header: 'Titulo',
-      accessorKey: 'title',
-    },
-    {
-      header: 'Autor',
-      accessorKey: 'author',
-    },
-    {
-      header: 'ISBN',
-      accessorKey: 'isbn',
-    },
-    {
-      header: 'Año y Pag',
-      accessorKey: 'year_and_pages',
-    },
-    {
-      header: 'Operaciones',
-      accessorKey: 'operations',
-      cell: ({ row }) => (
-        <div id={row.id} className="d-flex gap-2">
-          <button className="btn btn-primary btn-sm" onClick={() => console.log(row)}>Editar</button>
-          <button className="btn btn-danger btn-sm">Eliminar</button>
-        </div>
-      ),
-      enableSorting: false,
-    }
-  ]
+
+  const bookColumns = BookColumns()
 
   return (
     <>
@@ -85,7 +59,7 @@ export default function BooksPage() {
             {/* <button className="btn btn-primary ms-auto">Buscar</button> */}
           </div>
 
-          <Table paginatedTableData={allPublishings} columns={booksColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} setSearch={setSearch} />
+          <Table paginatedTableData={allPublishings} columns={bookColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllPublishingsLoading} sorting={sorting} setSorting={setSorting} setSearch={setSearch} />
         </div>
 
 
