@@ -3,6 +3,7 @@ import { useDebounce } from "../../hooks/utils/useDebounce";
 import { usePublishings } from "../../hooks/usePublishings";
 
 import { useModalCRUD } from "../../hooks/utils/useModalCRUD";
+import { useEffect } from "react";
 
 export const usePublishingsPage = (publishing_type) => {
   const [pagination, setPagination] = useState({
@@ -13,7 +14,14 @@ export const usePublishingsPage = (publishing_type) => {
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, 300);
+
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: 0
+    }));
+  }, [debouncedSearch]);
 
   const {
     isModalOpen,

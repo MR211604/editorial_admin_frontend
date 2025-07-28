@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Controller, useForm } from 'react-hook-form';
-import { useUpdatePublishing } from '../../hooks/usePublishings';
-import MagazineAuthorsTable from './MagazineAuthorsTable';
-import SelectCategories from './SelectCategories';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useUpdatePublishing } from '../../hooks/usePublishings';
+import AuthorsTable from '../publishings/AuthorsTable';
+import SelectCategories from './SelectCategories';
 
 export default function MagazineUpdateForm({ publishing }) {
 
@@ -273,7 +273,7 @@ export default function MagazineUpdateForm({ publishing }) {
 
         {/* Tabla de autores */}
         <Row className="mt-4">
-          <MagazineAuthorsTable publishing={publishing} ref={authorsTableRef} />
+          <AuthorsTable publishing={publishing} ref={authorsTableRef} />
         </Row>
       </Container>
       

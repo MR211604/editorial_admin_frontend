@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDebounce } from "../../hooks/utils/useDebounce";
 import { useAuthors } from "../../hooks/useAuthors";
 import { useModalCRUD } from "../../hooks/utils/useModalCRUD";
+import { useEffect } from "react";
 
 export const useAuthorsPage = () => {
   const [pagination, setPagination] = useState({
@@ -31,7 +32,16 @@ export const useAuthorsPage = () => {
   } = useModalCRUD();
 
 
-  const debouncedSearch = useDebounce(search, 1000);
+  const debouncedSearch = useDebounce(search, 300);
+
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: 0
+    }));
+  }, [debouncedSearch]);
+
+
   const { allAuthors, isAllAuthorsLoading } = useAuthors(
     pagination.pageIndex + 1,
     pagination.pageSize,

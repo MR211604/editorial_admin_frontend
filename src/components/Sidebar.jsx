@@ -4,7 +4,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="bg-light border-end h-100">
+      <div className="bg-light">
         <ul className="nav flex-column text-left lh-lg">
           <CustomLink to="/dashboard" icon="bi-house-door">
             Inicio

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { BookColumns } from "../components/books/BookColumns";
 import BookCreate from "../components/books/BookCreate";
 import SelectBookCategories from "../components/books/SelectBookCategories";
@@ -34,8 +35,13 @@ export default function BooksPage() {
     onCreateSuccess,
   } = usePublishingsPage(1)
 
+  const navigate = useNavigate();
 
-  const bookColumns = BookColumns()
+  const handleUpdateBook = (row) => navigate(`/dashboard/books/edit/${row.original.id}`);
+
+  const handleDeleteBook = (row) => console.log('Eliminar libro:', row.original.id);
+
+  const bookColumns = BookColumns(handleUpdateBook, handleDeleteBook)
 
   return (
     <>

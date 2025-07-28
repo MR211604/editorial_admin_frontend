@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-const MagazineAuthorMultiselect = memo(({ allAuthors,
+const AuthorMultiselect = memo(({ allAuthors,
   availableAuthors,
   search,
   setSearch,
@@ -93,4 +93,4 @@ const MagazineAuthorMultiselect = memo(({ allAuthors,
   )
 });
 
-export default MagazineAuthorMultiselect;
+export default AuthorMultiselect;

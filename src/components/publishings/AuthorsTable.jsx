@@ -1,13 +1,14 @@
 import { forwardRef, memo, useImperativeHandle } from 'react';
-import { useMagazineAuthorsTable } from '../../pages/hooks/useMagazineAuthorsTable';
+import { useAuthorsTable } from '../../pages/hooks/useAuthorsTable';
 import Modal from '../ui/modal/Modal';
-import MagazineAuthorMultiselect from './MagazineAuthorMultiselect';
+import AuthorMultiselect from './AuthorMultiselect';
 
 /**
  * @param {Object} publishing - La publicacion en la que se esta trabajando.
+ * @param {Object} ref - Referencia para acceder a los metodos del componente.
+ * @return {JSX.Element} Componente de tabla de autores.
  */
-
-const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
+const AuthorsTable = memo(forwardRef(({ publishing }, ref) => {
 
   const {
     search,
@@ -26,7 +27,7 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
     handleRemoveAuthor,
     handleDiscardTemporalChanges,
     getAuthorsByStatus
-  } = useMagazineAuthorsTable(publishing);
+  } = useAuthorsTable(publishing);
 
   useImperativeHandle(ref, () => ({
     getAuthorsData: () => {
@@ -125,7 +126,7 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
         showFooter={true}
         size='modal-xl'
       >
-        <MagazineAuthorMultiselect
+        <AuthorMultiselect
           allAuthors={allAuthors}
           availableAuthors={availableAuthors}
           search={search}
@@ -139,4 +140,4 @@ const MagazineAuthorsTable = memo(forwardRef(({ publishing }, ref) => {
   )
 }));
 
-export default MagazineAuthorsTable;
+export default AuthorsTable;

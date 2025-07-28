@@ -12,6 +12,7 @@ import MagazinesPage from '../pages/MagazinesPage';
 import UserPrivileges from '../pages/UserPrivileges';
 import MagazineUpdate from '../pages/magazines/MagazineUpdate';
 import MagazineArticles from '../pages/magazines/MagazineArticles';
+import BookUpdate from '../pages/books/BookUpdate';
 
 export default function AppRouter() {
 
@@ -41,7 +42,10 @@ export default function AppRouter() {
       <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={isAuthenticated} redirectPath='/login' />}>
         <Route index element={<Dashboard />} />
         <Route path='authors' element={<AuthorsPage />} />
-        <Route path='books' element={<BooksPage />} />
+        <Route path='books'>
+          <Route index element={<BooksPage />} />
+          <Route path='edit/:id' element={<BookUpdate />} />
+        </Route>
         <Route path='magazines'>
           <Route index element={<MagazinesPage />} />
           <Route path='edit/:id' element={<MagazineUpdate />} />

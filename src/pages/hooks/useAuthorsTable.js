@@ -3,7 +3,7 @@ import { useAuthors } from "../../hooks/useAuthors";
 import { useDebounce } from "../../hooks/utils/useDebounce";
 import { useModal } from "../../hooks/utils/useModal";
 
-export const useMagazineAuthorsTable = (publishing) => {
+export const useAuthorsTable = (publishing) => {
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);

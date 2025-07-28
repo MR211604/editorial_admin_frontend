@@ -1,4 +1,3 @@
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
   {
@@ -40,44 +39,26 @@ export const MagazineColumns = (onEdit, onDelete, onEditArticles) => [
     accessorKey: 'operations',
     cell: ({ row }) => (
       <div className="d-flex gap-2 align-items-center justify-content-center">
-        <OverlayTrigger
-          placement="top"
-          key={`tooltip-edit-key-${row.original.id}`}
-          overlay={<Tooltip id={`tooltip-edit-${row.original.id}`}>Editar</Tooltip>}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => onEdit(row)}
         >
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => onEdit(row)}
-          >
-            <i className="bi bi-pencil-square"></i>
-          </button>
-        </OverlayTrigger>
+          <i className="bi bi-pencil-square"></i>
+        </button>
 
-        <OverlayTrigger
-          placement="top"
-          key={`tooltip-delete-key-${row.original.id}`}
-          overlay={<Tooltip id={`tooltip-delete-${row.original.id}`}>Eliminar</Tooltip>}
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => onDelete(row)}
         >
-          <button
-            className="btn btn-danger btn-sm"
-            onClick={() => onDelete(row)}
-          >
-            <i className="bi bi-trash"></i>
-          </button>
-        </OverlayTrigger>
+          <i className="bi bi-trash"></i>
+        </button>
 
-        <OverlayTrigger
-          placement="top"
-          key={`tooltip-articles-key-${row.original.id}`}
-          overlay={<Tooltip id={`tooltip-articles-${row.original.id}`}>Editar artículos</Tooltip>}
+        <button
+          className="btn btn-success btn-sm"
+          onClick={() => onEditArticles(row)}
         >
-          <button
-            className="btn btn-success btn-sm"
-            onClick={() => onEditArticles(row)}
-          >
-            <i className="bi bi-file-earmark-ruled"></i>
-          </button>
-        </OverlayTrigger>
+          <i className="bi bi-file-earmark-ruled"></i>
+        </button>
       </div>
     ),
     enableSorting: false,
