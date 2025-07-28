@@ -1,4 +1,3 @@
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 export default function MagazineArticlesTable({ publishing, handleEdit }) {
 
@@ -20,33 +19,20 @@ export default function MagazineArticlesTable({ publishing, handleEdit }) {
                 <td>{index + 1}</td>
                 <td>{article.title}</td>
                 <td>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Inspeccionar</Tooltip>}
-                  >
-                    <button className="btn btn-info btn-sm">
-                      <i className="bi bi-search"></i>
-                    </button>
-                  </OverlayTrigger>
+                  <button className="btn btn-dark btn-sm">
+                    <i className="bi bi-search"></i>
+                  </button>
                 </td>
                 <td>
                   <div className='d-flex gap-2 justify-content-center'>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Editar</Tooltip>}
-                    >
-                      <button className="btn btn-success btn-sm" onClick={() => handleEdit(article)}>
-                        <i className="bi bi-pencil"></i>
-                      </button>
-                    </OverlayTrigger>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Eliminar</Tooltip>}
-                    >
-                      <button className="btn btn-danger btn-sm">
-                        <i className="bi bi-trash"></i>
-                      </button>
-                    </OverlayTrigger>
+
+                    <button className="btn btn-success btn-sm" onClick={() => handleEdit(article)}>
+                      <i className="bi bi-pencil"></i>
+                    </button>
+
+                    <button className="btn btn-danger btn-sm">
+                      <i className="bi bi-trash"></i>
+                    </button>
                   </div>
                 </td>
               </tr>

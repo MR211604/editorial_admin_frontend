@@ -1,3 +1,25 @@
+import {
+  BlockTypeSelect,
+  BoldItalicUnderlineToggles,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  headingsPlugin,
+  imagePlugin,
+  InsertTable,
+  InsertThematicBreak,
+  linkDialogPlugin,
+  linkPlugin,
+  listsPlugin,
+  ListsToggle,
+  markdownShortcutPlugin,
+  MDXEditor,
+  quotePlugin,
+  Separator,
+  tablePlugin,
+  thematicBreakPlugin,
+  toolbarPlugin,
+  UndoRedo
+} from '@mdxeditor/editor';
 import { Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Modal from '../ui/modal/Modal';
@@ -63,16 +85,45 @@ export default function MagazineUpdateArticle({ isOpen, onClose, onEditSuccess, 
           <Row className="mb-5">
             <Form.Group controlId="formSummary">
               <Form.Label>Resumen</Form.Label>
-              <Form.Control as="textarea" rows={3} isInvalid={!!errors.summary} placeholder="Ingrese un resumen del artículo" {...register('summary', {
-                required: 'El resumen es obligatorio',
-                minLength: {
-                  value: 10,
-                  message: 'El resumen debe tener al menos 10 caracteres'
-                }
-              })} />
-              <Form.Control.Feedback type="invalid">
-                {errors.summary?.message}
-              </Form.Control.Feedback>
+              <MDXEditor
+                markdown="#Hello world"
+                contentEditableClassName="mdx-editor-content"
+                plugins={[
+                  // Plugins básicos
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  markdownShortcutPlugin(),
+
+                  // Plugins de links e imágenes
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin(),
+
+                  // Plugins de tablas y código
+                  tablePlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
+
+                  // Plugin de toolbar con todos los componentes
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <Separator />
+                        <BoldItalicUnderlineToggles />
+                        <Separator />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <Separator />
+                        <InsertTable />
+                        <InsertThematicBreak />
+                      </>
+                    )
+                  })
+                ]}
+              />
             </Form.Group>
           </Row>
         </Form>

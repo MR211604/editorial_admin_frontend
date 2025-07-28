@@ -279,7 +279,7 @@ export default function MagazineUpdateForm({ publishing }) {
       
       <Row className="mt-4">
         <Col xs={12} className="d-flex justify-content-end gap-2">
-          <Button variant="secondary" type="button">
+          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
             Cancelar
           </Button>
           <Button variant="primary" type="submit">

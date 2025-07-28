@@ -1,7 +1,7 @@
 import { Button, Card, Container, Row } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MagazineArticlesTable from '../../components/magazines/MagazineArticlesTable';
 import MagazineCreateArticle from '../../components/magazines/MagazineCreateArticle';
 import MagazineUpdateArticle from '../../components/magazines/MagazineUpdateArticle';
@@ -12,6 +12,7 @@ import { useModalCRUD } from '../../hooks/utils/useModalCRUD';
 export default function MagazineArticles() {
   const { id } = useParams();
   const { publishing } = usePublishing(id);
+  const navigate = useNavigate();
 
   const { isModalOpen, closeModal, onCreateSuccess, onEditSuccess, handleCreateValue, selectedValue, handleEditValue } = useModalCRUD();
 
@@ -36,6 +37,7 @@ export default function MagazineArticles() {
                 </Row>
                 <Row className="mt-3">
                   <div className="col-12 d-flex justify-content-end gap-2">
+                    <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>Cancelar</Button>
                     <Button variant="primary" className="mb-3">Guardar cambios</Button>
                   </div>
                 </Row>
