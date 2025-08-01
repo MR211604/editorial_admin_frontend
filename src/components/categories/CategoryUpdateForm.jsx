@@ -1,15 +1,13 @@
 
-import { useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
-import { Button, Col, Container, Row, Form } from "react-bootstrap";
-import SelectCategories from "../magazines/SelectCategories";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
   codeBlockPlugin,
   codeMirrorPlugin,
+  CreateLink,
   headingsPlugin,
   imagePlugin,
+  InsertImage,
   InsertTable,
   InsertThematicBreak,
   linkDialogPlugin,
@@ -25,6 +23,10 @@ import {
   toolbarPlugin,
   UndoRedo
 } from '@mdxeditor/editor';
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import SelectCategories from "../magazines/SelectCategories";
 
 export default function CategoryUpdateForm({ category }) {
 
@@ -138,7 +140,6 @@ export default function CategoryUpdateForm({ category }) {
                   linkPlugin(),
                   linkDialogPlugin(),
                   imagePlugin(),
-
                   // Plugins de tablas y código
                   tablePlugin(),
                   codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
@@ -156,6 +157,7 @@ export default function CategoryUpdateForm({ category }) {
                         <Separator />
                         <InsertTable />
                         <InsertThematicBreak />
+                        <InsertImage />
                       </>
                     )
                   })
@@ -183,7 +185,8 @@ export default function CategoryUpdateForm({ category }) {
                   // Plugins de links e imágenes
                   linkPlugin(),
                   linkDialogPlugin(),
-                  imagePlugin(),
+                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
+                  linkDialogPlugin(),
 
                   // Plugins de tablas y código
                   tablePlugin(),
@@ -202,6 +205,8 @@ export default function CategoryUpdateForm({ category }) {
                         <Separator />
                         <InsertTable />
                         <InsertThematicBreak />
+                        <InsertImage />
+                        <CreateLink />
                       </>
                     )
                   })
@@ -209,6 +214,203 @@ export default function CategoryUpdateForm({ category }) {
               />
               <Form.Text className="text-muted">
                 Ingrese Información sobre consejo editorial
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Politica editorial
+              </Form.Label>
+              <MDXEditor
+                markdown="Inserte su resumen aquí"
+                contentEditableClassName="mdx-editor-content"
+                plugins={[
+                  // Plugins básicos
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  markdownShortcutPlugin(),
+
+                  // Plugins de links e imágenes
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin(),
+                  // Plugins de tablas y código
+                  tablePlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
+
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <Separator />
+                        <BoldItalicUnderlineToggles />
+                        <Separator />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <Separator />
+                        <InsertTable />
+                        <InsertThematicBreak />
+                        <InsertImage />
+                      </>
+                    )
+                  })
+                ]}
+              />
+              <Form.Text className="text-muted">
+                Ingrese Información sobre Politica editorial
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Norma editorial</Form.Label>
+              <MDXEditor
+                markdown="Inserte su resumen aquí"
+                contentEditableClassName="mdx-editor-content"
+                plugins={[
+                  // Plugins básicos
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  markdownShortcutPlugin(),
+
+                  // Plugins de links e imágenes
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
+                  linkDialogPlugin(),
+
+                  // Plugins de tablas y código
+                  tablePlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
+
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <Separator />
+                        <BoldItalicUnderlineToggles />
+                        <Separator />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <Separator />
+                        <InsertTable />
+                        <InsertThematicBreak />
+                        <InsertImage />
+                        <CreateLink />
+                      </>
+                    )
+                  })
+                ]}
+              />
+              <Form.Text className="text-muted">
+                Ingrese Información sobre Norma editorial
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mt-4">
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Proceso de Aceptación</Form.Label>
+              <MDXEditor
+                markdown="Inserte su resumen aquí"
+                contentEditableClassName="mdx-editor-content"
+                plugins={[
+                  // Plugins básicos
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  markdownShortcutPlugin(),
+
+                  // Plugins de links e imágenes
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin(),
+                  // Plugins de tablas y código
+                  tablePlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
+
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <Separator />
+                        <BoldItalicUnderlineToggles />
+                        <Separator />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <Separator />
+                        <InsertTable />
+                        <InsertThematicBreak />
+                        <InsertImage />
+                      </>
+                    )
+                  })
+                ]}
+              />
+              <Form.Text className="text-muted">
+                Ingrese Información sobre Proceso de Aceptación
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col lg={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Contacto editorial</Form.Label>
+              <MDXEditor
+                markdown="Inserte su resumen aquí"
+                contentEditableClassName="mdx-editor-content"
+                plugins={[
+                  // Plugins básicos
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  markdownShortcutPlugin(),
+
+                  // Plugins de links e imágenes
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
+                  linkDialogPlugin(),
+
+                  // Plugins de tablas y código
+                  tablePlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
+
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <Separator />
+                        <BoldItalicUnderlineToggles />
+                        <Separator />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <Separator />
+                        <InsertTable />
+                        <InsertThematicBreak />
+                        <InsertImage />
+                        <CreateLink />
+                      </>
+                    )
+                  })
+                ]}
+              />
+              <Form.Text className="text-muted">
+                Ingrese Información sobre Contacto editorial
               </Form.Text>
             </Form.Group>
           </Col>

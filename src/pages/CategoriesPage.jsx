@@ -2,6 +2,8 @@ import { useState } from "react";
 import ToolBar from "../components/ui/ToolBar";
 import { useCategories } from "../hooks/useCategories"
 import { useNavigate } from "react-router-dom";
+import { useModalCRUD } from "../hooks/utils/useModalCRUD";
+import CategoryCreate from "../components/categories/CategoryCreate";
 
 export default function CategoriesPage() {
 
@@ -10,6 +12,8 @@ export default function CategoriesPage() {
   const navigate = useNavigate();
 
   const handleUpdateCategory = (id) => navigate(`/dashboard/categories/edit/${id}`);
+
+  const { openModal, closeModal, isModalOpen, onCreateSuccess } = useModalCRUD();
 
   const [expandedCategory, setExpandedCategory] = useState(new Set());
 
@@ -25,18 +29,18 @@ export default function CategoriesPage() {
 
   const renderCategoryRow = (category, isChild = false) => (
     <tr key={category.id}>
-      <td style={{ paddingLeft: isChild ? '4rem' : '0.5rem' }}>
-        <div className="d-flex align-items-center">
+      <td style={{ paddingLeft: isChild && '3rem' }} className="align-middle">
+        <div>
           {
             !isChild && category.children && category.children.length > 0 && (
-              <button className="text-decoration-none text-dark btn btn-link"
+              <button className="text-decoration-none text-dark btn btn-link p-0 me-2"
                 onClick={() => toggleCategory(category.id)}
               >
                 {expandedCategory.has(category.id) ? <i className="bi bi-dash-circle" /> : <i className="bi bi-plus-circle" />}
               </button>
             )
           }
-          <span>
+          <span style={{ paddingLeft: !isChild && category.children.length === 0 ? '1.6rem' : '0' }}>
             {category.title}
             {isChild && <small className="text-muted ms-2">({category.description})</small>}
           </span>
@@ -56,18 +60,17 @@ export default function CategoriesPage() {
   )
 
   return (
-    <div>
+    <>
       <h1>Categorías</h1>
       <hr />
       <p>Bienvenido a la sección de categorías. Aquí puedes encontrar información sobre las categorías de libros.</p>
-
       <div className="card">
         <div className="card-header">
           Listado de categorías
         </div>
         <div className="card-body">
           <div className="d-flex flex-row pb-4">
-            <button className="btn btn-success" onClick={() => console.log("Crear nueva categoría")}>
+            <button className="btn btn-success" onClick={() => openModal("create")}>
               Agregar nueva categoría
             </button>
           </div>
@@ -90,9 +93,14 @@ export default function CategoriesPage() {
               }
             </tbody>
           </table>
-
         </div>
       </div>
-    </div>
+
+      <CategoryCreate
+        isOpen={isModalOpen('create')}
+        onClose={() => closeModal('create')}
+        onSuccess={onCreateSuccess}
+      />
+    </>
   )
 }
