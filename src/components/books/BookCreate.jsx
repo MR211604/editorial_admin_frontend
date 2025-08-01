@@ -5,7 +5,6 @@ import SelectBookCategories from "./SelectBookCategories";
 
 export default function BookCreate({ isOpen, onClose, onSuccess }) {
 
-
   const { register, handleSubmit, control, formState: { errors } } = useForm({})
 
   const handleSave = () => {
