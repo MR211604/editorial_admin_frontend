@@ -9,7 +9,7 @@ export default function ToolBar({
   children
 }) {
   return (
-    <div className="">
+    <>
       {
         hasSelect ? (
           <>
@@ -43,6 +43,6 @@ export default function ToolBar({
           </div>
         )
       }
-    </div>
+    </>
   );
 }

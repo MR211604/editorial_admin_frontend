@@ -86,7 +86,7 @@ export default function MagazineUpdateArticle({ isOpen, onClose, onEditSuccess, 
             <Form.Group controlId="formSummary">
               <Form.Label>Resumen</Form.Label>
               <MDXEditor
-                markdown="#Hello world"
+                markdown="Inserte su resumen aquí"
                 contentEditableClassName="mdx-editor-content"
                 plugins={[
                   // Plugins básicos

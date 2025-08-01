@@ -13,6 +13,8 @@ import UserPrivileges from '../pages/UserPrivileges';
 import MagazineUpdate from '../pages/magazines/MagazineUpdate';
 import MagazineArticles from '../pages/magazines/MagazineArticles';
 import BookUpdate from '../pages/books/BookUpdate';
+import CategoriesPage from '../pages/CategoriesPage';
+import CategoryUpdate from '../pages/categories/CategoryUpdate';
 
 export default function AppRouter() {
 
@@ -51,8 +53,11 @@ export default function AppRouter() {
           <Route path='edit/:id' element={<MagazineUpdate />} />
           <Route path='articles/:id' element={<MagazineArticles />} />
         </Route>
+        <Route path='categories'>
+          <Route index element={<CategoriesPage />} />
+          <Route path='edit/:id' element={<CategoryUpdate />} />
+        </Route>
         <Route path='userAccounts' element={<UserAccountsPage />} />
-        <Route path='categories' element={<BooksPage />} />
         <Route path='rol' element={<RolPage />} />
         <Route path='privileges' element={<UserPrivileges />} />
       </Route>
