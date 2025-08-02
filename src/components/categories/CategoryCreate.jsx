@@ -76,9 +76,9 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
             rules={{ required: 'El tipo de categoría es obligatorio' }}
             render={({ field }) => (
               <Form.Control as="select" {...field} isInvalid={!!errors.category_type}>
-                <option value="3">Sin Categoria</option>
-                <option value="0">Revista</option>
-                <option value="1">Libro</option>
+                <option value="0">Sin Categoria</option>
+                <option value="1">Revista</option>
+                <option value="2">Libro</option>
               </Form.Control>
             )}
           />

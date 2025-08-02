@@ -32,7 +32,7 @@ export default function CategoriesPage() {
       <td style={{ paddingLeft: isChild && '3rem' }} className="align-middle">
         <div>
           {
-            !isChild && category.children && category.children.length > 0 && (
+            !isChild && category?.children && category?.children?.length > 0 && (
               <button className="text-decoration-none text-dark btn btn-link p-0 me-2"
                 onClick={() => toggleCategory(category.id)}
               >
@@ -40,7 +40,7 @@ export default function CategoriesPage() {
               </button>
             )
           }
-          <span style={{ paddingLeft: !isChild && category.children.length === 0 ? '1.6rem' : '0' }}>
+          <span style={{ paddingLeft: !isChild && category?.children?.length === 0 ? '1.66rem' : '0' }}>
             {category.title}
             {isChild && <small className="text-muted ms-2">({category.description})</small>}
           </span>

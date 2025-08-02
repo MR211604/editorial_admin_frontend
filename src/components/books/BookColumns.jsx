@@ -11,7 +11,12 @@ export const BookColumns = (onEdit, onDelete) => [
   },
   {
     header: 'Autor(es)',
-    accessorKey: 'author',
+    accessorKey: 'authors',
+    cell: ({ row }) => {
+      const authors = row.original.authors;
+      if (!authors || !Array.isArray(authors)) return '-';
+      return authors.map(author => author.name || author).join(', ');
+    }
   },
   {
     header: 'ISBN',
@@ -19,7 +24,12 @@ export const BookColumns = (onEdit, onDelete) => [
   },
   {
     header: 'Año y Pag',
-    accessorKey: 'year_and_pages',
+    accessorKey: 'publish_date',
+    cell: ({ row }) => (
+      <>
+        {row.original.publish_date ? new Date(row.original.publish_date).getFullYear() : '-'} / {row.original.pages || '-'}
+      </>
+    )
   },
   {
     header: 'Operaciones',

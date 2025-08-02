@@ -1,7 +1,6 @@
 
 export default function SelectCategories({ onCategoryChange, selectedCategory, ...props }) {
 
-
   const selectOptions = [
     { id: 1, value: 1, label: "Científica" },
     { id: 2, value: 2, label: "Ing-novación" },

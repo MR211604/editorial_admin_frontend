@@ -1,4 +1,3 @@
-
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -23,30 +22,35 @@ import {
   toolbarPlugin,
   UndoRedo
 } from '@mdxeditor/editor';
+import { useCallback } from 'react';
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import SelectCategories from "../magazines/SelectCategories";
+import SelectAllCategories from '../ui/SelectAllCategories';
+import { useCategories } from '../../hooks/useCategories';
 
 export default function CategoryUpdateForm({ category }) {
 
   const navigate = useNavigate();
+  const { allCategories } = useCategories(1);
 
-  console.log('Category data:', category);
-
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
       title: category?.data.title,
       description: category?.data.description,
-      category_id: category?.data.category_id,
+      category_id: category?.data.main_category,
       is_featured: category?.data.is_featured
     }
   })
 
+
+  const handleCategoryChange = useCallback((fieldOnChange) => (e) => {
+    fieldOnChange(e.target.value);
+  }, []);
+
   const onSubmit = (data) => {
     console.log(data)
   }
-
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -57,12 +61,16 @@ export default function CategoryUpdateForm({ category }) {
               <Form.Label>Titulo de categoria</Form.Label>
               <Form.Control
                 type="text"
+                isInvalid={!!errors.title}
                 placeholder="Ingrese el nombre de la categoria"
                 {...register("title", { required: true })}
               />
               <Form.Text className="text-muted">
                 Ingrese un título de categoría
               </Form.Text>
+              <Form.Control.Feedback type="invalid">
+                Por favor ingrese un título de categoría
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col lg={6} sm={12}>
@@ -70,12 +78,16 @@ export default function CategoryUpdateForm({ category }) {
               <Form.Label>Descripcion</Form.Label>
               <Form.Control
                 type="text"
+                isInvalid={!!errors.description}
                 placeholder="Ingrese la descripcion de la categoria"
                 {...register("description", { required: true })}
               />
               <Form.Text className="text-muted">
                 Ingrese una descripción corta de la categoría
               </Form.Text>
+              <Form.Control.Feedback type="invalid">
+                Por favor ingrese una descripción corta de la categoría
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -89,8 +101,11 @@ export default function CategoryUpdateForm({ category }) {
                 control={control}
                 render={({ field }) => (
                   <>
-                    <SelectCategories onCategoryChange={(e) => field.onChange(e.target.value)}
-                      selectedCategory={field.value} className="form-select"
+                    <SelectAllCategories
+                      allCategories={allCategories}
+                      onCategoryChange={handleCategoryChange(field.onChange)}
+                      selectedCategory={field.value}
+                      className="form-select"
                     />
                   </>
                 )}
@@ -419,7 +434,7 @@ export default function CategoryUpdateForm({ category }) {
         <Row className="mt-3">
           <div className="col-12 d-flex justify-content-end gap-2">
             <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>Cancelar</Button>
-            <Button variant="primary" className="mb-3">Guardar cambios</Button>
+            <Button variant="primary" className="mb-3" onClick={handleSubmit(onSubmit)} >Guardar cambios</Button>
           </div>
         </Row>
 

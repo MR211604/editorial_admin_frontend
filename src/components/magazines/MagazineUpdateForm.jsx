@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUpdatePublishing } from '../../hooks/usePublishings';
 import AuthorsTable from '../publishings/AuthorsTable';
 import SelectCategories from './SelectCategories';
+import SelectPublishingCategories from '../ui/SelectPublishingCategories';
 
 export default function MagazineUpdateForm({ publishing }) {
 
@@ -50,8 +51,6 @@ export default function MagazineUpdateForm({ publishing }) {
       publishing_type: publishing?.data.publishing_type,
       authors: authorsData?.visibleAuthors.map(author => author.id) || [],
     }
-    console.log('Datos actualizados:', updateData);
-
     updatePublishing(updateData, {
       onSuccess: () => {
         console.log('Revista actualizada exitosamente');
@@ -70,8 +69,8 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12}>
             <Form.Group className="mb-3">
               <Form.Label>Titulo de revista</Form.Label>
-              <Form.Control 
-                type="text" 
+              <Form.Control
+                type="text"
                 isInvalid={!!errors.title}
                 {...register('title', {
                   required: 'El título es obligatorio',
@@ -79,7 +78,7 @@ export default function MagazineUpdateForm({ publishing }) {
                     value: 3,
                     message: 'El título debe tener al menos 3 caracteres'
                   }
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.title?.message}
@@ -92,8 +91,8 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
             <Form.Group className="mb-3">
               <Form.Label>Numero de paginas</Form.Label>
-              <Form.Control 
-                type="number" 
+              <Form.Control
+                type="number"
                 isInvalid={!!errors.pages}
                 {...register('pages', {
                   required: 'El número de páginas es obligatorio',
@@ -101,7 +100,7 @@ export default function MagazineUpdateForm({ publishing }) {
                     value: 1,
                     message: 'El número de páginas debe ser al menos 1'
                   }
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.pages?.message}
@@ -117,12 +116,12 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12}>
             <Form.Group className="mb-3">
               <Form.Label>Fecha de publicación</Form.Label>
-              <Form.Control 
-                type="date" 
+              <Form.Control
+                type="date"
                 isInvalid={!!errors.publish_date}
                 {...register('publish_date', {
                   required: 'La fecha de publicación es obligatoria'
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.publish_date?.message}
@@ -135,12 +134,12 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
             <Form.Group className="mb-3">
               <Form.Label>ISBN</Form.Label>
-              <Form.Control 
-                type="number" 
+              <Form.Control
+                type="number"
                 isInvalid={!!errors.publish_code}
                 {...register('publish_code', {
                   required: 'El ISBN es obligatorio'
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.publish_code?.message}
@@ -162,7 +161,8 @@ export default function MagazineUpdateForm({ publishing }) {
                 rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
                 render={({ field }) => (
                   <>
-                    <SelectCategories
+                    <SelectPublishingCategories
+                      categoryTitle="Revistas"
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
@@ -193,12 +193,12 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12}>
             <Form.Group className="mb-3">
               <Form.Label>Epoca</Form.Label>
-              <Form.Control 
-                type="number" 
+              <Form.Control
+                type="number"
                 isInvalid={!!errors.age}
                 {...register('age', {
                   required: 'La época es obligatoria',
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.age?.message}
@@ -211,12 +211,12 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
             <Form.Group className="mb-3">
               <Form.Label>Numero de epoca</Form.Label>
-              <Form.Control 
-                type="text" 
+              <Form.Control
+                type="text"
                 isInvalid={!!errors.age_number}
                 {...register('age_number', {
                   required: 'El número de época es obligatorio',
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.age_number?.message}
@@ -232,8 +232,8 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12}>
             <Form.Group className="mb-3">
               <Form.Label>Numero de volumen</Form.Label>
-              <Form.Control 
-                type="number" 
+              <Form.Control
+                type="number"
                 isInvalid={!!errors.volume}
                 {...register('volume', {
                   required: 'El número de volumen es obligatorio',
@@ -241,7 +241,7 @@ export default function MagazineUpdateForm({ publishing }) {
                     value: 1,
                     message: 'El número de volumen debe ser al menos 1'
                   }
-                })} 
+                })}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.volume?.message}
@@ -276,7 +276,7 @@ export default function MagazineUpdateForm({ publishing }) {
           <AuthorsTable publishing={publishing} ref={authorsTableRef} />
         </Row>
       </Container>
-      
+
       <Row className="mt-4">
         <Col xs={12} className="d-flex justify-content-end gap-2">
           <Button variant="secondary" type="button" onClick={() => navigate(-1)}>

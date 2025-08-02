@@ -1,9 +1,9 @@
 import { fetchWithToken } from "../../helpers/fetch";
 
-export const getCategories = async () => {
+export const getCategories = async (getAll) => {
   try {
 
-    const response = await fetchWithToken('api/categories/getCategories');
+    const response = await fetchWithToken(`api/categories/getCategories?getAll=${getAll}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);
     }
@@ -17,7 +17,6 @@ export const getCategories = async () => {
 
 export const getCategoryById = async (id) => {
   try {
-    console.log('Fetching category with ID:', id);
     const response = await fetchWithToken(`api/categories/getCategory/${id}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.error}`);

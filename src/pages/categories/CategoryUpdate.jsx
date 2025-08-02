@@ -9,7 +9,6 @@ export default function CategoryUpdate() {
   const { id } = useParams();
   
   const { category, isLoading } = useCategory(id);
-  console.log('informacion de categoria:', category)
 
   if (isLoading) {
     return <div>Cargando...</div>;

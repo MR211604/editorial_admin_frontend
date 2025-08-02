@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createCategory, getCategories, getCategoryById } from "../api/categories/categoriesService"
 
-export const useCategories = () => {
+export const useCategories = (getAll) => {
   const { data: allCategories, error, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: getCategories
-  })
+    queryKey: ['categories', getAll],
+    queryFn: () => getCategories(getAll),
+  });
 
   return {
     allCategories,
@@ -15,7 +15,7 @@ export const useCategories = () => {
 }
 
 export const useCategory = (id) => {
-  const { data: category, error, isLoading } = useQuery({
+  const { data: category, isLoading } = useQuery({
     queryKey: ['category', id],
     queryFn: () => getCategoryById(id)
   })
@@ -23,7 +23,6 @@ export const useCategory = (id) => {
   return {
     category,
     isLoading,
-    error
   }
 }
 

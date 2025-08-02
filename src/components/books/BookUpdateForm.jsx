@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useUpdatePublishing } from "../../hooks/usePublishings";
 import AuthorsTable from "../publishings/AuthorsTable";
 import SelectBookCategories from "./SelectBookCategories";
+import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 
 export default function BookUpdateForm({ publishing }) {
 
@@ -21,7 +22,7 @@ export default function BookUpdateForm({ publishing }) {
       publish_date: publishing?.data.publish_date || "",
       publish_code: publishing?.data.publish_code || [],
       category_id: publishing?.data.category_id || undefined,
-      repository_URL: publishing?.data.repository_URL || "", //!ESTO HAY QUE TRAERLO DE LOS DETALLES
+      URL: publishing?.data.URL || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
     }
   })
@@ -34,7 +35,7 @@ export default function BookUpdateForm({ publishing }) {
         publish_date: publishing.data.publish_date || "",
         publish_code: publishing.data.publish_code || "",
         category_id: publishing.data.category_id || undefined,
-        repository_URL: publishing.data.repository_URL || "",
+        URL: publishing.data.URL || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
       });
     }
@@ -48,7 +49,15 @@ export default function BookUpdateForm({ publishing }) {
       publishing_type: publishing?.data.publishing_type,
       authors: authorsData?.visibleAuthors.map(author => author.id) || [],
     }
-    console.log(' Update Data:', updateData);
+    updatePublishing(updateData, {
+      onSuccess: () => {
+        console.log('Publishing updated successfully');
+        navigate(0);
+      },
+      onError: (error) => {
+        console.log('Error updating publishing:', error);
+      }
+    })
   }
 
   return (
@@ -160,7 +169,8 @@ export default function BookUpdateForm({ publishing }) {
                 rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
                 render={({ field }) => (
                   <>
-                    <SelectBookCategories
+                    <SelectPublishingCategories
+                      categoryTitle={"Libros"}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
@@ -211,8 +221,8 @@ export default function BookUpdateForm({ publishing }) {
               <Form.Label>URL del recurso</Form.Label>
               <Form.Control
                 type="text"
-                isInvalid={!!errors.repository_URL}
-                {...register('repository_URL', {
+                isInvalid={!!errors.URL}
+                {...register('URL', {
                   required: 'La URL del recurso es obligatoria',
                   minLength: {
                     value: 3,
@@ -221,7 +231,7 @@ export default function BookUpdateForm({ publishing }) {
                 })}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.repository_URL?.message}
+                {errors.URL?.message}
               </Form.Control.Feedback>
               <Form.Text className="text-muted">
                 Ingrese la URL del recurso

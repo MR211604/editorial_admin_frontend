@@ -37,8 +37,6 @@ export const getPublishingById = async (id) => {
 
 export const updatePublishing = async (id, data) => {
   try {
-    console.log('Updating publishing with ID:', id);
-    console.log('Updateing publishing with data:', data);
     const response = await fetchWithToken(`api/publishings/updatePublishing/${id}`, data, 'POST');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.message} - ${JSON.stringify(response.errors)}`);
