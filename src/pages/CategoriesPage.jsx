@@ -1,20 +1,16 @@
 import { useState } from "react";
-import ToolBar from "../components/ui/ToolBar";
-import { useCategories } from "../hooks/useCategories"
 import { useNavigate } from "react-router-dom";
-import { useModalCRUD } from "../hooks/utils/useModalCRUD";
 import CategoryCreate from "../components/categories/CategoryCreate";
+import { useCategories } from "../hooks/useCategories";
+import { useModalCRUD } from "../hooks/utils/useModalCRUD";
 
+//!TODO: REFACTOR ESTE COMPONENTE PARA QUE SOLAMENTE TENGA UN NIVEL DE CHILDREN
 export default function CategoriesPage() {
 
   const { allCategories } = useCategories();
-
   const navigate = useNavigate();
-
   const handleUpdateCategory = (id) => navigate(`/dashboard/categories/edit/${id}`);
-
   const { openModal, closeModal, isModalOpen, onCreateSuccess } = useModalCRUD();
-
   const [expandedCategory, setExpandedCategory] = useState(new Set());
 
   const toggleCategory = (categoryId) => {
@@ -27,37 +23,48 @@ export default function CategoriesPage() {
     setExpandedCategory(newExpanded)
   }
 
-  const renderCategoryRow = (category, isChild = false) => (
-    <tr key={category.id}>
-      <td style={{ paddingLeft: isChild && '3rem' }} className="align-middle">
-        <div>
-          {
-            !isChild && category?.children && category?.children?.length > 0 && (
-              <button className="text-decoration-none text-dark btn btn-link p-0 me-2"
-                onClick={() => toggleCategory(category.id)}
-              >
-                {expandedCategory.has(category.id) ? <i className="bi bi-dash-circle" /> : <i className="bi bi-plus-circle" />}
-              </button>
-            )
-          }
-          <span style={{ paddingLeft: !isChild && category?.children?.length === 0 ? '1.66rem' : '0' }}>
-            {category.title}
-            {isChild && <small className="text-muted ms-2">({category.description})</small>}
-          </span>
-        </div>
-      </td>
-      <td className="text-center align-middle">
-        <div className="d-flex gap-2 justify-content-center">
-          <button className="btn btn-success btn-sm" onClick={() => handleUpdateCategory(category.id)}>
-            <i className="bi bi-pencil"></i>
-          </button>
-          <button className="btn btn-danger btn-sm" onClick={() => console.log("Eliminar categoría", category.id)}>
-            <i className="bi bi-trash"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-  )
+  const renderCategoryRow = (category, level = 0) => {
+    const hasChildren = category?.children_recursive && category?.children_recursive?.length > 0;
+    const isExpanded = expandedCategory.has(category.id);
+    const paddingLeft = level * 2; // 2rem por cada nivel de profundidad
+
+    return [
+      <tr key={category.id}>
+        <td style={{ paddingLeft: `${paddingLeft}rem` }} className="align-middle">
+          <div>
+            {
+              hasChildren && (
+                <button
+                  className="text-decoration-none text-dark btn btn-link"
+                  onClick={() => toggleCategory(category.id)}
+                >
+                  {isExpanded ? <i className="bi bi-dash-circle" /> : <i className="bi bi-plus-circle" />}
+                </button>
+              )
+            }
+            <span style={{ paddingLeft: !hasChildren ? '1.5rem' : '0' }}>
+              {category.title}
+              {level > 0 && <small className="text-muted ms-2">({category.description})</small>}
+            </span>
+          </div>
+        </td>
+        <td className="text-center align-middle">
+          <div className="d-flex gap-2 justify-content-center">
+            <button className="btn btn-success btn-sm" onClick={() => handleUpdateCategory(category.id)}>
+              <i className="bi bi-pencil"></i>
+            </button>
+            <button className="btn btn-danger btn-sm" onClick={() => console.log("Eliminar categoría", category.id)}>
+              <i className="bi bi-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>,
+      // Renderizar recursivamente las subcategorías si están expandidas
+      ...(isExpanded && hasChildren
+        ? category.children_recursive.flatMap(child => renderCategoryRow(child, level + 1))
+        : [])
+    ];
+  };
 
   return (
     <>
@@ -84,12 +91,7 @@ export default function CategoriesPage() {
             </thead>
             <tbody>
               {
-                allCategories?.data?.map(category => [
-                  renderCategoryRow(category),
-                  ...(expandedCategory.has(category.id) && category.children
-                    ? category.children.map(child => renderCategoryRow(child, true))
-                    : [])
-                ]).flat()
+                allCategories?.data?.flatMap(category => renderCategoryRow(category))
               }
             </tbody>
           </table>

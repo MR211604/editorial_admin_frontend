@@ -43,3 +43,18 @@ export const createCategory = async (categoryData) => {
     throw new Error(`Error creating category: ${error.message}`);
   }
 }
+
+export const updateCategory = async (id, categoryData) => {
+  try {
+    const response = await fetchWithToken(`api/categories/updateCategory/${id}`, categoryData, 'POST');
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.error} with errors: ${JSON.stringify(response.errors)} and message: ${response.message}`);
+    }
+    return response;
+
+  } catch (error) {
+    console.error('Error updating category:', error);
+    throw new Error(`Error updating category: ${error.message}`);
+  }
+}

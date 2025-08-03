@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createCategory, getCategories, getCategoryById } from "../api/categories/categoriesService"
+import { createCategory, getCategories, getCategoryById, updateCategory } from "../api/categories/categoriesService"
 
 export const useCategories = (getAll) => {
   const { data: allCategories, error, isLoading } = useQuery({
@@ -42,5 +42,25 @@ export const useCreateCategory = () => {
     createCategory: createCategoryMutation.mutate,
     isCreating: createCategoryMutation.isPending,
     createError: createCategoryMutation.error,
+  }
+}
+
+export const useUpdateCategory = (id) => {
+  const queryClient = useQueryClient();
+
+  const updateCategoryMutation = useMutation({
+    queryKey: ['category', id],
+    mutationFn: (categoryData) => updateCategory(id, categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['category', id]
+      })
+    }
+  })
+
+  return {
+    updateCategory: updateCategoryMutation.mutate,
+    isUpdating: updateCategoryMutation.isPending,
+    updateError: updateCategoryMutation.error,
   }
 }

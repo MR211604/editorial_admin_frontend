@@ -1,19 +1,19 @@
 import { useCategories } from '../../hooks/useCategories';
 
-//Esto trae los datos de las categorias con los children
-export default function SelectPublishingCategories({ onCategoryChange, selectedCategory, categoryTitle, ...props }) {
+//Esto trae los datos de las categorias con los children_recursive
+export default function SelectPublishingCategories({ onCategoryChange, selectedCategory, categoryType, ...props }) {
 
   const { allCategories } = useCategories();
-  const filteredCategories = allCategories?.data?.filter(category => category?.title?.toLowerCase().includes(categoryTitle.toLowerCase()) || category?.title === "Sin Categoria");
+  const filteredCategories = allCategories?.data?.filter(category => category.category_type === categoryType);
 
   return (
     <select {...props} value={selectedCategory} onChange={onCategoryChange}>
-      <option value="">Seleccionar categoria</option>
+      <option value={null}>Sin categoría</option>
       {
         filteredCategories?.map(category => (
-          category.children.length > 0 ? <optgroup key={category.id + category.title} label={category.title}>
+          category.children_recursive.length > 0 ? <optgroup key={category.id + category.title} label={category.title}>
             {
-              category.children.map(child => (
+              category.children_recursive.map(child => (
                 <option key={child.id} value={child.id}>
                   {child.title}
                 </option>

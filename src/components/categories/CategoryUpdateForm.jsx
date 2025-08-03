@@ -1,45 +1,35 @@
-import {
-  BlockTypeSelect,
-  BoldItalicUnderlineToggles,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  CreateLink,
-  headingsPlugin,
-  imagePlugin,
-  InsertImage,
-  InsertTable,
-  InsertThematicBreak,
-  linkDialogPlugin,
-  linkPlugin,
-  listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
-  MDXEditor,
-  quotePlugin,
-  Separator,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  UndoRedo
-} from '@mdxeditor/editor';
 import { useCallback } from 'react';
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useCategories, useUpdateCategory } from '../../hooks/useCategories';
+import MDXEditorField from '../ui/MDXEditorField';
 import SelectAllCategories from '../ui/SelectAllCategories';
-import { useCategories } from '../../hooks/useCategories';
+import { mdxEditorFields } from '../ui/utils/mdxEditorFields';
+import { useMemo } from 'react';
+import { memo } from 'react';
 
-export default function CategoryUpdateForm({ category }) {
+function CategoryUpdateForm({ category }) {
 
   const navigate = useNavigate();
   const { allCategories } = useCategories(1);
+  const { updateCategory } = useUpdateCategory(category?.data.id);
+
 
   const { register, handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
       title: category?.data.title,
       description: category?.data.description,
-      category_id: category?.data.main_category,
-      is_featured: category?.data.is_featured
+      main_category: category?.data.main_category,
+      is_featured: category?.data.is_featured,
+
+      //Agregando campos de MDXEditor
+      about: category?.data?.detail?.about || "",
+      editorial_board: category?.data?.detail?.editorial_board || "",
+      policy: category?.data?.detail?.policy || "",
+      norms: category?.data?.detail?.norms || "",
+      process: category?.data?.detail?.process || "",
+      contact: category?.data?.detail?.contact || ""
     }
   })
 
@@ -49,396 +39,161 @@ export default function CategoryUpdateForm({ category }) {
   }, []);
 
   const onSubmit = (data) => {
-    console.log(data)
+    const categoryData = {
+      ...data,
+      category_id: category.data.id,
+    }
+    console.log('object', categoryData);
+    updateCategory(categoryData, {
+      onSuccess: () => {
+        console.log('Categoría actualizada correctamente');
+        navigate(0);
+      },
+      onError: (error) => {
+        console.log('Error al actualizar la categoría:', error);
+      }
+    })
   }
+
+  const renderBasicFields = () => (
+    <Row>
+      <Col lg={6} sm={12}>
+        <Form.Group className="mb-3">
+          <Form.Label>Título de categoría</Form.Label>
+          <Form.Control
+            type="text"
+            isInvalid={!!errors.title}
+            placeholder="Ingrese el nombre de la categoría"
+            {...register("title", { required: true })}
+          />
+          <Form.Text className="text-muted">
+            Ingrese un título de categoría
+          </Form.Text>
+          <Form.Control.Feedback type="invalid">
+            Por favor ingrese un título de categoría
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Col>
+      <Col lg={6} sm={12}>
+        <Form.Group className="mb-3">
+          <Form.Label>Descripción</Form.Label>
+          <Form.Control
+            type="text"
+            isInvalid={!!errors.description}
+            placeholder="Ingrese la descripción de la categoría"
+            {...register("description", { required: true })}
+          />
+          <Form.Text className="text-muted">
+            Ingrese una descripción corta de la categoría
+          </Form.Text>
+          <Form.Control.Feedback type="invalid">
+            Por favor ingrese una descripción corta de la categoría
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Col>
+    </Row>
+  )
+
+  const memoizedCategorySelect = useMemo(() => (
+    <Controller
+      name="main_category"
+      control={control}
+      render={({ field }) => (
+        <SelectAllCategories
+          allCategories={allCategories}
+          onCategoryChange={handleCategoryChange(field.onChange)}
+          selectedCategory={field.value}
+          className="form-select"
+        />
+      )}
+    />
+  ), [allCategories, control, handleCategoryChange])
+
+  const renderConfigFields = () => (
+    <Row className="mt-4">
+      <Col lg={6} sm={12}>
+        <Form.Group className="mb-3">
+          <Form.Label>Categoría Padre</Form.Label>
+          {memoizedCategorySelect}
+          <Form.Text className="text-muted">
+            Seleccione la categoría de la publicación
+          </Form.Text>
+        </Form.Group>
+      </Col>
+
+      <Col lg={6} sm={12}>
+        <Form.Group className="mb-3">
+          <Form.Label>Mostrar en novedades</Form.Label>
+          <Controller
+            name="is_featured"
+            control={control}
+            render={({ field }) => (
+              <Form.Select {...field}>
+                <option value={1}>Sí</option>
+                <option value={0}>No</option>
+              </Form.Select>
+            )}
+          />
+          <Form.Text className="text-muted">
+            Seleccione si desea mostrar la categoría como destacada
+          </Form.Text>
+        </Form.Group>
+      </Col>
+    </Row>
+  );
+
+  const renderMDXFields = () => {
+    const fieldPairs = []
+    for (let i = 0; i < mdxEditorFields.length; i += 2) {
+      const leftField = mdxEditorFields[i];
+      const rightField = mdxEditorFields[i + 1];
+
+      fieldPairs.push(
+        <Row key={i} className="mt-4">
+          <Col lg={6} sm={12}>
+            <MDXEditorField
+              name={leftField.name}
+              control={control}
+              label={leftField.label}
+              helpText={leftField.helpText}
+            />
+          </Col>
+          <Col lg={6} sm={12}>
+            {rightField && (
+              <MDXEditorField
+                name={rightField.name}
+                control={control}
+                label={rightField.label}
+                helpText={rightField.helpText}
+              />
+            )}
+          </Col>
+        </Row>
+      );
+    }
+    return fieldPairs;
+  }
+
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Container>
-        <Row>
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Titulo de categoria</Form.Label>
-              <Form.Control
-                type="text"
-                isInvalid={!!errors.title}
-                placeholder="Ingrese el nombre de la categoria"
-                {...register("title", { required: true })}
-              />
-              <Form.Text className="text-muted">
-                Ingrese un título de categoría
-              </Form.Text>
-              <Form.Control.Feedback type="invalid">
-                Por favor ingrese un título de categoría
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Descripcion</Form.Label>
-              <Form.Control
-                type="text"
-                isInvalid={!!errors.description}
-                placeholder="Ingrese la descripcion de la categoria"
-                {...register("description", { required: true })}
-              />
-              <Form.Text className="text-muted">
-                Ingrese una descripción corta de la categoría
-              </Form.Text>
-              <Form.Control.Feedback type="invalid">
-                Por favor ingrese una descripción corta de la categoría
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row className="mt-4">
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Categoria Padre</Form.Label>
-              <Controller
-                name="category_id"
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <SelectAllCategories
-                      allCategories={allCategories}
-                      onCategoryChange={handleCategoryChange(field.onChange)}
-                      selectedCategory={field.value}
-                      className="form-select"
-                    />
-                  </>
-                )}
-              />
-              <Form.Text className="text-muted">
-                Seleccione la categoría de la publicación
-              </Form.Text>
-            </Form.Group>
-          </Col>
-
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Mostrar en novedades</Form.Label>
-              <Controller
-                name="is_featured"
-                control={control}
-                render={({ field }) => (
-                  <Form.Select {...field}>
-                    <option value={1}>Sí</option>
-                    <option value={0}>No</option>
-                  </Form.Select>
-                )}
-              />
-              <Form.Text className="text-muted">
-                Seleccione si desea mostrar la categoría como destacada
-              </Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row className="mt-4">
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Acerca de</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(),
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese la descripcion de la categoria
-              </Form.Text>
-            </Form.Group>
-          </Col>
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Consejo editorial</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
-                  linkDialogPlugin(),
-
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                        <CreateLink />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese Información sobre consejo editorial
-              </Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row className="mt-4">
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Politica editorial
-              </Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(),
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese Información sobre Politica editorial
-              </Form.Text>
-            </Form.Group>
-          </Col>
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Norma editorial</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
-                  linkDialogPlugin(),
-
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                        <CreateLink />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese Información sobre Norma editorial
-              </Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row className="mt-4">
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Proceso de Aceptación</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(),
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese Información sobre Proceso de Aceptación
-              </Form.Text>
-            </Form.Group>
-          </Col>
-          <Col lg={6} sm={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Contacto editorial</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(), //!ESTO TIENE QUE MODIFICARSE PARA QUE FUNCIONE CON EL BACKEND
-                  linkDialogPlugin(),
-
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                        <InsertImage />
-                        <CreateLink />
-                      </>
-                    )
-                  })
-                ]}
-              />
-              <Form.Text className="text-muted">
-                Ingrese Información sobre Contacto editorial
-              </Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-
+        {renderBasicFields()}
+        {renderConfigFields()}
+        {renderMDXFields()}
         <Row className="mt-3">
           <div className="col-12 d-flex justify-content-end gap-2">
-            <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>Cancelar</Button>
-            <Button variant="primary" className="mb-3" onClick={handleSubmit(onSubmit)} >Guardar cambios</Button>
+            <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>
+              Cancelar
+            </Button>
+            <Button variant="primary" className="mb-3" onClick={handleSubmit(onSubmit)}>
+              Guardar cambios
+            </Button>
           </div>
         </Row>
-
       </Container>
     </Form>
   )
 }
+
+export default memo(CategoryUpdateForm);
