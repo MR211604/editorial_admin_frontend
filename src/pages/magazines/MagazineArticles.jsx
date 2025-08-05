@@ -13,9 +13,8 @@ export default function MagazineArticles() {
   const { id } = useParams();
   const { publishing } = usePublishing(id);
   const navigate = useNavigate();
-
   const { isModalOpen, closeModal, onCreateSuccess, onEditSuccess, handleCreateValue, selectedValue, handleEditValue } = useModalCRUD();
-
+  
   return (
     <>
       <h1>Articulos de {publishing?.data.title}</h1>
@@ -59,7 +58,7 @@ export default function MagazineArticles() {
 
       {
         isModalOpen('edit') && selectedValue &&
-        <MagazineUpdateArticle isOpen={isModalOpen('edit')} onClose={() => closeModal('edit')} onSuccess={onEditSuccess} article={selectedValue} />
+        <MagazineUpdateArticle isOpen={isModalOpen('edit')} onClose={() => closeModal('edit')} onEditSuccess={onEditSuccess} article={selectedValue} />
       }
 
     </>

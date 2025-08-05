@@ -50,8 +50,8 @@ export default function CategoriesPage() {
         </td>
         <td className="text-center align-middle">
           <div className="d-flex gap-2 justify-content-center">
-            <button className="btn btn-success btn-sm" onClick={() => handleUpdateCategory(category.id)}>
-              <i className="bi bi-pencil"></i>
+            <button className="btn btn-primary btn-sm" onClick={() => handleUpdateCategory(category.id)}>
+              <i className="bi bi-pencil-square"></i>
             </button>
             <button className="btn btn-danger btn-sm" onClick={() => console.log("Eliminar categoría", category.id)}>
               <i className="bi bi-trash"></i>

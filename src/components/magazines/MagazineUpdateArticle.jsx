@@ -1,42 +1,41 @@
-import {
-  BlockTypeSelect,
-  BoldItalicUnderlineToggles,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  headingsPlugin,
-  imagePlugin,
-  InsertTable,
-  InsertThematicBreak,
-  linkDialogPlugin,
-  linkPlugin,
-  listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
-  MDXEditor,
-  quotePlugin,
-  Separator,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  UndoRedo
-} from '@mdxeditor/editor';
 import { Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import MDXEditorField from '../ui/MDXEditorField';
 import Modal from '../ui/modal/Modal';
+import { useUpdatePublishingDetail } from '../../hooks/usePublishingsDetails';
+import { useNavigate } from 'react-router-dom';
 
 export default function MagazineUpdateArticle({ isOpen, onClose, onEditSuccess, article }) {
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+
+  const { updatePublishingDetail } = useUpdatePublishingDetail(article?.id);
+
+  const navigate = useNavigate();
+
+  const { register, control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      title: '',
-      URL: '',
-      summary: ''
+      title: article?.title || '',
+      URL: article?.URL || '',
+      summary: article?.summary || ''
     }
-  })
+  });
 
   const onSubmit = (data) => {
-    console.log('Form data:', data);
-    onEditSuccess();
+    const updateData = {
+      ...data,
+      repository_URL: data.URL,
+      publishing_id: article.publishing_id, // Assuming this is needed
+    }
+    updatePublishingDetail(updateData, {
+      onSuccess: () => {
+        console.log('Article updated successfully');
+        onEditSuccess();
+        navigate(0);
+      },
+      onError: (error) => {
+        console.error('Error updating article:', error);
+      }
+    })
     // Aquí puedes manejar el envío del formulario, por ejemplo, enviarlo a una API
   }
 
@@ -83,48 +82,12 @@ export default function MagazineUpdateArticle({ isOpen, onClose, onEditSuccess, 
             </Form.Group>
           </Row>
           <Row className="mb-5">
-            <Form.Group controlId="formSummary">
-              <Form.Label>Resumen</Form.Label>
-              <MDXEditor
-                markdown="Inserte su resumen aquí"
-                contentEditableClassName="mdx-editor-content"
-                plugins={[
-                  // Plugins básicos
-                  headingsPlugin(),
-                  listsPlugin(),
-                  quotePlugin(),
-                  thematicBreakPlugin(),
-                  markdownShortcutPlugin(),
-
-                  // Plugins de links e imágenes
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin(),
-
-                  // Plugins de tablas y código
-                  tablePlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' } }),
-
-                  // Plugin de toolbar con todos los componentes
-                  toolbarPlugin({
-                    toolbarContents: () => (
-                      <>
-                        <UndoRedo />
-                        <Separator />
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <BlockTypeSelect />
-                        <ListsToggle />
-                        <Separator />
-                        <InsertTable />
-                        <InsertThematicBreak />
-                      </>
-                    )
-                  })
-                ]}
-              />
-            </Form.Group>
+            <MDXEditorField
+              name="summary"
+              control={control}
+              label={'Resumen'}
+              error={errors.summary?.message}
+            />
           </Row>
         </Form>
       </Modal>
