@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BookColumns } from "../components/books/BookColumns";
 import BookCreate from "../components/books/BookCreate";
-import SelectBookCategories from "../components/books/SelectBookCategories";
+import SelectPublishingCategories from "../components/ui/SelectPublishingCategories";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
@@ -64,7 +64,12 @@ export default function BooksPage() {
             hasSelect={true}
             optionSelectedValue='Todos los libros'
           >
-            <SelectBookCategories className="form-select form-select-md w-50 ms-2" onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
+            <SelectPublishingCategories
+              categoryType={1}
+              onCategoryChange={handleCategoryChange}
+              selectedCategory={selectedCategory}
+              className="form-select form-select-md w-50 ms-2"
+            />
           </ToolBar>
 
           <Table

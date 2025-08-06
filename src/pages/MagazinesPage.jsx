@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { MagazineColumns } from '../components/magazines/MagazineColumns';
-import SelectCategories from '../components/magazines/SelectCategories';
+import SelectPublishingCategories from '../components/ui/SelectPublishingCategories';
 import Table from '../components/ui/table/Table';
 import ToolBar from '../components/ui/ToolBar';
 import { usePublishingsPage } from './hooks/usePublishingsPage';
@@ -70,7 +70,12 @@ export default function MagazinesPage() {
             hasSelect={true}
             optionSelectedValue='Todas las revistas'
           >
-            <SelectCategories className="form-select form-select-md w-50 ms-2" onCategoryChange={handleCategoryChange} selectedCategory={selectedCategory} />
+            <SelectPublishingCategories
+              categoryType={2}
+              onCategoryChange={handleCategoryChange}
+              selectedCategory={selectedCategory}
+              className="form-select form-select-md w-50 ms-2"
+            />
           </ToolBar>
 
           <Table

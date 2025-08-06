@@ -16,7 +16,7 @@ export const useModalCRUD = () => {
   }
 
   const closeModal = (modalType) => {
-    setModals(prev => ({ ...prev, [modalType]: false }));
+    setModals(prev => ({ ...prev, [modalType]: false }));        
     setSelectedValue(null);
   };
 

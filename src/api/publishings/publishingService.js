@@ -47,3 +47,16 @@ export const updatePublishing = async (id, data) => {
     throw error;
   }
 }
+
+export const createPublishing = async (data) => {
+  try {
+    const response = await fetchWithToken(`api/publishings/createPublishing`, data, 'POST');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.message} - ${JSON.stringify(response.errors)}`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error creating publishing:', error);
+    throw error;
+  }
+}

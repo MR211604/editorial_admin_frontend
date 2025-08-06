@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPublishingById, getPublishings, updatePublishing } from "../api/publishings/publishingService";
+import { createPublishing, getPublishingById, getPublishings, updatePublishing } from "../api/publishings/publishingService";
 
 //Pagination: la pagina actual
 //Rows: cantidad de filas por pagina
@@ -14,6 +14,27 @@ export const usePublishings = (pagination, rows, publishing_type, sorting, searc
   return {
     allPublishings,
     isAllPublishingsLoading,
+  };
+}
+
+export const useCreatePublishing = () => {
+  const queryClient = useQueryClient();
+
+  const createPublishingMutation = useMutation({
+    queryKey: ['publishing'],
+    mutationFn: (publishingData) => createPublishing(publishingData),
+    onSuccess: () => {
+      // Invalidate the query to refetch the updated data
+      queryClient.invalidateQueries({
+        queryKey: ['publishing']
+      });
+    }
+  });
+
+  return {
+    createPublishing: createPublishingMutation.mutate,
+    isCreating: createPublishingMutation.isPending,
+    createError: createPublishingMutation.error,
   };
 }
 

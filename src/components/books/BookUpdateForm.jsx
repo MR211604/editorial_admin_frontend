@@ -170,7 +170,7 @@ export default function BookUpdateForm({ publishing }) {
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
-                      categoryType={2}
+                      categoryType={1}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}

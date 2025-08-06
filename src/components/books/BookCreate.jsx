@@ -1,22 +1,45 @@
+import { Form } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import Modal from "../../components/ui/modal/Modal";
-import { Form } from "react-bootstrap";
-import SelectBookCategories from "./SelectBookCategories";
+import SelectPublishingCategories from "../ui/SelectPublishingCategories";
+import { useCreatePublishing } from "../../hooks/usePublishings";
+import { useNavigate } from "react-router-dom";
 
 export default function BookCreate({ isOpen, onClose, onSuccess }) {
 
-  const { register, handleSubmit, control, formState: { errors } } = useForm({})
+  const { createPublishing } = useCreatePublishing();
+  const navigate = useNavigate()
+  const { register, reset, handleSubmit, control, formState: { errors } } = useForm({})
 
-  const handleSave = () => {
-    onSuccess();
+  const handleSave = (data) => {
+    const publishingData = {
+      ...data,
+      publishing_type: 1,
+    }
+    console.log('informacion que se envia', publishingData);
+    createPublishing(publishingData, {
+      onSuccess: () => {
+        console.log('Publishing created successfully');
+        onSuccess();
+        navigate(0);
+      },
+      onError: (error) => {
+        console.error('Error creating publishing:', error);
+      }
+    })
+  }
+
+  const handleClose = () => {
+    onClose();
+    reset();
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title="Crear Nuevo Libro"
-      onSave={handleSave}
+      onSave={handleSubmit(handleSave)}
       saveButtonText={"Crear Libro"}
       closeButtonText="Cancelar"
       showFooter={true}
@@ -41,11 +64,11 @@ export default function BookCreate({ isOpen, onClose, onSuccess }) {
           <Form.Control
             type="text"
             id="bookUrl"
-            {...register("url", { required: "La URL es obligatoria" })}
-            isInvalid={!!errors.url}
+            {...register("URL", { required: "La URL es obligatoria" })}
+            isInvalid={!!errors.URL}
           />
           <Form.Control.Feedback type="invalid">
-            {errors.url?.message}
+            {errors.URL?.message}
           </Form.Control.Feedback>
         </Form.Group>
 
@@ -57,7 +80,8 @@ export default function BookCreate({ isOpen, onClose, onSuccess }) {
             rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
             render={({ field }) => (
               <>
-                <SelectBookCategories
+                <SelectPublishingCategories
+                  categoryType={1}
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
                   className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}

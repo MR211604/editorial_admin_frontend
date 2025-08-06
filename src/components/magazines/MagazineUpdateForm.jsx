@@ -162,7 +162,7 @@ export default function MagazineUpdateForm({ publishing }) {
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
-                      categoryType={1}
+                      categoryType={2}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
