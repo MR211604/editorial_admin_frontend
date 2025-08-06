@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BookColumns } from "../components/books/BookColumns";
-import BookCreate from "../components/books/BookCreate";
+import CreatePublishing from "../components/publishings/CreatePublishing";
 import SelectPublishingCategories from "../components/ui/SelectPublishingCategories";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
@@ -84,11 +84,13 @@ export default function BooksPage() {
           />
         </div>
 
-        {/* Aquí se puede agregar el modal de creación de libro */}
-        <BookCreate
+        <CreatePublishing
+          modalTitle="Crear Nuevo Libro"
+          modalSaveButtonText="Crear Libro"
           isOpen={isModalOpen('create')}
           onClose={() => closeModal('create')}
           onSuccess={onCreateSuccess}
+          publishingType={1}
         />
 
       </div>

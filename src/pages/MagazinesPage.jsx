@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { MagazineColumns } from '../components/magazines/MagazineColumns';
+import CreatePublishing from '../components/publishings/CreatePublishing';
 import SelectPublishingCategories from '../components/ui/SelectPublishingCategories';
 import Table from '../components/ui/table/Table';
 import ToolBar from '../components/ui/ToolBar';
 import { usePublishingsPage } from './hooks/usePublishingsPage';
-import MagazineCreate from './magazines/MagazineCreate';
 
 export default function MagazinesPage() {
 
@@ -92,10 +92,13 @@ export default function MagazinesPage() {
       </div>
 
       {/* Modales separados */}
-      <MagazineCreate
+      <CreatePublishing
+        modalTitle="Crear Nueva Revista"
+        modalSaveButtonText="Crear Revista"
         isOpen={isModalOpen('create')}
         onClose={() => closeModal('create')}
         onSuccess={onCreateSuccess}
+        publishingType={2}
       />
 
     </div>
