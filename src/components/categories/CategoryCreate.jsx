@@ -1,9 +1,8 @@
-import React from "react";
-import Modal from "../ui/modal/Modal";
 import { Form } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
-import { useCreateCategory } from "../../hooks/useCategories";
 import toast from "react-hot-toast";
+import { useCreateCategory } from "../../hooks/useCategories";
+import Modal from "../ui/modal/Modal";
 
 export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
   const { createCategory, isCreating } = useCreateCategory();
@@ -28,7 +27,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
       onSuccess: () => {
         toast.success("Categoría creada exitosamente");
         onSuccess();
-        reset(); // Reset the form after successful creation
+        reset();
         onClose();
       },
       onError: (error) => {

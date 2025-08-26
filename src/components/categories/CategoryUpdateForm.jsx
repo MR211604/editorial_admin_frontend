@@ -1,22 +1,26 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useCategories, useUpdateCategory } from '../../hooks/useCategories';
-import MDXEditorField from '../ui/MDXEditorField';
-import SelectAllCategories from '../ui/SelectAllCategories';
-import { mdxEditorFields } from '../ui/utils/mdxEditorFields';
-import { useMemo } from 'react';
-import { memo } from 'react';
+import { useCategories, useUpdateCategory } from "../../hooks/useCategories";
+import MDXEditorField from "../ui/MDXEditorField";
+import SelectAllCategories from "../ui/SelectAllCategories";
+import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
+import { useMemo } from "react";
+import { memo } from "react";
+import toast from "react-hot-toast";
 
 function CategoryUpdateForm({ category }) {
-
   const navigate = useNavigate();
   const { allCategories } = useCategories(1);
   const { updateCategory } = useUpdateCategory(category?.data.id);
 
-
-  const { register, handleSubmit, control, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       title: category?.data.title,
       description: category?.data.description,
@@ -29,31 +33,39 @@ function CategoryUpdateForm({ category }) {
       policy: category?.data?.detail?.policy || "",
       norms: category?.data?.detail?.norms || "",
       process: category?.data?.detail?.process || "",
-      contact: category?.data?.detail?.contact || ""
+      contact: category?.data?.detail?.contact || "",
+    },
+  });
+
+  useEffect(() => {
+    if (localStorage.getItem("categoryUpdateSuccess") === "1") {
+      toast.success("Categoría actualizada exitosamente");
+      localStorage.removeItem("categoryUpdateSuccess");
     }
-  })
-
-
-  const handleCategoryChange = useCallback((fieldOnChange) => (e) => {
-    fieldOnChange(e.target.value);
   }, []);
+
+  const handleCategoryChange = useCallback(
+    (fieldOnChange) => (e) => {
+      fieldOnChange(e.target.value);
+    },
+    []
+  );
 
   const onSubmit = (data) => {
     const categoryData = {
       ...data,
       category_id: category.data.id,
-    }
-    console.log('object', categoryData);
+    };
     updateCategory(categoryData, {
       onSuccess: () => {
-        console.log('Categoría actualizada correctamente');
+        localStorage.setItem("categoryUpdateSuccess", "1");
         navigate(0);
       },
       onError: (error) => {
-        console.log('Error al actualizar la categoría:', error);
-      }
-    })
-  }
+        console.log("Error al actualizar la categoría:", error);
+      },
+    });
+  };
 
   const renderBasicFields = () => (
     <Row>
@@ -92,22 +104,25 @@ function CategoryUpdateForm({ category }) {
         </Form.Group>
       </Col>
     </Row>
-  )
+  );
 
-  const memoizedCategorySelect = useMemo(() => (
-    <Controller
-      name="main_category"
-      control={control}
-      render={({ field }) => (
-        <SelectAllCategories
-          allCategories={allCategories}
-          onCategoryChange={handleCategoryChange(field.onChange)}
-          selectedCategory={field.value}
-          className="form-select"
-        />
-      )}
-    />
-  ), [allCategories, control, handleCategoryChange])
+  const memoizedCategorySelect = useMemo(
+    () => (
+      <Controller
+        name="main_category"
+        control={control}
+        render={({ field }) => (
+          <SelectAllCategories
+            allCategories={allCategories}
+            onCategoryChange={handleCategoryChange(field.onChange)}
+            selectedCategory={field.value}
+            className="form-select"
+          />
+        )}
+      />
+    ),
+    [allCategories, control, handleCategoryChange]
+  );
 
   const renderConfigFields = () => (
     <Row className="mt-4">
@@ -143,7 +158,7 @@ function CategoryUpdateForm({ category }) {
   );
 
   const renderMDXFields = () => {
-    const fieldPairs = []
+    const fieldPairs = [];
     for (let i = 0; i < mdxEditorFields.length; i += 2) {
       const leftField = mdxEditorFields[i];
       const rightField = mdxEditorFields[i + 1];
@@ -172,8 +187,7 @@ function CategoryUpdateForm({ category }) {
       );
     }
     return fieldPairs;
-  }
-
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -183,17 +197,25 @@ function CategoryUpdateForm({ category }) {
         {renderMDXFields()}
         <Row className="mt-3">
           <div className="col-12 d-flex justify-content-end gap-2">
-            <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>
+            <Button
+              variant="secondary"
+              className="mb-3"
+              onClick={() => navigate(-1)}
+            >
               Cancelar
             </Button>
-            <Button variant="primary" className="mb-3" onClick={handleSubmit(onSubmit)}>
+            <Button
+              variant="primary"
+              className="mb-3"
+              onClick={handleSubmit(onSubmit)}
+            >
               Guardar cambios
             </Button>
           </div>
         </Row>
       </Container>
     </Form>
-  )
+  );
 }
 
 export default memo(CategoryUpdateForm);

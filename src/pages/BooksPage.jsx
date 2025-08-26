@@ -7,7 +7,6 @@ import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 
 export default function BooksPage() {
-
   const {
     pagination,
     setPagination,
@@ -33,15 +32,17 @@ export default function BooksPage() {
 
     //Callbacks
     onCreateSuccess,
-  } = usePublishingsPage(1)
+  } = usePublishingsPage(1);
 
   const navigate = useNavigate();
 
-  const handleUpdateBook = (row) => navigate(`/dashboard/books/edit/${row.original.id}`);
+  const handleUpdateBook = (row) =>
+    navigate(`/dashboard/books/edit/${row.original.id}`);
 
-  const handleDeleteBook = (row) => console.log('Eliminar libro:', row.original.id);
+  const handleDeleteBook = (row) =>
+    console.log("Eliminar libro:", row.original.id);
 
-  const bookColumns = BookColumns(handleUpdateBook, handleDeleteBook)
+  const bookColumns = BookColumns(handleUpdateBook, handleDeleteBook);
 
   return (
     <>
@@ -50,11 +51,9 @@ export default function BooksPage() {
       <p>Aqui puedes encontrar una lista de todos los libros disponibles.</p>
 
       <div className="card">
-        <div className="card-header">
-          Listado de Libros
-        </div>
+        <div className="card-header">Listado de Libros</div>
 
-        <div className='card-body'>
+        <div className="card-body">
           <ToolBar
             onCreateClick={handleCreateValue}
             search={search}
@@ -62,10 +61,11 @@ export default function BooksPage() {
             createButtonText="Agregar nuevo libro"
             searchPlaceholder="Buscar libro..."
             hasSelect={true}
-            optionSelectedValue='Todos los libros'
+            optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
               categoryType={1}
+              defaultValue="Todos los libros"
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
               className="form-select form-select-md w-50 ms-2"
@@ -87,13 +87,12 @@ export default function BooksPage() {
         <CreatePublishing
           modalTitle="Crear Nuevo Libro"
           modalSaveButtonText="Crear Libro"
-          isOpen={isModalOpen('create')}
-          onClose={() => closeModal('create')}
+          isOpen={isModalOpen("create")}
+          onClose={() => closeModal("create")}
           onSuccess={onCreateSuccess}
           publishingType={1}
         />
-
       </div>
     </>
-  )
+  );
 }
