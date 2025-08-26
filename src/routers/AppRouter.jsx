@@ -1,68 +1,80 @@
-import { useContext, useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { AuthContext } from '../context/authContext';
-import AuthorsPage from '../pages/AuthorsPage';
-import BooksPage from '../pages/BooksPage';
-import Dashboard from '../pages/Dashboard';
-import RolPage from '../pages/RolPage';
-import UserAccountsPage from '../pages/UserAccountsPage';
-import LoginPage from '../pages/auth/LoginPage';
-import ProtectedRoute from './ProtectedRoute';
-import MagazinesPage from '../pages/MagazinesPage';
-import UserPrivileges from '../pages/UserPrivileges';
-import MagazineUpdate from '../pages/magazines/MagazineUpdate';
-import MagazineArticles from '../pages/magazines/MagazineArticles';
-import BookUpdate from '../pages/books/BookUpdate';
-import CategoriesPage from '../pages/CategoriesPage';
-import CategoryUpdate from '../pages/categories/CategoryUpdate';
+import { useContext, useEffect } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
+import AuthorsPage from "../pages/AuthorsPage";
+import BooksPage from "../pages/BooksPage";
+import CategoriesPage from "../pages/CategoriesPage";
+import Dashboard from "../pages/Dashboard";
+import MagazinesPage from "../pages/MagazinesPage";
+import RolPage from "../pages/RolPage";
+import UserAccountsPage from "../pages/UserAccountsPage";
+import UserPrivileges from "../pages/UserPrivileges";
+import LoginPage from "../pages/auth/LoginPage";
+import BookUpdate from "../pages/books/BookUpdate";
+import CategoryUpdate from "../pages/categories/CategoryUpdate";
+import MagazineArticles from "../pages/magazines/MagazineArticles";
+import MagazineUpdate from "../pages/magazines/MagazineUpdate";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRouter() {
-
-  const { auth, verifyToken } = useContext(AuthContext)
+  const { auth, verifyToken } = useContext(AuthContext);
 
   useEffect(() => {
-    verifyToken()
-  }, [verifyToken])
+    verifyToken();
+  }, [verifyToken]);
 
   if (auth.checking) {
     return (
       <div className="d-flex items-center justify-center min-h-screen">
         <div></div>
       </div>
-    )
+    );
   }
-  console.log("Auth Context:", auth)
-  const isAuthenticated = auth.logged
+  console.log("Auth Context:", auth);
+  const isAuthenticated = auth.logged;
 
   return (
     <Routes>
       <Route
-        path='/*'
-        element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />}
+        path="/*"
+        element={
+          <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
+        }
       />
-      <Route path='/login' element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
-      <Route path='/dashboard' element={<ProtectedRoute isAuthenticated={isAuthenticated} redirectPath='/login' />}>
+      <Route
+        path="/login"
+        element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute
+            isAuthenticated={isAuthenticated}
+            redirectPath="/login"
+          />
+        }
+      >
         <Route index element={<Dashboard />} />
-        <Route path='authors' element={<AuthorsPage />} />
-        <Route path='books'>
+        <Route path="authors" element={<AuthorsPage />} />
+        <Route path="books">
           <Route index element={<BooksPage />} />
-          <Route path='edit/:id' element={<BookUpdate />} />
+          <Route path="edit/:id" element={<BookUpdate />} />
         </Route>
-        <Route path='magazines'>
+        <Route path="magazines">
           <Route index element={<MagazinesPage />} />
-          <Route path='edit/:id' element={<MagazineUpdate />} />
-          <Route path='articles/:id' element={<MagazineArticles />} />
+          <Route path="edit/:id" element={<MagazineUpdate />} />
+          <Route path="articles/:id" element={<MagazineArticles />} />
         </Route>
-        <Route path='categories'>
+        <Route path="categories">
           <Route index element={<CategoriesPage />} />
-          <Route path='edit/:id' element={<CategoryUpdate />} />
+          <Route path="edit/:id" element={<CategoryUpdate />} />
         </Route>
-        <Route path='userAccounts' element={<UserAccountsPage />} />
-        <Route path='rol' element={<RolPage />} />
-        <Route path='privileges' element={<UserPrivileges />} />
+        <Route path="userAccounts" element={<UserAccountsPage />} />
+        <Route path="rol" element={<RolPage />} />
+        <Route path="privileges" element={<UserPrivileges />} />
       </Route>
-
-
     </Routes>
-  )
+  );
 }

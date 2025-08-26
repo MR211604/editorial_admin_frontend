@@ -1,47 +1,59 @@
-import { useEffect, useRef } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useUpdatePublishing } from '../../hooks/usePublishings';
-import AuthorsTable from '../publishings/AuthorsTable';
-import SelectCategories from './SelectCategories';
-import SelectPublishingCategories from '../ui/SelectPublishingCategories';
+import { useEffect, useRef } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useUpdatePublishing } from "../../hooks/usePublishings";
+import AuthorsTable from "../publishings/AuthorsTable";
+import SelectPublishingCategories from "../ui/SelectPublishingCategories";
+import toast from "react-hot-toast";
 
 export default function MagazineUpdateForm({ publishing }) {
-
   const authorsTableRef = useRef();
 
   const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
 
   const navigate = useNavigate();
 
-  const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      title: publishing?.data.title || '',
-      pages: publishing?.data.pages || '',
-      publish_date: publishing?.data.publish_date || '',
-      publish_code: publishing?.data.publish_code || '',
-      age: publishing?.data.age || '',
-      age_number: publishing?.data.age_number || '',
-      volume: publishing?.data.volume || '',
+      title: publishing?.data.title || "",
+      pages: publishing?.data.pages || "",
+      publish_date: publishing?.data.publish_date || "",
+      publish_code: publishing?.data.publish_code || "",
+      age: publishing?.data.age || "",
+      age_number: publishing?.data.age_number || "",
+      volume: publishing?.data.volume || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       category_id: publishing?.data.category_id || undefined,
-    }
-  })
+    },
+  });
 
   useEffect(() => {
     if (publishing?.data) {
       reset({
         title: publishing.data.title,
-        pages: publishing.data.pages || '',
-        publish_date: publishing.data.publish_date || '',
-        publish_code: publishing.data.publish_code || '',
-        volume: publishing.data.volume || '',
+        pages: publishing.data.pages || "",
+        publish_date: publishing.data.publish_date || "",
+        publish_code: publishing.data.publish_code || "",
+        volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || undefined,
       });
     }
-  }, [publishing, reset])
+  }, [publishing, reset]);
+
+  useEffect(() => {
+    if (localStorage.getItem("magazineUpdateSuccess") === "1") {
+      toast.success("Publicación actualizada exitosamente");
+      localStorage.removeItem("magazineUpdateSuccess");
+    }
+  }, []);
 
   const onSubmit = (data) => {
     const authorsData = authorsTableRef.current?.getAuthorsData();
@@ -49,18 +61,19 @@ export default function MagazineUpdateForm({ publishing }) {
       ...data,
       id: publishing?.data.id,
       publishing_type: publishing?.data.publishing_type,
-      authors: authorsData?.visibleAuthors.map(author => author.id) || [],
-    }
+      authors: authorsData?.visibleAuthors.map((author) => author.id) || [],
+    };
     updatePublishing(updateData, {
       onSuccess: () => {
-        console.log('Revista actualizada exitosamente');
+        localStorage.setItem("magazineUpdateSuccess", "1");
         navigate(0);
       },
       onError: (error) => {
-        console.log('Error actualizando revista:', error);
-      }
-    })
-  }
+        toast.error("Error actualizando publicación: " + error.message);
+        console.log("Error actualizando publicación:", error);
+      },
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -72,12 +85,12 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="text"
                 isInvalid={!!errors.title}
-                {...register('title', {
-                  required: 'El título es obligatorio',
+                {...register("title", {
+                  required: "El título es obligatorio",
                   minLength: {
                     value: 3,
-                    message: 'El título debe tener al menos 3 caracteres'
-                  }
+                    message: "El título debe tener al menos 3 caracteres",
+                  },
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -94,12 +107,12 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="number"
                 isInvalid={!!errors.pages}
-                {...register('pages', {
-                  required: 'El número de páginas es obligatorio',
+                {...register("pages", {
+                  required: "El número de páginas es obligatorio",
                   min: {
                     value: 1,
-                    message: 'El número de páginas debe ser al menos 1'
-                  }
+                    message: "El número de páginas debe ser al menos 1",
+                  },
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -119,8 +132,8 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="date"
                 isInvalid={!!errors.publish_date}
-                {...register('publish_date', {
-                  required: 'La fecha de publicación es obligatoria'
+                {...register("publish_date", {
+                  required: "La fecha de publicación es obligatoria",
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -137,8 +150,8 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="number"
                 isInvalid={!!errors.publish_code}
-                {...register('publish_code', {
-                  required: 'El ISBN es obligatorio'
+                {...register("publish_code", {
+                  required: "El ISBN es obligatorio",
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -158,17 +171,24 @@ export default function MagazineUpdateForm({ publishing }) {
               <Controller
                 name="category_id"
                 control={control}
-                rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
+                rules={{
+                  required: "La categoría es obligatoria",
+                  validate: (value) => value !== "" || "Todas las categorias",
+                }}
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
                       categoryType={2}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
-                      className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
+                      className={`form-select ${
+                        errors.category_id ? "is-invalid" : ""
+                      }`}
                     />
                     {errors.category_id && (
-                      <div className="invalid-feedback">{errors.category_id.message}</div>
+                      <div className="invalid-feedback">
+                        {errors.category_id.message}
+                      </div>
                     )}
                   </>
                 )}
@@ -196,8 +216,8 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="number"
                 isInvalid={!!errors.age}
-                {...register('age', {
-                  required: 'La época es obligatoria',
+                {...register("age", {
+                  required: "La época es obligatoria",
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -214,8 +234,8 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="text"
                 isInvalid={!!errors.age_number}
-                {...register('age_number', {
-                  required: 'El número de época es obligatorio',
+                {...register("age_number", {
+                  required: "El número de época es obligatorio",
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -235,12 +255,12 @@ export default function MagazineUpdateForm({ publishing }) {
               <Form.Control
                 type="number"
                 isInvalid={!!errors.volume}
-                {...register('volume', {
-                  required: 'El número de volumen es obligatorio',
+                {...register("volume", {
+                  required: "El número de volumen es obligatorio",
                   min: {
                     value: 1,
-                    message: 'El número de volumen debe ser al menos 1'
-                  }
+                    message: "El número de volumen debe ser al menos 1",
+                  },
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -279,7 +299,11 @@ export default function MagazineUpdateForm({ publishing }) {
 
       <Row className="mt-4">
         <Col xs={12} className="d-flex justify-content-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => navigate(-1)}
+          >
             Cancelar
           </Button>
           <Button variant="primary" type="submit">
@@ -288,5 +312,5 @@ export default function MagazineUpdateForm({ publishing }) {
         </Col>
       </Row>
     </Form>
-  )
+  );
 }

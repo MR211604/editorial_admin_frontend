@@ -1,41 +1,42 @@
-import { useState, useEffect } from 'react';
-import Modal from '../ui/modal/Modal';
-import { useAuthors } from '../../hooks/useAuthors';
-import { Form } from 'react-bootstrap';
+import { useState, useEffect } from "react";
+import Modal from "../ui/modal/Modal";
+import { useAuthors } from "../../hooks/useAuthors";
+import { Form } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
   const [authorForm, setAuthorForm] = useState({
-    name: '',
-    lastname: ''
+    name: "",
+    lastname: "",
   });
   const { updateAuthor, isUpdating } = useAuthors();
-  
+
   useEffect(() => {
     if (author) {
       setAuthorForm({
-        name: author.original?.name || author.name || '',
-        lastname: author.original?.lastname || author.lastname || ''
+        name: author.original?.name || author.name || "",
+        lastname: author.original?.lastname || author.lastname || "",
       });
     }
   }, [author]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setAuthorForm(prev => ({
+    setAuthorForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleClose = () => {
-    setAuthorForm({ name: '', lastname: '' });
+    setAuthorForm({ name: "", lastname: "" });
     onClose();
   };
 
   const handleSave = () => {
     const updateData = {
       id: author.original?.id || author.id,
-      ...authorForm
+      ...authorForm,
     };
 
     if (!updateData.name.trim() || !updateData.lastname.trim()) {
@@ -45,15 +46,14 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
 
     updateAuthor(updateData, {
       onSuccess: () => {
-        console.log("Autor editado exitosamente");
+        toast.success("Autor actualizado exitosamente");
         onSuccess();
         handleClose();
       },
       onError: (error) => {
         console.error("Error editando autor:", error);
-      }
+      },
     });
-
   };
 
   return (

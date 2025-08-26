@@ -2,31 +2,31 @@ import { useState } from "react";
 import { useAuthors } from "../../hooks/useAuthors";
 import Modal from "../ui/modal/Modal";
 import { Form } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
-
   const [authorForm, setAuthorForm] = useState({
-    name: '',
-    lastname: ''
+    name: "",
+    lastname: "",
   });
-  const { createAuthor, isCreating } = useAuthors()
+  const { createAuthor, isCreating } = useAuthors();
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setAuthorForm({
       ...authorForm,
-      [name]: value
+      [name]: value,
     });
-  }
+  };
 
   const handleClose = () => {
     setAuthorForm({
-      name: '',
-      lastname: ''
+      name: "",
+      lastname: "",
     });
     // Logic to close the modal or navigate away
     onClose();
-  }
+  };
 
   const handleSave = () => {
     if (!authorForm.name.trim() || !authorForm.lastname.trim()) {
@@ -36,13 +36,13 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
     console.log("Creando autor:", authorForm);
     createAuthor(authorForm, {
       onSuccess: () => {
-        console.log("Autor creado exitosamente");
+        toast.success("Autor creado exitosamente");
         onSuccess();
         handleClose();
       },
       onError: (error) => {
         console.error("Error creando autor:", error);
-      }
+      },
     });
   };
 
@@ -81,5 +81,5 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
         </Form.Group>
       </Form>
     </Modal>
-  )
+  );
 }
