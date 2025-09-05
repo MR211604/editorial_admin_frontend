@@ -34,13 +34,17 @@ export const createCategory = async (categoryData) => {
     const response = await fetchWithToken('api/categories/createCategory', categoryData, 'POST');
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error} with errors: ${JSON.stringify(response.errors)} and message: ${response.message}`);
+      const err = new Error(response.message || 'Error creating category');
+      err.status = response.error;
+      err.errors = response.errors;
+      err.response = response;
+      throw err;
     }
     return response;
 
   } catch (error) {
     console.error('Error creating category:', error);
-    throw new Error(`Error creating category: ${error.message}`);
+    throw error;
   }
 }
 
@@ -49,12 +53,16 @@ export const updateCategory = async (id, categoryData) => {
     const response = await fetchWithToken(`api/categories/updateCategory/${id}`, categoryData, 'POST');
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error} with errors: ${JSON.stringify(response.errors)} and message: ${response.message}`);
+      const err = new Error(response.message || 'Error updating category');
+      err.status = response.error;
+      err.errors = response.errors;
+      err.response = response;
+      throw err;
     }
     return response;
 
   } catch (error) {
     console.error('Error updating category:', error);
-    throw new Error(`Error updating category: ${error.message}`);
+    throw error;
   }
 }
