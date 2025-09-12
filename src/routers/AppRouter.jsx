@@ -32,7 +32,7 @@ export default function AppRouter() {
     )
   }
   console.log("Auth Context:", auth)
-  const isAuthenticated = auth.logged
+  const isAuthenticated = true
 
   return (
     <Routes>

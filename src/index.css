@@ -1,5 +1,5 @@
-html,
-body {
+/* ================= GLOBAL ================= */
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -21,6 +21,7 @@ body {
   background-color: rgb(218, 218, 218);
 }
 
+/* ================= MDX EDITOR ================= */
 .mdxeditor-root-contenteditable {
   min-height: 200px;
   padding: 0.5rem;
@@ -35,4 +36,67 @@ body {
 
 .mdxeditor-popup-container {
   z-index: 1070 !important;
+}
+
+/* ================= NAVBAR PERSONALIZADO ================= */
+.custom-navbar {
+  background: linear-gradient(135deg, #0e569e, #156dc5); 
+  border-bottom: 3px solid #1962bb; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 12px; 
+  min-height: 60px; 
+  padding: 0.2rem 1rem;
+}
+
+.custom-navbar .navbar-brand {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-navbar .navbar-brand img {
+  height: 55px; 
+  width: auto;       
+  object-fit: contain;
+  transition: height 0.3s ease;
+}
+
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-toggle {
+  color: #f0f4ff !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .dropdown-toggle:hover {
+  color: #ffffff !important;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #e7f1f8 !important; 
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15); 
+  border: none;
+}
+
+/* Botón de cerrar sesión */
+.dropdown-item {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item.logout-btn {
+  background-color: #d3e0f8 !important; 
+  color: #003f7f !important;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.dropdown-item.logout-btn:hover {
+  background-color: #4e8ace !important; 
+  color: #ffffff !important;
 }
