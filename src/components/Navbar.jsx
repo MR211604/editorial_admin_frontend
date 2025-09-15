@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 
 export default function Navbar() {
-
   const { auth: { name }, logout } = useContext(AuthContext)
-
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -21,7 +19,6 @@ export default function Navbar() {
       sticky="top" 
     >
       <Container fluid>
-        {/* Logo institucional */}
         <BootstrapNavbar.Brand 
           href="/dashboard" 
           className="fw-bold text-white"
@@ -35,16 +32,19 @@ export default function Navbar() {
 
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" className="bg-light" />
         
-        {/* Menú de usuario */}
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <NavDropdown  
-              align="end" 
-              title={<><i className="bi bi-person-circle me-1"></i> {name}</>} 
+              align="end"
+              title={<span><i className="bi bi-person-circle me-1"></i> {name}</span>}
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item onClick={handleLogout} className="logout-btn">
-                <i className="bi bi-box-arrow-right"></i> Cerrar sesión
+              <NavDropdown.Item 
+                onClick={handleLogout}
+                className="logout-btn"
+                style={{ background: 'none', color: '#000' }}
+              >
+                <i className="bi bi-box-arrow-right me-2"></i> Cerrar sesión
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
