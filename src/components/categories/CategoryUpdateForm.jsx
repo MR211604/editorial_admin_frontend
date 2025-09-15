@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, memo } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,6 @@ import { useCategories, useUpdateCategory } from "../../hooks/useCategories";
 import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
-import { useMemo } from "react";
-import { memo } from "react";
 import toast from "react-hot-toast";
 
 function CategoryUpdateForm({ category }) {
@@ -19,6 +17,7 @@ function CategoryUpdateForm({ category }) {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -27,7 +26,7 @@ function CategoryUpdateForm({ category }) {
       main_category: category?.data.main_category,
       is_featured: category?.data.is_featured,
 
-      //Agregando campos de MDXEditor
+      // Agregando campos de MDXEditor
       about: category?.data?.detail?.about || "",
       editorial_board: category?.data?.detail?.editorial_board || "",
       policy: category?.data?.detail?.policy || "",
@@ -62,6 +61,18 @@ function CategoryUpdateForm({ category }) {
         navigate(0);
       },
       onError: (error) => {
+        const fieldErrors = error?.errors || {};
+        if (fieldErrors && typeof fieldErrors === "object") {
+          Object.entries(fieldErrors).forEach(([field, messages]) => {
+            const messageText = Array.isArray(messages)
+              ? messages.join(", ")
+              : messages;
+            setError(field, { type: "server", message: messageText });
+          });
+          toast.error("Corrija los errores del formulario");
+        } else {
+          toast.error(error?.message || "Error actualizando categoría");
+        }
         console.log("Error al actualizar la categoría:", error);
       },
     });
@@ -82,7 +93,7 @@ function CategoryUpdateForm({ category }) {
             Ingrese un título de categoría
           </Form.Text>
           <Form.Control.Feedback type="invalid">
-            Por favor ingrese un título de categoría
+            {errors.title?.message || "Por favor ingrese un título de categoría"}
           </Form.Control.Feedback>
         </Form.Group>
       </Col>
@@ -99,7 +110,8 @@ function CategoryUpdateForm({ category }) {
             Ingrese una descripción corta de la categoría
           </Form.Text>
           <Form.Control.Feedback type="invalid">
-            Por favor ingrese una descripción corta de la categoría
+            {errors.description?.message ||
+              "Por favor ingrese una descripción corta de la categoría"}
           </Form.Control.Feedback>
         </Form.Group>
       </Col>
@@ -219,3 +231,4 @@ function CategoryUpdateForm({ category }) {
 }
 
 export default memo(CategoryUpdateForm);
+

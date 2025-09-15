@@ -12,6 +12,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
     handleSubmit,
     control,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -22,7 +23,6 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
   });
 
   const handleSave = (data) => {
-    console.log("Crear categoría con datos:", data);
     createCategory(data, {
       onSuccess: () => {
         toast.success("Categoría creada exitosamente");
@@ -31,7 +31,17 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
         onClose();
       },
       onError: (error) => {
-        toast.error("Error creando categoría: " + error.message);
+        if (error?.errors && typeof error.errors === "object") {
+          Object.entries(error.errors).forEach(([field, messages]) => {
+            const messageText = Array.isArray(messages)
+              ? messages.join(", ")
+              : messages;
+            setError(field, { type: "server", message: messageText });
+          });
+          toast.error("Corrija los errores del formulario");
+        } else {
+          toast.error(error?.message || "Error creando categoría");
+        }
         console.error("Error creando categoría:", error);
       },
     });
@@ -93,11 +103,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
             control={control}
             rules={{ required: "El tipo de categoría es obligatorio" }}
             render={({ field }) => (
-              <Form.Control
-                as="select"
-                {...field}
-                isInvalid={!!errors.category_type}
-              >
+              <Form.Control as="select" {...field} isInvalid={!!errors.category_type}>
                 <option value="0">Sin Categoria</option>
                 <option value="1">Libro</option>
                 <option value="2">Revista</option>
@@ -112,3 +118,4 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
     </Modal>
   );
 }
+

@@ -26,7 +26,11 @@ export const createAuthor = async (authorData) => {
   try {
     const response = await fetchWithToken('api/authors/createAuthor', authorData, 'POST');
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error}`);
+      const err = new Error(response.message || 'Error creating author');
+      err.status = response.error;
+      err.errors = response.errors;
+      err.response = response;
+      throw err;
     }
     return response;
   } catch (error) {
@@ -39,7 +43,11 @@ export const updateAuthor = async (authorData) => {
   try {
     const response = await fetchWithToken('api/authors/updateAuthor', authorData, 'POST');
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error}`);
+      const err = new Error(response.message || 'Error updating author');
+      err.status = response.error;
+      err.errors = response.errors;
+      err.response = response;
+      throw err;
     }
     return response;
   } catch (error) {
