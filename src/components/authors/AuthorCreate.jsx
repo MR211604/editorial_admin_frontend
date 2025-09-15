@@ -1,48 +1,59 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useAuthors } from "../../hooks/useAuthors";
 import Modal from "../ui/modal/Modal";
 import { Form } from "react-bootstrap";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
-
-  const [authorForm, setAuthorForm] = useState({
-    name: '',
-    lastname: ''
+  const { createAuthor, isCreating } = useAuthors();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      lastname: "",
+    },
   });
-  const { createAuthor, isCreating } = useAuthors()
 
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setAuthorForm({
-      ...authorForm,
-      [name]: value
-    });
-  }
+  const nameValue = watch("name");
+  const lastnameValue = watch("lastname");
+  useEffect(() => {
+    if (errors.name?.type === "server") clearErrors("name");
+  }, [nameValue]);
+  useEffect(() => {
+    if (errors.lastname?.type === "server") clearErrors("lastname");
+  }, [lastnameValue]);
 
   const handleClose = () => {
-    setAuthorForm({
-      name: '',
-      lastname: ''
-    });
+    reset();
     // Logic to close the modal or navigate away
     onClose();
-  }
+  };
 
-  const handleSave = () => {
-    if (!authorForm.name.trim() || !authorForm.lastname.trim()) {
-      console.warn("Nombre y apellido son requeridos");
-      return;
-    }
-    console.log("Creando autor:", authorForm);
-    createAuthor(authorForm, {
+  const onSubmit = (data) => {
+    createAuthor(data, {
       onSuccess: () => {
-        console.log("Autor creado exitosamente");
+        toast.success("Autor creado exitosamente");
         onSuccess();
         handleClose();
       },
       onError: (error) => {
         console.error("Error creando autor:", error);
-      }
+        const fieldErrors = error?.errors || {};
+        Object.entries(fieldErrors).forEach(([field, messages]) => {
+          const messageText = Array.isArray(messages) ? messages.join(", ") : messages;
+          setError(field, { type: "server", message: messageText });
+        });
+        if (error?.message) toast.error(error.message);
+      },
     });
   };
 
@@ -51,35 +62,49 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
       isOpen={isOpen}
       onClose={handleClose}
       title="Crear Nuevo Autor"
-      onSave={handleSave}
+      onSave={handleSubmit(onSubmit)}
       saveButtonText={isCreating ? "Creando..." : "Crear Autor"}
       closeButtonText="Cancelar"
       showFooter={true}
     >
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="createAuthorName">Nombre</Form.Label>
           <Form.Control
             type="text"
             id="createAuthorName"
-            name="name"
-            value={authorForm.name}
-            onChange={handleFormChange}
+            isInvalid={!!errors.name}
             disabled={isCreating}
+            {...register("name", {
+              required: "El nombre es obligatorio",
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
+              maxLength: { value: 50, message: "Máximo 50 caracteres" },
+              validate: (v) => (v?.trim().length ? true : "El nombre es obligatorio"),
+            })}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.name?.message}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="createAuthorLastname">Apellido</Form.Label>
           <Form.Control
             type="text"
             id="createAuthorLastname"
-            name="lastname"
-            value={authorForm.lastname}
-            onChange={handleFormChange}
+            isInvalid={!!errors.lastname}
             disabled={isCreating}
+            {...register("lastname", {
+              required: "El apellido es obligatorio",
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
+              maxLength: { value: 50, message: "Máximo 50 caracteres" },
+              validate: (v) => (v?.trim().length ? true : "El apellido es obligatorio"),
+            })}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.lastname?.message}
+          </Form.Control.Feedback>
         </Form.Group>
       </Form>
     </Modal>
-  )
+  );
 }
