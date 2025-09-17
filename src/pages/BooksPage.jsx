@@ -5,6 +5,7 @@ import SelectPublishingCategories from "../components/ui/SelectPublishingCategor
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
+import { BOOK_CATEGORY } from "../constants/common";
 
 export default function BooksPage() {
   const {
@@ -64,8 +65,9 @@ export default function BooksPage() {
             optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
-              categoryType={1}
+              categoryType={BOOK_CATEGORY}
               defaultValue="Todos los libros"
+              defaultCategoryValue={null}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
               className="form-select form-select-md w-50 ms-2"

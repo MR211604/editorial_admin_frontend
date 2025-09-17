@@ -8,7 +8,6 @@ import Dashboard from "../pages/Dashboard";
 import MagazinesPage from "../pages/MagazinesPage";
 import RolPage from "../pages/RolPage";
 import UserAccountsPage from "../pages/UserAccountsPage";
-import UserPrivileges from "../pages/UserPrivileges";
 import LoginPage from "../pages/auth/LoginPage";
 import BookUpdate from "../pages/books/BookUpdate";
 import CategoryUpdate from "../pages/categories/CategoryUpdate";
@@ -73,7 +72,6 @@ export default function AppRouter() {
         </Route>
         <Route path="userAccounts" element={<UserAccountsPage />} />
         <Route path="rol" element={<RolPage />} />
-        <Route path="privileges" element={<UserPrivileges />} />
       </Route>
     </Routes>
   );

@@ -1,10 +1,9 @@
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router-dom";
 import { usePublishing } from "../../hooks/usePublishings";
 import { Card, Tab, Tabs } from "react-bootstrap";
 import BookUpdateForm from "../../components/books/BookUpdateForm";
 
 export default function BookUpdate() {
-
   const { id } = useParams();
 
   const { publishing, isPublishingLoading } = usePublishing(id);
@@ -20,7 +19,6 @@ export default function BookUpdate() {
       <p>Esta es la pagina de actualizacion de libros</p>
 
       <Card className="mb-3">
-
         <Card.Header>Actualizando informacion del libro</Card.Header>
 
         <Card.Body>
@@ -33,9 +31,7 @@ export default function BookUpdate() {
             </Tab>
           </Tabs>
         </Card.Body>
-
       </Card>
-
     </>
-  )
+  );
 }

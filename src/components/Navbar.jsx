@@ -1,48 +1,61 @@
-import { useContext } from 'react'
-import { Navbar as BootstrapNavbar, Container, Nav, NavDropdown } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../context/authContext'
+import { useContext } from "react";
+import {
+  Navbar as BootstrapNavbar,
+  Container,
+  Nav,
+  NavDropdown,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 export default function Navbar() {
-  const { auth: { name }, logout } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const {
+    auth: { name },
+    logout,
+  } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout()
-    navigate('/login', { replace: true })
-  }
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
-    <BootstrapNavbar 
-      expand="lg" 
-      className="custom-navbar shadow-lg" 
-      sticky="top" 
+    <BootstrapNavbar
+      expand="lg"
+      className="custom-navbar shadow-lg"
+      sticky="top"
     >
       <Container fluid>
-        <BootstrapNavbar.Brand 
-          href="/dashboard" 
-          className="fw-bold text-white"
-        >
-          <img 
-            src="https://i.imgur.com/Cm2nr2f.png" 
-            alt="logo editorial udb" 
+        <BootstrapNavbar.Brand href="/dashboard" className="fw-bold text-white">
+          <img
+            src="https://i.imgur.com/Cm2nr2f.png"
+            alt="logo editorial udb"
             className="me-2"
           />
         </BootstrapNavbar.Brand>
 
-        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" className="bg-light" />
-        
+        <BootstrapNavbar.Toggle
+          aria-controls="basic-navbar-nav"
+          className="bg-light"
+        />
+
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <NavDropdown  
+            <NavDropdown
               align="end"
-              title={<span><i className="bi bi-person-circle me-1"></i> {name}</span>}
+              title={
+                <span className="d-inline-flex align-items-center">
+                  <i className="bi bi-person-circle pe-2"></i>
+                  {name}
+                </span>
+              }
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item 
+              <NavDropdown.Item
                 onClick={handleLogout}
                 className="logout-btn"
-                style={{ background: 'none', color: '#000' }}
+                style={{ background: "none", color: "#000" }}
               >
                 <i className="bi bi-box-arrow-right me-2"></i> Cerrar sesión
               </NavDropdown.Item>
@@ -51,5 +64,5 @@ export default function Navbar() {
         </BootstrapNavbar.Collapse>
       </Container>
     </BootstrapNavbar>
-  )
+  );
 }

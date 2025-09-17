@@ -5,6 +5,7 @@ import SelectPublishingCategories from "../components/ui/SelectPublishingCategor
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
+import { MAGAZINE_CATEGORY } from "../constants/common";
 
 export default function MagazinesPage() {
   const {
@@ -78,7 +79,8 @@ export default function MagazinesPage() {
             optionSelectedValue="Todas las revistas"
           >
             <SelectPublishingCategories
-              categoryType={2}
+              categoryType={MAGAZINE_CATEGORY}
+              defaultCategoryValue={null}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
               defaultValue="Todas las revistas"

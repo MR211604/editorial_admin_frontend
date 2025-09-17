@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useDebounce } from "../../hooks/utils/useDebounce";
-import { useAuthors } from "../../hooks/useAuthors";
+// import { useAuthors } from "../../hooks/useAuthors";
 import { useModalCRUD } from "../../hooks/utils/useModalCRUD";
 import { useEffect } from "react";
 
-export const useAuthorsPage = () => {
+export const usePage = () => {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 10,
   });
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
@@ -20,7 +20,6 @@ export const useAuthorsPage = () => {
     closeModal,
 
     // Handlers específicos
-
     handleCreateValue,
     handleEditValue,
     handleDeleteValue,
@@ -28,31 +27,21 @@ export const useAuthorsPage = () => {
     // Callbacks de éxito
     onCreateSuccess,
     onEditSuccess,
-    onDeleteSuccess
+    onDeleteSuccess,
   } = useModalCRUD();
-
 
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
-      pageIndex: 0
+      pageIndex: 0,
     }));
   }, [debouncedSearch]);
-
-
-  const { allAuthors, isAllAuthorsLoading } = useAuthors(
-    pagination.pageIndex + 1,
-    pagination.pageSize,
-    sorting,
-    debouncedSearch
-  );
 
   const searchHandler = (e) => {
     setSearch(e.target.value);
   };
-
 
   return {
     // Estados básicos
@@ -62,10 +51,9 @@ export const useAuthorsPage = () => {
     setSorting,
     search,
     setSearch,
+    debouncedSearch,
 
     // Datos
-    allAuthors,
-    isAllAuthorsLoading,
     selectedValue,
 
     // Modal handlers
@@ -82,6 +70,6 @@ export const useAuthorsPage = () => {
     // Callbacks de éxito
     onCreateSuccess,
     onEditSuccess,
-    onDeleteSuccess
+    onDeleteSuccess,
   };
-}
+};

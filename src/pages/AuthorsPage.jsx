@@ -3,10 +3,11 @@ import AuthorCreate from "../components/authors/AuthorCreate";
 import AuthorUpdate from "../components/authors/AuthorUpdate";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
-import { useAuthorsPage } from "./hooks/useAuthorsPage";
+import { useAuthors } from "../hooks/useAuthors";
+import { useDebounce } from "../hooks/utils/useDebounce";
+import { usePage } from "./hooks/usePage";
 
 export default function AuthorsPage() {
-
   const {
     // Estados básicos
     pagination,
@@ -15,10 +16,6 @@ export default function AuthorsPage() {
     setSorting,
     search,
     setSearch,
-
-    // Datos
-    allAuthors,
-    isAllAuthorsLoading,
     selectedValue,
 
     // Modal handlers
@@ -34,8 +31,20 @@ export default function AuthorsPage() {
     // Callbacks de éxito
     onCreateSuccess,
     onEditSuccess,
-    // onDeleteSuccess
-  } = useAuthorsPage();
+  } = usePage();
+
+  //Logica para mantener un debounce
+  const debouncedSearch = useDebounce(search, 300);
+
+  // Data
+  const { allAuthors, isAllAuthorsLoading } = useAuthors(
+    pagination.pageIndex + 1,
+    pagination.pageSize,
+    sorting,
+    debouncedSearch
+  );
+
+  console.log("allAuthors", allAuthors);
 
   const authorColumns = AuthorColumns(handleEditValue, handleDeleteValue);
 
@@ -43,13 +52,14 @@ export default function AuthorsPage() {
     <div>
       <h1>Autores</h1>
       <hr />
-      <p>Bienvenido a la sección de autores. Aquí puedes encontrar información sobre los autores.</p>
+      <p>
+        Bienvenido a la sección de autores. Aquí puedes encontrar información
+        sobre los autores.
+      </p>
 
-      <div className='card'>
-        <div className="card-header">
-          Listado de autores
-        </div>
-        <div className='card-body'>
+      <div className="card">
+        <div className="card-header">Listado de autores</div>
+        <div className="card-body">
           <ToolBar
             onCreateClick={handleCreateValue}
             search={search}
@@ -72,19 +82,22 @@ export default function AuthorsPage() {
       </div>
 
       {/* Modales separados */}
-      <AuthorCreate
-        isOpen={isModalOpen('create')}
-        onClose={() => closeModal('create')}
-        onSuccess={onCreateSuccess}
-      />
+      {isModalOpen("create") && (
+        <AuthorCreate
+          isOpen={isModalOpen("create")}
+          onClose={() => closeModal("create")}
+          onSuccess={onCreateSuccess}
+        />
+      )}
 
-      <AuthorUpdate
-        isOpen={isModalOpen('edit')}
-        onClose={() => closeModal('edit')}
-        onSuccess={onEditSuccess}
-        author={selectedValue}
-      />
-
+      {isModalOpen("edit") && selectedValue && (
+        <AuthorUpdate
+          isOpen={isModalOpen("edit")}
+          onClose={() => closeModal("edit")}
+          onSuccess={onEditSuccess}
+          author={selectedValue}
+        />
+      )}
     </div>
-  )
+  );
 }

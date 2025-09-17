@@ -1,74 +1,93 @@
-import React from 'react'
-import { useState } from 'react'
-import { useUsers } from '../hooks/useUsers'
-import Table from '../components/ui/table/Table'
+import Table from "../components/ui/table/Table";
+import ToolBar from "../components/ui/ToolBar";
+import { UserColumns } from "../components/users/UserColumns";
+import UserCreate from "../components/users/UserCreate";
+import { useUsers } from "../hooks/useUsers";
+import { useDebounce } from "../hooks/utils/useDebounce";
+import { usePage } from "./hooks/usePage";
 
 export default function UserAccountsPage() {
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    search,
+    setSearch,
+    // selectedValue,
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10
-  })
+    // Modal handlers
+    isModalOpen,
+    closeModal,
 
-  const { allUsers, isAllUsersLoading } = useUsers(pagination.pageIndex + 1, pagination.pageSize)
+    // Handlers específicos
+    searchHandler,
+    handleCreateValue,
+    handleEditValue,
+    // handleDeleteValue,
 
-  const usersColumns = [
-    {
-      header: 'ID',
-      accessorKey: 'id',
-      enableSorting: true
-    },
-    {
-      header: 'Nombre',
-      accessorKey: 'name',
-      enableSorting: true
-    },
-    {
-      header: 'Token/Usuario',
-      accessorKey: 'token',
-      enableSorting: true
-    },
-    {
-      header: 'Rol',
-      accessorKey: 'rol.name',
-      enableSorting: true
-    },
-    {
-      header: 'Ultimo acceso',
-      accessorKey: 'last_login_date',
-      enableSorting: true
-    },
-    // {
-    //   Header: 'Operaciones',
-    //   accessor: 'operations',
-    //   Cell: ({ row }) => (
-    //     <div id={row.id} className="d-flex gap-2">
-    //       <button className="btn btn-primary btn-sm" onClick={() => console.log(row)}>Editar</button>
-    //       <button className="btn btn-danger btn-sm">Eliminar</button>
-    //     </div>
-    //   )
-    // }
-  ]
+    // Callbacks de éxito
+    onCreateSuccess,
+    // onEditSuccess,
+  } = usePage();
+
+  const onDelete = (id) => {
+    console.log("id a eliminar", id);
+  };
+
+  const debouncedSearch = useDebounce(search, 300);
+
+  const { allUsers, isAllUsersLoading } = useUsers(
+    pagination.pageIndex + 1,
+    pagination.pageSize,
+    sorting,
+    debouncedSearch
+  );
+
+  console.log("allUsers", allUsers);
+
+  const userColumns = UserColumns(handleEditValue, onDelete);
 
   return (
     <>
       <h1>Usuarios</h1>
       <hr />
-      <p>Aqui puedes encontrar una lista de todos los usuarios registrados dentro de esta plataforma.</p>
+      <p>
+        Aqui puedes encontrar una lista de todos los usuarios registrados dentro
+        de esta plataforma.
+      </p>
 
       <div className="card">
-        <div className="card-header">
-          Listado de Usuarios
-        </div>
-
+        <div className="card-header">Listado de usuarios</div>
         <div className="card-body">
-          <div className='d-flex align-items-center mb-3'>
-            <button className='btn btn-success'>Agregar Usuario</button>
-          </div>
-          <Table paginatedTableData={allUsers} columns={usersColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllUsersLoading} />
+          <ToolBar
+            onCreateClick={handleCreateValue}
+            search={search}
+            onSearchChange={searchHandler}
+            createButtonText="Agregar nuevo usuario"
+            searchPlaceholder="Buscar usuario..."
+          />
+
+          <Table
+            paginatedTableData={allUsers}
+            columns={userColumns}
+            pagination={pagination}
+            setPagination={setPagination}
+            isTableDataLoading={isAllUsersLoading}
+            sorting={sorting}
+            setSorting={setSorting}
+            setSearch={setSearch}
+          />
         </div>
       </div>
-    </>
 
-  )
+      {isModalOpen("create") && (
+        <UserCreate
+          isOpen={isModalOpen("create")}
+          onClose={() => closeModal("create")}
+          onSuccess={onCreateSuccess}
+        />
+      )}
+    </>
+  );
 }

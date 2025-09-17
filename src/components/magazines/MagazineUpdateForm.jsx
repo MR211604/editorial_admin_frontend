@@ -6,6 +6,7 @@ import { useUpdatePublishing } from "../../hooks/usePublishings";
 import AuthorsTable from "../publishings/AuthorsTable";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
+import { MAGAZINE_CATEGORY } from "../../constants/common";
 
 export default function MagazineUpdateForm({ publishing }) {
   const authorsTableRef = useRef();
@@ -178,7 +179,7 @@ export default function MagazineUpdateForm({ publishing }) {
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
-                      categoryType={2}
+                      categoryType={MAGAZINE_CATEGORY}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${

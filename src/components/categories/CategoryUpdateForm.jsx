@@ -7,6 +7,7 @@ import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
 import toast from "react-hot-toast";
+import { DEFAULT_MAIN_CATEGORY_ID } from "../../constants/common";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function CategoryUpdateForm({ category }) {
     defaultValues: {
       title: category?.data.title,
       description: category?.data.description,
-      main_category: category?.data.main_category,
+      main_category: category?.data.main_category ?? DEFAULT_MAIN_CATEGORY_ID,
       is_featured: category?.data.is_featured,
 
       // Agregando campos de MDXEditor
@@ -93,7 +94,8 @@ function CategoryUpdateForm({ category }) {
             Ingrese un título de categoría
           </Form.Text>
           <Form.Control.Feedback type="invalid">
-            {errors.title?.message || "Por favor ingrese un título de categoría"}
+            {errors.title?.message ||
+              "Por favor ingrese un título de categoría"}
           </Form.Control.Feedback>
         </Form.Group>
       </Col>
@@ -231,4 +233,3 @@ function CategoryUpdateForm({ category }) {
 }
 
 export default memo(CategoryUpdateForm);
-

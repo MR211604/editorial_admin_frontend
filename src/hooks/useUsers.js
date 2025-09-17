@@ -1,32 +1,31 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser, getUsers,updateUser } from "../api/users/usersService";
+import { createUser, getUsers, updateUser } from "../api/users/usersService";
 
-export const useUsers = (pagination, rows) => {
-
+export const useUsers = (pagination, rows, sorting, search) => {
   const queryClient = useQueryClient();
 
   const { data: allUsers, isLoading: isAllUsersLoading } = useQuery({
-    queryKey: ['users', pagination, rows],
-    queryFn: () => getUsers(pagination, rows)
+    queryKey: ["users", pagination, rows, sorting, search],
+    queryFn: () => getUsers(pagination, rows, sorting, search),
   });
 
   const createUserMutation = useMutation({
     mutationFn: (userData) => createUser(userData),
     onSucces: () => {
       queryClient.invalidateQueries({
-        queryKey: ['users']
-      })
-    }
-  })
+        queryKey: ["users"],
+      });
+    },
+  });
 
   const updateUserMutation = useMutation({
     mutationFn: (userData) => updateUser(userData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['users']
-      })
-    }
-  })
+        queryKey: ["users"],
+      });
+    },
+  });
 
   return {
     allUsers,
@@ -44,4 +43,4 @@ export const useUsers = (pagination, rows) => {
     createError: createUserMutation.error,
     updateError: updateUserMutation.error,
   };
-}
+};

@@ -2,14 +2,17 @@ export const AuthorColumns = (onEdit, onDelete) => [
   {
     header: "ID",
     accessorKey: "id",
+    enableSorting: true,
   },
   {
     header: "Nombre",
     accessorKey: "name",
+    enableSorting: true,
   },
   {
     header: "Apellido",
     accessorKey: "lastname",
+    enableSorting: true,
   },
   {
     header: "Operaciones",

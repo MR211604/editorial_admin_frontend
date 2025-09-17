@@ -34,7 +34,6 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
 
   const handleClose = () => {
     reset();
-    // Logic to close the modal or navigate away
     onClose();
   };
 
@@ -49,7 +48,9 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
         console.error("Error creando autor:", error);
         const fieldErrors = error?.errors || {};
         Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages) ? messages.join(", ") : messages;
+          const messageText = Array.isArray(messages)
+            ? messages.join(", ")
+            : messages;
           setError(field, { type: "server", message: messageText });
         });
         if (error?.message) toast.error(error.message);
@@ -79,7 +80,8 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
               required: "El nombre es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
               maxLength: { value: 50, message: "Máximo 50 caracteres" },
-              validate: (v) => (v?.trim().length ? true : "El nombre es obligatorio"),
+              validate: (v) =>
+                v?.trim().length ? true : "El nombre es obligatorio",
             })}
           />
           <Form.Control.Feedback type="invalid">
@@ -97,7 +99,8 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
               required: "El apellido es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
               maxLength: { value: 50, message: "Máximo 50 caracteres" },
-              validate: (v) => (v?.trim().length ? true : "El apellido es obligatorio"),
+              validate: (v) =>
+                v?.trim().length ? true : "El apellido es obligatorio",
             })}
           />
           <Form.Control.Feedback type="invalid">
