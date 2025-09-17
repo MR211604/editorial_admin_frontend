@@ -21,14 +21,12 @@ export const useCreatePublishing = () => {
   const queryClient = useQueryClient();
 
   const createPublishingMutation = useMutation({
-    queryKey: ['publishing'],
     mutationFn: (publishingData) => createPublishing(publishingData),
     onSuccess: () => {
-      // Invalidate the query to refetch the updated data
-      queryClient.invalidateQueries({
-        queryKey: ['publishing']
-      });
-    }
+      // Refresh dependent publishing lists after create/update
+      queryClient.invalidateQueries({ queryKey: ['publishings'] });
+      queryClient.invalidateQueries({ queryKey: ['publishing'] });
+    },
   });
 
   return {
@@ -42,14 +40,12 @@ export const useUpdatePublishing = (id) => {
   const queryClient = useQueryClient();
 
   const updatePublishingMutation = useMutation({
-    queryKey: ['publishing', id],
     mutationFn: (publishingData) => updatePublishing(id, publishingData),
     onSuccess: () => {
-      // Invalidate the query to refetch the updated data
-      queryClient.invalidateQueries({
-        queryKey: ['publishing', id]
-      });
-    }
+      // Refresh dependent publishing lists after create/update
+      queryClient.invalidateQueries({ queryKey: ['publishing', id] });
+      queryClient.invalidateQueries({ queryKey: ['publishings'] });
+    },
   });
 
   return {
