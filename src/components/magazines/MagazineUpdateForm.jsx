@@ -7,6 +7,7 @@ import AuthorsTable from "../publishings/AuthorsTable";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
 import { MAGAZINE_CATEGORY } from "../../constants/common";
+import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 
 export default function MagazineUpdateForm({ publishing }) {
   const authorsTableRef = useRef();
@@ -26,7 +27,7 @@ export default function MagazineUpdateForm({ publishing }) {
       title: publishing?.data.title || "",
       pages: publishing?.data.pages || "",
       publish_date: publishing?.data.publish_date || "",
-      publish_code: publishing?.data.publish_code || "",
+      publish_code: formatISBN(publishing?.data.publish_code || ""),
       age: publishing?.data.age || "",
       age_number: publishing?.data.age_number || "",
       volume: publishing?.data.volume || "",
@@ -41,7 +42,7 @@ export default function MagazineUpdateForm({ publishing }) {
         title: publishing.data.title,
         pages: publishing.data.pages || "",
         publish_date: publishing.data.publish_date || "",
-        publish_code: publishing.data.publish_code || "",
+        publish_code: formatISBN(publishing.data.publish_code || ""),
         volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || undefined,
@@ -60,6 +61,7 @@ export default function MagazineUpdateForm({ publishing }) {
     const authorsData = authorsTableRef.current?.getAuthorsData();
     const updateData = {
       ...data,
+      publish_code: data.publish_code,
       id: publishing?.data.id,
       publishing_type: publishing?.data.publishing_type,
       authors: authorsData?.visibleAuthors.map((author) => author.id) || [],
@@ -148,18 +150,35 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
             <Form.Group className="mb-3">
               <Form.Label>ISBN</Form.Label>
-              <Form.Control
-                type="number"
-                isInvalid={!!errors.publish_code}
-                {...register("publish_code", {
+              <Controller
+                name="publish_code"
+                control={control}
+                rules={{
                   required: "El ISBN es obligatorio",
-                })}
+                  validate: (value) =>
+                    ISBN_FORMAT_REGEX.test(value || "") ||
+                    "El ISBN debe seguir el formato ###-##-####-###-#",
+                }}
+                render={({ field }) => (
+                  <Form.Control
+                    {...field}
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="123-45-6789-012-3"
+                    value={field.value || ""}
+                    isInvalid={!!errors.publish_code}
+                    onChange={(event) => {
+                      const formattedValue = formatISBN(event.target.value);
+                      field.onChange(formattedValue);
+                    }}
+                  />
+                )}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.publish_code?.message}
               </Form.Control.Feedback>
               <Form.Text className="text-muted">
-                Ingrese el ISBN de la publicación
+                Formato requerido: ###-##-####-###-#
               </Form.Text>
             </Form.Group>
           </Col>
