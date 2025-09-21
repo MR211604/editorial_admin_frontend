@@ -26,6 +26,7 @@ export const useCreatePublishing = () => {
       // Refresh dependent publishing lists after create/update
       queryClient.invalidateQueries({ queryKey: ['publishings'] });
       queryClient.invalidateQueries({ queryKey: ['publishing'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
     },
   });
 
@@ -45,6 +46,7 @@ export const useUpdatePublishing = (id) => {
       // Refresh dependent publishing lists after create/update
       queryClient.invalidateQueries({ queryKey: ['publishing', id] });
       queryClient.invalidateQueries({ queryKey: ['publishings'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
     },
   });
 

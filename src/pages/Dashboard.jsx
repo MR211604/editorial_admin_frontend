@@ -1,7 +1,37 @@
+import { useEffect } from "react";
 import CardButton from "../components/dashboard/CardButton";
 import DashboardCard from "../components/dashboard/DashboardCard";
+import { useDashboardSummary } from "../hooks/useDashboardSummary";
+
+/**
+ * Formatea la métrica para la UI:
+ * "..." mientras carga
+ * 0 si el valor es null/undefined
+ */
+
+const formatMetric = (value, { isLoading }) => {
+  if (isLoading) return "...";
+  return value ?? 0;
+};
 
 export default function Dashboard() {
+  const {
+    data: dashboardSummary,
+    isLoading,
+    isError,
+    error,
+  } = useDashboardSummary();
+
+  // Log de error si la petición falla
+  useEffect(() => {
+    if (isError) {
+      console.error("No se pudo obtener el resumen del dashboard:", error);
+    }
+  }, [isError, error]);
+
+  const booksCount = formatMetric(dashboardSummary?.books, { isLoading });
+  const magazinesCount = formatMetric(dashboardSummary?.magazines, { isLoading });
+
   return (
     <>
       <div>
@@ -23,7 +53,7 @@ export default function Dashboard() {
               </svg>
             }
             title="Libros"
-            count={150}
+            count={booksCount}
             buttonComponent={true}
           >
             <CardButton className="btn-primary" href="/dashboard/books">
@@ -33,7 +63,7 @@ export default function Dashboard() {
           <DashboardCard
             className={"flex-grow-1"}
             title="Revistas"
-            count={50}
+            count={magazinesCount}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
