@@ -90,3 +90,24 @@ export const createPublishing = async (data) => {
     throw error;
   }
 };
+
+export const toggleArchivePublishing = async (id, isArchived) => {
+  try {
+    const response = await fetchWithToken(
+      `api/publishings/updateStatus/${id}`,
+      { is_archived: isArchived }, // Permite modificar el estado de la publicacion
+      "POST"
+    );
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! status: ${response.message} - ${JSON.stringify(
+          response.errors
+        )}`
+      );
+    }
+    return response;
+  } catch (error) {
+    console.error("Error creating publishing:", error);
+    throw error;
+  }
+};

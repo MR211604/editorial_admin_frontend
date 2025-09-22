@@ -7,6 +7,7 @@ import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_CATEGORY } from "../constants/common";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
+import ArchivePublishing from "../components/publishings/ArchivePublishing";
 
 export default function BooksPage() {
   const {
@@ -21,11 +22,12 @@ export default function BooksPage() {
     // Datos
     allPublishings,
     isAllPublishingsLoading,
-    // selectedPublishing,
+    selectedPublishing,
 
     // Modal handlers
     isModalOpen,
     closeModal,
+    handleEditValue,
 
     // Handlers específicos
     searchHandler,
@@ -36,6 +38,7 @@ export default function BooksPage() {
 
     //Callbacks
     onCreateSuccess,
+    onEditSuccess,
   } = usePublishingsPage(1);
 
   const navigate = useNavigate();
@@ -43,10 +46,18 @@ export default function BooksPage() {
   const handleUpdateBook = (row) =>
     navigate(`/dashboard/books/edit/${row.original.id}`);
 
+  // const handleArchiveBook = (row) => {
+  //   console.log("Archivar libro:", row.original.id);
+  // };
+
   const handleDeleteBook = (row) =>
     console.log("Eliminar libro:", row.original);
 
-  const bookColumns = BookColumns(handleUpdateBook, handleDeleteBook);
+  const bookColumns = BookColumns(
+    handleUpdateBook,
+    handleEditValue,
+    handleDeleteBook
+  );
 
   return (
     <>
@@ -103,6 +114,15 @@ export default function BooksPage() {
           onSuccess={onCreateSuccess}
           publishingType={1}
         />
+
+        {isModalOpen("edit") && selectedPublishing && (
+          <ArchivePublishing
+            isOpen={isModalOpen("edit")}
+            onClose={() => closeModal("edit")}
+            onSuccess={onEditSuccess}
+            selectedPublishing={selectedPublishing}
+          />
+        )}
       </div>
     </>
   );

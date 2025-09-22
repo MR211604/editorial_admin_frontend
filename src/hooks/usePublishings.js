@@ -3,6 +3,7 @@ import {
   createPublishing,
   getPublishingById,
   getPublishings,
+  toggleArchivePublishing,
   updatePublishing,
 } from "../api/publishings/publishingService";
 
@@ -96,5 +97,20 @@ export const usePublishing = (id) => {
   return {
     publishing,
     isPublishingLoading,
+  };
+};
+
+export const useArchivePublishing = (id) => {
+  const queryClient = useQueryClient();
+  const archivePublishingMutation = useMutation({
+    mutationFn: (publishingData) => toggleArchivePublishing(id, publishingData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["publishing", id] });
+    },
+  });
+
+  return {
+    archivePublishing: archivePublishingMutation.mutate,
+    isArchiving: archivePublishingMutation.isPending,
   };
 };
