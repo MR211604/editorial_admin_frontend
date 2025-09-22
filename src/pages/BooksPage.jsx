@@ -6,6 +6,7 @@ import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_CATEGORY } from "../constants/common";
+import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
 
 export default function BooksPage() {
   const {
@@ -15,6 +16,7 @@ export default function BooksPage() {
     setSorting,
     search,
     setSearch,
+    filterArchived,
 
     // Datos
     allPublishings,
@@ -30,6 +32,7 @@ export default function BooksPage() {
     handleCreateValue,
     handleCategoryChange,
     selectedCategory,
+    handleArchivedFilterChange,
 
     //Callbacks
     onCreateSuccess,
@@ -41,7 +44,7 @@ export default function BooksPage() {
     navigate(`/dashboard/books/edit/${row.original.id}`);
 
   const handleDeleteBook = (row) =>
-    console.log("Eliminar libro:", row.original.id);
+    console.log("Eliminar libro:", row.original);
 
   const bookColumns = BookColumns(handleUpdateBook, handleDeleteBook);
 
@@ -62,15 +65,21 @@ export default function BooksPage() {
             createButtonText="Agregar nuevo libro"
             searchPlaceholder="Buscar libro..."
             hasSelect={true}
+            selectName="Filtrar: "
             optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
               categoryType={BOOK_CATEGORY}
               defaultValue="Todos los libros"
-              defaultCategoryValue={null}
+              defaultCategoryValue={""}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
               className="form-select form-select-md w-50 ms-2"
+            />
+            <SelectArchivedPublishings
+              onSelectChange={handleArchivedFilterChange}
+              selectedValue={filterArchived}
+              className="form-select form-select-md w-25 ms-2"
             />
           </ToolBar>
 

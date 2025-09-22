@@ -20,20 +20,18 @@ import {
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
-  UndoRedo
-} from '@mdxeditor/editor';
-import { Form } from 'react-bootstrap';
-import { Controller } from 'react-hook-form';
-
+  UndoRedo,
+} from "@mdxeditor/editor";
+import { Form } from "react-bootstrap";
+import { Controller } from "react-hook-form";
 
 export default function MDXEditorField({
   name,
   control,
   label,
   helpText,
-  placeholder = "Inserte su contenido aquí"
+  placeholder = "Inserte su contenido aquí",
 }) {
-
   const plugins = [
     // Plugins básicos
     headingsPlugin(),
@@ -49,14 +47,14 @@ export default function MDXEditorField({
 
     // Plugins de tablas y código
     tablePlugin(),
-    codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+    codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
     codeMirrorPlugin({
       codeBlockLanguages: {
-        js: 'JavaScript',
-        css: 'CSS',
-        txt: 'text',
-        tsx: 'TypeScript'
-      }
+        js: "JavaScript",
+        css: "CSS",
+        txt: "text",
+        tsx: "TypeScript",
+      },
     }),
 
     toolbarPlugin({
@@ -74,8 +72,8 @@ export default function MDXEditorField({
           <InsertImage />
           <CreateLink />
         </>
-      )
-    })
+      ),
+    }),
   ];
 
   return (
@@ -93,9 +91,7 @@ export default function MDXEditorField({
           />
         )}
       />
-      <Form.Text className="text-muted">
-        {helpText}
-      </Form.Text>
+      <Form.Text className="text-muted">{helpText}</Form.Text>
     </Form.Group>
-  )
+  );
 }

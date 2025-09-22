@@ -238,3 +238,19 @@ body {
     transform: translateX(0);
   }
 }
+
+.mdxeditor-root-contenteditable {
+  min-height: 200px;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.mdxeditor-toolbar {
+  flex-wrap: wrap;
+  padding: 0.5rem;
+}
+
+.mdxeditor-popup-container {
+  z-index: 1070 !important;
+}

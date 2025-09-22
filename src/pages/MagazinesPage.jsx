@@ -53,6 +53,7 @@ export default function MagazinesPage() {
 
   const magazineColumns = MagazineColumns(
     handleUpdateMagazine,
+    null, //Temporal, aun no existe funcion para archivar
     handleDeleteMagazine,
     handleEditArticles
   );

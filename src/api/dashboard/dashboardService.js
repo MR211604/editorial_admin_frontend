@@ -5,13 +5,14 @@ import { fetchWithToken } from "../../helpers/fetch";
  * Llama al endpoint /api/dashboard/summary
  * Lanza error si la petición falla
  * Normaliza la respuesta para valores numéricos
- */ 
+ */
 
 export const getDashboardSummary = async () => {
-  const response = await fetchWithToken("api/dashboard/summary");
+  const response = await fetchWithToken("api/publishings/summary");
 
   if (!response?.ok) {
-    const message = response?.message || "No se pudo obtener el resumen del dashboard";
+    const message =
+      response?.message || "No se pudo obtener el resumen del dashboard";
     throw new Error(message);
   }
 

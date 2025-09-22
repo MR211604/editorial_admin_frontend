@@ -8,18 +8,19 @@ import { useEffect } from "react";
 export const usePublishingsPage = (publishing_type) => {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 10,
   });
 
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [filterArchived, setFilterArchived] = useState(0);
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
-      pageIndex: 0
+      pageIndex: 0,
     }));
   }, [debouncedSearch]);
 
@@ -35,22 +36,27 @@ export const usePublishingsPage = (publishing_type) => {
     selectedValue: selectedPublishing,
   } = useModalCRUD();
 
-  const { allPublishings, isAllPublishingsLoading } = usePublishings(pagination.pageIndex + 1,
+  const { allPublishings, isAllPublishingsLoading } = usePublishings(
+    pagination.pageIndex + 1,
     pagination.pageSize,
     publishing_type,
     sorting,
     debouncedSearch,
-    selectedCategory
-  )
+    selectedCategory,
+    filterArchived
+  );
 
   const searchHandler = (e) => {
     setSearch(e.target.value);
-  }
+  };
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
-  }
+  };
 
+  const handleArchivedFilterChange = (e) => {
+    setFilterArchived(e.target.value);
+  };
 
   return {
     // Estados
@@ -61,6 +67,7 @@ export const usePublishingsPage = (publishing_type) => {
     search,
     setSearch,
     selectedCategory,
+    filterArchived,
 
     // Datos
     allPublishings,
@@ -77,11 +84,11 @@ export const usePublishingsPage = (publishing_type) => {
     handleEditValue,
     handleDeleteValue,
     handleCategoryChange,
+    handleArchivedFilterChange,
 
     // Callbacks de éxito
     onCreateSuccess,
     onEditSuccess,
-    onDeleteSuccess
-  }
-
-}
+    onDeleteSuccess,
+  };
+};
