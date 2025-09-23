@@ -111,3 +111,24 @@ export const toggleArchivePublishing = async (id, isArchived) => {
     throw error;
   }
 };
+
+export const deletePublishing = async (id) => {
+  try {
+    const response = await fetchWithToken(
+      `api/publishings/deletePublishing/${id}`,
+      {},
+      "POST"
+    );
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! status: ${response.message} - ${JSON.stringify(
+          response.errors
+        )}`
+      );
+    }
+    return response;
+  } catch (error) {
+    console.error("Error creating publishing:", error);
+    throw error;
+  }
+};

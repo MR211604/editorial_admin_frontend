@@ -53,22 +53,17 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
         <button className="btn btn-primary btn-sm" onClick={() => onEdit(row)}>
           <i className="bi bi-pencil-square"></i>
         </button>
-
-        {row.original.is_archive ? (
+        {row.original.is_archived === 1 ? (
           <button
             className="btn btn-danger btn-sm"
             onClick={() => onDelete(row)}
           >
             <i className="bi bi-trash"></i>
           </button>
-        ) : (
-          <button
-            className="btn btn-info btn-sm"
-            onClick={() => onArchive(row)}
-          >
-            <i className="bi bi-archive"></i>
-          </button>
-        )}
+        ) : null}
+        <button className="btn btn-info btn-sm" onClick={() => onArchive(row)}>
+          <i className="bi bi-archive"></i>
+        </button>
       </div>
     ),
     enableSorting: false,

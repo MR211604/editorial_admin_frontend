@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useArchivePublishing } from "../../hooks/usePublishings";
 import Modal from "../ui/modal/Modal";
 import toast from "react-hot-toast";
@@ -14,16 +13,13 @@ export default function ArchivePublishing({
     selectedPublishing?.original.id
   );
 
-  const navigate = useNavigate();
-
   const onArchive = () => {
     if (selectedPublishing?.original.is_archived === 1) {
-      // Ya esta archivado, por lo tanto, desarchivar (0)
       archivePublishing(0, {
         onSuccess: () => {
           toast.success("Publicación desarchivada exitosamente");
           onSuccess();
-          navigate(0);
+          onClose();
         },
       });
     } else {
@@ -31,7 +27,7 @@ export default function ArchivePublishing({
         onSuccess: () => {
           toast.success("Publicación archivada exitosamente");
           onSuccess();
-          navigate(0);
+          onClose();
         },
       });
     }
@@ -42,7 +38,11 @@ export default function ArchivePublishing({
       isOpen={isOpen}
       onClose={onClose}
       title={"Archivar Publicación"}
-      saveButtonText={"Archivar"}
+      saveButtonText={
+        selectedPublishing?.original.is_archived === 1
+          ? "Desarchivar"
+          : "Archivar"
+      }
       onSave={() => onArchive()}
       closeButtonText="Cancelar"
       showFooter={true}

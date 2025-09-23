@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createPublishing,
+  deletePublishing,
   getPublishingById,
   getPublishings,
   toggleArchivePublishing,
@@ -105,12 +106,28 @@ export const useArchivePublishing = (id) => {
   const archivePublishingMutation = useMutation({
     mutationFn: (publishingData) => toggleArchivePublishing(id, publishingData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publishing", id] });
+      queryClient.invalidateQueries({ queryKey: ["publishings"] });
     },
   });
 
   return {
     archivePublishing: archivePublishingMutation.mutate,
     isArchiving: archivePublishingMutation.isPending,
+  };
+};
+
+export const useDeletePublishing = (id) => {
+  const queryClient = useQueryClient();
+
+  const deletePublishingMutation = useMutation({
+    mutationFn: () => deletePublishing(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["publishings"] });
+    },
+  });
+
+  return {
+    deletePublishingMutation: deletePublishingMutation.mutate,
+    isDeleting: deletePublishingMutation.isPending,
   };
 };

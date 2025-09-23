@@ -8,6 +8,7 @@ import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_CATEGORY } from "../constants/common";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
+import DeletePublishing from "../components/publishings/DeletePublishing";
 
 export default function BooksPage() {
   const {
@@ -28,6 +29,7 @@ export default function BooksPage() {
     isModalOpen,
     closeModal,
     handleEditValue,
+    handleDeleteValue,
 
     // Handlers específicos
     searchHandler,
@@ -39,6 +41,7 @@ export default function BooksPage() {
     //Callbacks
     onCreateSuccess,
     onEditSuccess,
+    onDeleteSuccess,
   } = usePublishingsPage(1);
 
   const navigate = useNavigate();
@@ -46,17 +49,10 @@ export default function BooksPage() {
   const handleUpdateBook = (row) =>
     navigate(`/dashboard/books/edit/${row.original.id}`);
 
-  // const handleArchiveBook = (row) => {
-  //   console.log("Archivar libro:", row.original.id);
-  // };
-
-  const handleDeleteBook = (row) =>
-    console.log("Eliminar libro:", row.original);
-
   const bookColumns = BookColumns(
     handleUpdateBook,
     handleEditValue,
-    handleDeleteBook
+    handleDeleteValue
   );
 
   return (
@@ -120,6 +116,15 @@ export default function BooksPage() {
             isOpen={isModalOpen("edit")}
             onClose={() => closeModal("edit")}
             onSuccess={onEditSuccess}
+            selectedPublishing={selectedPublishing}
+          />
+        )}
+
+        {isModalOpen("delete") && selectedPublishing && (
+          <DeletePublishing
+            isOpen={isModalOpen("delete")}
+            onClose={() => closeModal("delete")}
+            onSuccess={onDeleteSuccess}
             selectedPublishing={selectedPublishing}
           />
         )}
