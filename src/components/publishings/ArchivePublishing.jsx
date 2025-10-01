@@ -37,7 +37,11 @@ export default function ArchivePublishing({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={"Archivar Publicación"}
+      title={`${
+        selectedPublishing?.original.is_archived === 1
+          ? "Desarchivar"
+          : "Archivar"
+      } Publicación`}
       saveButtonText={
         selectedPublishing?.original.is_archived === 1
           ? "Desarchivar"

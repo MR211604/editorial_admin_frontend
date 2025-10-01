@@ -108,7 +108,7 @@ export default function BooksPage() {
           isOpen={isModalOpen("create")}
           onClose={() => closeModal("create")}
           onSuccess={onCreateSuccess}
-          publishingType={1}
+          publishingType={BOOK_CATEGORY}
         />
 
         {isModalOpen("edit") && selectedPublishing && (

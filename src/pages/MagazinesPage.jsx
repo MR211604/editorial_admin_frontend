@@ -6,6 +6,9 @@ import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { MAGAZINE_CATEGORY } from "../constants/common";
+import ArchivePublishing from "../components/publishings/ArchivePublishing";
+import DeletePublishing from "../components/publishings/DeletePublishing";
+import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
 
 export default function MagazinesPage() {
   const {
@@ -21,23 +24,25 @@ export default function MagazinesPage() {
     // Datos
     allPublishings,
     isAllPublishingsLoading,
-    // selectedPublishing,
+    selectedPublishing,
+    filterArchived,
 
     // Modal handlers
-    // isModalOpen,
-    // closeModal,
+    isModalOpen,
+    closeModal,
+    handleEditValue,
+    handleDeleteValue,
+    handleArchivedFilterChange,
 
     // Handlers específicos
     searchHandler,
     handleCreateValue,
     handleCategoryChange,
-    isModalOpen,
-    closeModal,
 
     // Callbacks de éxito
     onCreateSuccess,
-    //onEditSuccess,
-    //onDeleteSuccess
+    onEditSuccess,
+    onDeleteSuccess,
   } = usePublishingsPage(2);
 
   const navigate = useNavigate();
@@ -45,16 +50,13 @@ export default function MagazinesPage() {
   const handleUpdateMagazine = (row) =>
     navigate(`/dashboard/magazines/edit/${row.original.id}`);
 
-  const handleDeleteMagazine = (row) =>
-    console.log("Eliminar revista:", row.original.id);
-
   const handleEditArticles = (row) =>
     navigate(`/dashboard/magazines/articles/${row.original.id}`);
 
   const magazineColumns = MagazineColumns(
     handleUpdateMagazine,
-    null, //Temporal, aun no existe funcion para archivar
-    handleDeleteMagazine,
+    handleEditValue, //Temporal, aun no existe funcion para archivar
+    handleDeleteValue,
     handleEditArticles
   );
 
@@ -87,6 +89,11 @@ export default function MagazinesPage() {
               defaultValue="Todas las revistas"
               className="form-select form-select-md w-50 ms-2"
             />
+            <SelectArchivedPublishings
+              onSelectChange={handleArchivedFilterChange}
+              selectedValue={filterArchived}
+              className="form-select form-select-md w-25 ms-2"
+            />
           </ToolBar>
 
           <Table
@@ -109,8 +116,26 @@ export default function MagazinesPage() {
         isOpen={isModalOpen("create")}
         onClose={() => closeModal("create")}
         onSuccess={onCreateSuccess}
-        publishingType={2}
+        publishingType={MAGAZINE_CATEGORY}
       />
+
+      {isModalOpen("edit") && selectedPublishing && (
+        <ArchivePublishing
+          isOpen={isModalOpen("edit")}
+          onClose={() => closeModal("edit")}
+          onSuccess={onEditSuccess}
+          selectedPublishing={selectedPublishing}
+        />
+      )}
+
+      {isModalOpen("delete") && selectedPublishing && (
+        <DeletePublishing
+          isOpen={isModalOpen("delete")}
+          onClose={() => closeModal("delete")}
+          onSuccess={onDeleteSuccess}
+          selectedPublishing={selectedPublishing}
+        />
+      )}
     </div>
   );
 }

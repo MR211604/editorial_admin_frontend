@@ -44,7 +44,7 @@ export const MagazineColumns = (
     header: "Estado",
     accessorKey: "is_archive",
     cell: ({ row }) => {
-      return row.original.is_archive ? (
+      return row.original.is_archived ? (
         <Badge bg="secondary">Archivado</Badge>
       ) : (
         <Badge bg="success">Activo</Badge>
@@ -60,21 +60,17 @@ export const MagazineColumns = (
           <i className="bi bi-pencil-square"></i>
         </button>
 
-        {row.original.is_archive ? (
+        {row.original.is_archived === 1 ? (
           <button
             className="btn btn-danger btn-sm"
             onClick={() => onDelete(row)}
           >
             <i className="bi bi-trash"></i>
           </button>
-        ) : (
-          <button
-            className="btn btn-info btn-sm"
-            onClick={() => onArchive(row)}
-          >
-            <i className="bi bi-archive"></i>
-          </button>
-        )}
+        ) : null}
+        <button className="btn btn-info btn-sm" onClick={() => onArchive(row)}>
+          <i className="bi bi-archive"></i>
+        </button>
 
         <button
           className="btn btn-success btn-sm"
