@@ -6,6 +6,7 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import { useCreatePublishing } from "../../hooks/usePublishings";
 import toast from "react-hot-toast";
 import { NO_CATEGORY } from "../../constants/common";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
 
 export default function CreatePublishing({
   isOpen,
@@ -25,6 +26,7 @@ export default function CreatePublishing({
     watch,
     setError,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -37,6 +39,11 @@ export default function CreatePublishing({
   const titleValue = watch("title");
   const urlValue = watch("URL");
   const categoryValue = watch("category_id");
+
+  useEffect(() => {
+    const generatedUrl = generateUrlFromTitle(titleValue);
+    setValue("URL", generatedUrl);
+  }, [titleValue, setValue]);
 
   useEffect(() => {
     if (errors.title?.type === "server") clearErrors("title");
@@ -81,10 +88,15 @@ export default function CreatePublishing({
         console.error("Error creating publishing:", error);
         const fieldErrors = error?.errors || {};
         Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages) ? messages.join(", ") : messages;
+          const messageText = Array.isArray(messages)
+            ? messages.join(", ")
+            : messages;
           setError(field, { type: "server", message: messageText });
         });
-        toast.error(error?.message || `No se pudo crear la ${publishingLabel.toLowerCase()}`);
+        toast.error(
+          error?.message ||
+            `No se pudo crear la ${publishingLabel.toLowerCase()}`
+        );
       },
     });
   };
@@ -101,7 +113,9 @@ export default function CreatePublishing({
       onClose={handleClose}
       title={modalTitle || "Crear Nueva Publicacion"}
       onSave={handleSubmit(handleSave)}
-      saveButtonText={isCreating ? "Creando..." : modalSaveButtonText || "Crear Publicacion"}
+      saveButtonText={
+        isCreating ? "Creando..." : modalSaveButtonText || "Crear Publicacion"
+      }
       closeButtonText="Cancelar"
       showFooter={true}
     >
@@ -150,7 +164,9 @@ export default function CreatePublishing({
                   defaultCategoryValue={NO_CATEGORY}
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
-                  className={"form-select " + (errors.category_id ? "is-invalid" : "")}
+                  className={
+                    "form-select " + (errors.category_id ? "is-invalid" : "")
+                  }
                   disabled={isCreating}
                 />
                 {errors.category_id && (
