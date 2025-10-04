@@ -71,8 +71,15 @@ export default function AppRouter() {
           <Route index element={<CategoriesPage />} />
           <Route path="edit/:id" element={<CategoryUpdate />} />
         </Route>
-        <Route path="userAccounts" element={<UserAccountsPage />} />
-        <Route path="rol" element={<RolPage />} />
+
+        {/* Los gestores y editores no pueden entrar a estas rutas */}
+        {auth.rol === "Gestor de Publicaciones" ||
+        auth.rol === "Editor de Publicaciones" ? null : (
+          <>
+            <Route path="userAccounts" element={<UserAccountsPage />} />
+            <Route path="rol" element={<RolPage />} />
+          </>
+        )}
       </Route>
     </Routes>
   );

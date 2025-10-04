@@ -8,6 +8,7 @@ const initialState = {
   checking: true,
   logged: false,
   name: null,
+  rol: null,
 };
 
 export default function AuthProvider({ children }) {
@@ -26,6 +27,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: true,
         name: response.user.name,
+        rol: response.user.rol,
       });
     }
     return response;
@@ -39,6 +41,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: false,
         name: null,
+        rol: null,
       });
       return false;
     }
@@ -50,6 +53,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: true,
         name: response.user.name,
+        rol: response.user.rol,
       });
       return true;
     } else {
@@ -58,6 +62,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: false,
         name: null,
+        rol: null,
       });
       return false;
     }
@@ -69,6 +74,7 @@ export default function AuthProvider({ children }) {
       checking: false,
       logged: false,
       name: null,
+      rol: null,
     });
 
     // Luego limpiar localStorage
