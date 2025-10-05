@@ -8,6 +8,7 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
 import { BOOK_CATEGORY } from "../../constants/common";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
+import { getImageURL } from "../../helpers/getImageURL";
 
 export default function BookUpdateForm({ publishing }) {
   const authorsTableRef = useRef();
@@ -31,15 +32,9 @@ export default function BookUpdateForm({ publishing }) {
       category_id: publishing?.data.category_id || undefined,
       URL: publishing?.data.URL || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
-      cover: null,
+      cover: publishing?.data.cover || null,
     },
   });
-
-  const previewImage = publishing?.data.cover
-    ? import.meta.env.VITE_EDITORIAL_LOCAL_API_URL + "/" + publishing.data.cover
-    : "";
-
-  console.log("previeimage", previewImage);
 
   useEffect(() => {
     if (publishing?.data) {
@@ -51,6 +46,7 @@ export default function BookUpdateForm({ publishing }) {
         category_id: publishing.data.category_id || undefined,
         URL: publishing.data.URL || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
+        cover: publishing?.data.cover || null,
       });
     }
   }, [publishing, reset]);
@@ -61,28 +57,6 @@ export default function BookUpdateForm({ publishing }) {
       localStorage.removeItem("bookUpdateSuccess");
     }
   }, []);
-
-  //! ENVIO DE FORMULARIO USANDO APPLICATION/JSON
-  // const onSubmit = async (data) => {
-  //   const authorsData = authorsTableRef.current.getAuthorsData();
-  //   const updateData = {
-  //     ...data,
-  //     publish_code: data.publish_code,
-  //     id: publishing?.data.id,
-  //     publishing_type: publishing?.data.publishing_type,
-  //     authors: authorsData?.visibleAuthors.map((author) => author.id) || [],
-  //   };
-  //   updatePublishing(updateData, {
-  //     onSuccess: () => {
-  //       localStorage.setItem("bookUpdateSuccess", "1");
-  //       navigate(0);
-  //     },
-  //     onError: (error) => {
-  //       console.log("Error updating publishing:", error);
-  //       toast.error("Error actualizando publicación: " + error.message);
-  //     },
-  //   });
-  // };
 
   //! ENVIO DE FORMULARIO USANDO FORM-DATA
   const onSubmit = async (data) => {
@@ -113,7 +87,6 @@ export default function BookUpdateForm({ publishing }) {
         navigate(0);
       },
       onError: (error) => {
-        console.log("Error updating publishing:", error);
         toast.error("Error actualizando publicación: " + error.message);
       },
     });
@@ -267,18 +240,11 @@ export default function BookUpdateForm({ publishing }) {
             </Form.Group>
           </Col>
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
-            {/* <Form.Group className="mb-3">
-              <Form.Label>Imagen de portada</Form.Label>
-              <Form.Control type="file" />
-              <Form.Text className="text-muted">
-                Seleccione la imagen de portada
-              </Form.Text>
-            </Form.Group> */}
             <Form.Group className="mb-3">
               <Form.Label>Imagen de portada</Form.Label>
               <div className="mb-3 text-center">
                 <img
-                  src={previewImage}
+                  src={getImageURL(publishing?.data.cover)}
                   alt="Portada actual"
                   style={{
                     maxWidth: "200px",

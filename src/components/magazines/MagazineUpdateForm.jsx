@@ -8,6 +8,7 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
 import { MAGAZINE_CATEGORY } from "../../constants/common";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
+import { getImageURL } from "../../helpers/getImageURL";
 
 export default function MagazineUpdateForm({ publishing }) {
   const authorsTableRef = useRef();
@@ -33,6 +34,7 @@ export default function MagazineUpdateForm({ publishing }) {
       volume: publishing?.data.volume || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       category_id: publishing?.data.category_id || undefined,
+      cover: null,
     },
   });
 
@@ -46,6 +48,7 @@ export default function MagazineUpdateForm({ publishing }) {
         volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || undefined,
+        cover: null,
       });
     }
   }, [publishing, reset]);
@@ -57,23 +60,35 @@ export default function MagazineUpdateForm({ publishing }) {
     }
   }, []);
 
-  const onSubmit = (data) => {
-    const authorsData = authorsTableRef.current?.getAuthorsData();
-    const updateData = {
-      ...data,
-      publish_code: data.publish_code,
-      id: publishing?.data.id,
-      publishing_type: publishing?.data.publishing_type,
-      authors: authorsData?.visibleAuthors.map((author) => author.id) || [],
-    };
-    updatePublishing(updateData, {
+  const onSubmit = async (data) => {
+    const authorsData = authorsTableRef.current.getAuthorsData();
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("pages", data.pages);
+    formData.append("publish_date", data.publish_date);
+    formData.append("publish_code", data.publish_code);
+    formData.append("age", data.age);
+    formData.append("age_number", data.age_number);
+    formData.append("volume", data.volume);
+    formData.append("is_new_arrival", data.is_new_arrival);
+    formData.append("category_id", data.category_id);
+    formData.append("publishing_type", publishing?.data.publishing_type);
+
+    authorsData?.visibleAuthors.forEach((author, index) => {
+      formData.append(`authors[${index}]`, author.id);
+    });
+
+    if (data.cover && data.cover[0]) {
+      formData.append("cover", data.cover[0]);
+    }
+
+    updatePublishing(formData, {
       onSuccess: () => {
         localStorage.setItem("magazineUpdateSuccess", "1");
         navigate(0);
       },
       onError: (error) => {
         toast.error("Error actualizando publicación: " + error.message);
-        console.log("Error actualizando publicación:", error);
       },
     });
   };
@@ -221,9 +236,54 @@ export default function MagazineUpdateForm({ publishing }) {
           <Col lg={6} sm={12} className="mt-sm-3 mt-lg-0">
             <Form.Group className="mb-3">
               <Form.Label>Imagen de portada</Form.Label>
-              <Form.Control type="file" />
+              <div className="mb-3 text-center">
+                <img
+                  src={getImageURL(publishing?.data.cover)}
+                  alt="Portada actual"
+                  style={{
+                    maxWidth: "200px",
+                    maxHeight: "300px",
+                    objectFit: "contain",
+                    border: "1px solid #dee2e6",
+                    borderRadius: "4px",
+                    padding: "8px",
+                  }}
+                />
+                <div className="text-muted small mt-2">Portada actual</div>
+              </div>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                isInvalid={!!errors.cover}
+                {...register("cover", {
+                  validate: {
+                    fileSize: (files) => {
+                      if (!files || files.length === 0) return true;
+                      return (
+                        files[0].size <= 5000000 ||
+                        "El archivo debe ser menor a 5MB"
+                      );
+                    },
+                    fileType: (files) => {
+                      if (!files || files.length === 0) return true;
+                      const validTypes = [
+                        "image/jpeg",
+                        "image/png",
+                        "image/jpg",
+                      ];
+                      return (
+                        validTypes.includes(files[0].type) ||
+                        "Solo se permiten imágenes JPG, JPEG o PNG"
+                      );
+                    },
+                  },
+                })}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.cover?.message}
+              </Form.Control.Feedback>
               <Form.Text className="text-muted">
-                Seleccione la imagen de portada
+                Seleccione la imagen de portada (JPG, PNG, máx. 5MB)
               </Form.Text>
             </Form.Group>
           </Col>
