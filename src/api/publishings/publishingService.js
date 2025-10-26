@@ -10,7 +10,6 @@ export const getPublishings = async (
   isArchived = 0
 ) => {
   try {
-    console.log("search que viene", search);
     //backend_url/api/publishings?limit=10&page=1&publishing_type=2&sort=title&direction=desc
     let sortParam = "";
     let sortOrder = "";

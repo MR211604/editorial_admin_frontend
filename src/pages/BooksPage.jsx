@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BookColumns } from "../components/books/BookColumns";
-import CreatePublishing from "../components/publishings/CreatePublishing";
+import PublishingCreate from "../components/publishings/PublishingCreate";
 import SelectPublishingCategories from "../components/ui/SelectPublishingCategories";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
@@ -8,7 +8,7 @@ import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_CATEGORY } from "../constants/common";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
-import DeletePublishing from "../components/publishings/DeletePublishing";
+import PublishingDelete from "../components/publishings/PublishingDelete";
 
 export default function BooksPage() {
   const {
@@ -102,14 +102,16 @@ export default function BooksPage() {
           />
         </div>
 
-        <CreatePublishing
-          modalTitle="Crear Nuevo Libro"
-          modalSaveButtonText="Crear Libro"
-          isOpen={isModalOpen("create")}
-          onClose={() => closeModal("create")}
-          onSuccess={onCreateSuccess}
-          publishingType={BOOK_CATEGORY}
-        />
+        {isModalOpen("create") && (
+          <PublishingCreate
+            modalTitle="Crear Nuevo Libro"
+            modalSaveButtonText="Crear Libro"
+            isOpen={isModalOpen("create")}
+            onClose={() => closeModal("create")}
+            onSuccess={onCreateSuccess}
+            publishingType={BOOK_CATEGORY}
+          />
+        )}
 
         {isModalOpen("edit") && selectedPublishing && (
           <ArchivePublishing
@@ -121,7 +123,7 @@ export default function BooksPage() {
         )}
 
         {isModalOpen("delete") && selectedPublishing && (
-          <DeletePublishing
+          <PublishingDelete
             isOpen={isModalOpen("delete")}
             onClose={() => closeModal("delete")}
             onSuccess={onDeleteSuccess}

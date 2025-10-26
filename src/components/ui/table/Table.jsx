@@ -1,11 +1,20 @@
-import { useReactTable } from '@tanstack/react-table'
-import { getCoreRowModel, getPaginationRowModel } from '@tanstack/react-table'
-import TablePagination from './TablePagination';
-import TableBody from './TableBody';
-import TableHeader from './TableHeader';
+import { useReactTable } from "@tanstack/react-table";
+import { getCoreRowModel, getPaginationRowModel } from "@tanstack/react-table";
+import TablePagination from "./TablePagination";
+import TableBody from "./TableBody";
+import TableHeader from "./TableHeader";
 
-export default function Table({ paginatedTableData, columns, pagination, setPagination, isTableDataLoading, setSorting, sorting, setSearch, categoryFilter }) {
-
+export default function Table({
+  paginatedTableData,
+  columns,
+  pagination,
+  setPagination,
+  isTableDataLoading,
+  setSorting,
+  sorting,
+  setSearch,
+  categoryFilter,
+}) {
   const table = useReactTable({
     data: paginatedTableData?.data || [],
     columns,
@@ -24,22 +33,28 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     rowCount: Number(paginatedTableData?.pagination.total),
-    pageCount: Math.ceil((paginatedTableData?.pagination.total || 0) / (Number(paginatedTableData?.pagination.per_page) || 1)),
+    pageCount: Math.ceil(
+      (paginatedTableData?.pagination.total || 0) /
+        (Number(paginatedTableData?.pagination.per_page) || 1)
+    ),
     manualPagination: true,
     state: {
       pagination,
       sorting: sorting ? sorting : [],
-      columnFilters: categoryFilter ? [{ id: 'category_id', value: categoryFilter }] : [],
+      columnFilters: categoryFilter
+        ? [{ id: "category_id", value: categoryFilter }]
+        : [],
     },
   });
 
   return (
-
     <table className="table table-responsive table-hover table-bordered table-striped">
       {isTableDataLoading ? (
         <thead>
           <tr>
-            <th colSpan="6" className="text-center">Cargando datos...</th>
+            <th colSpan="6" className="text-center">
+              Cargando datos...
+            </th>
           </tr>
         </thead>
       ) : (
@@ -48,15 +63,20 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
           <TableHeader table={table} />
           <tfoot className="table-footer">
             <tr>
-              <td colSpan={columns.length} className='pt-3 pb-3'>
+              <td colSpan={columns.length} className="pt-3 pb-3">
                 <div className="d-flex align-items-center justify-content-between">
-                  <div className='d-flex align-items-center'>
+                  <div className="d-flex align-items-center">
                     <span className="form-label me-2">Mostrando</span>
                     <select
-                      name='pageSize'
+                      name="pageSize"
                       className="form-select w-auto me-2"
                       value={pagination.pageSize}
-                      onChange={(e) => setPagination((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
+                      onChange={(e) =>
+                        setPagination((prev) => ({
+                          ...prev,
+                          pageSize: Number(e.target.value),
+                        }))
+                      }
                     >
                       <option value={10}>10</option>
                       <option value={25}>25</option>
@@ -72,5 +92,5 @@ export default function Table({ paginatedTableData, columns, pagination, setPagi
         </>
       )}
     </table>
-  )
+  );
 }

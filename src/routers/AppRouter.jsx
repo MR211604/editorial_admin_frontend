@@ -20,7 +20,6 @@ export default function AppRouter() {
 
   useEffect(() => {
     verifyToken();
-    console.log("Verificando token");
   }, [verifyToken]);
 
   if (auth.checking) {

@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useDeletePublishing } from "../../hooks/usePublishings";
 import Modal from "../ui/modal/Modal";
 
-export default function DeletePublishing({
+export default function PublishingDelete({
   isOpen,
   onClose,
   onSuccess,

@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
-import Modal from "../../components/ui/modal/Modal";
+import Modal from "../ui/modal/Modal";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import { useCreatePublishing } from "../../hooks/usePublishings";
 import toast from "react-hot-toast";
 import { NO_CATEGORY } from "../../constants/common";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
 
-export default function CreatePublishing({
+export default function PublishingCreate({
   isOpen,
   onClose,
   onSuccess,

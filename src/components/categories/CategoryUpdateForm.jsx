@@ -74,7 +74,6 @@ function CategoryUpdateForm({ category }) {
         } else {
           toast.error(error?.message || "Error actualizando categoría");
         }
-        console.log("Error al actualizar la categoría:", error);
       },
     });
   };

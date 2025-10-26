@@ -4,35 +4,39 @@ import Modal from "../../components/ui/modal/Modal";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import { useCreatePublishing } from "../../hooks/usePublishings";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function BookCreate({ isOpen, onClose, onSuccess }) {
-
   const { createPublishing } = useCreatePublishing();
-  const navigate = useNavigate()
-  const { register, reset, handleSubmit, control, formState: { errors } } = useForm({})
+  const navigate = useNavigate();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({});
 
   const handleSave = (data) => {
     const publishingData = {
       ...data,
       publishing_type: 1,
-    }
-    console.log('informacion que se envia', publishingData);
+    };
     createPublishing(publishingData, {
       onSuccess: () => {
-        console.log('Publishing created successfully');
         onSuccess();
         navigate(0);
       },
       onError: (error) => {
-        console.error('Error creating publishing:', error);
-      }
-    })
-  }
+        toast.error("Error al crear el libro", error);
+      },
+    });
+  };
 
   const handleClose = () => {
     onClose();
     reset();
-  }
+  };
 
   return (
     <Modal
@@ -45,7 +49,6 @@ export default function BookCreate({ isOpen, onClose, onSuccess }) {
       showFooter={true}
     >
       <Form onAbort={handleSubmit(handleSave)}>
-
         <Form.Group className="mb-3">
           <Form.Label htmlFor="bookTitle">Título</Form.Label>
           <Form.Control
@@ -77,24 +80,30 @@ export default function BookCreate({ isOpen, onClose, onSuccess }) {
           <Controller
             name="category_id"
             control={control}
-            rules={{ required: 'La categoría es obligatoria', validate: value => value !== "" || 'Todas las categorias' }}
+            rules={{
+              required: "La categoría es obligatoria",
+              validate: (value) => value !== "" || "Todas las categorias",
+            }}
             render={({ field }) => (
               <>
                 <SelectPublishingCategories
                   categoryType={1}
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
-                  className={`form-select ${errors.category_id ? 'is-invalid' : ''}`}
+                  className={`form-select ${
+                    errors.category_id ? "is-invalid" : ""
+                  }`}
                 />
                 {errors.category_id && (
-                  <div className="invalid-feedback">{errors.category_id.message}</div>
+                  <div className="invalid-feedback">
+                    {errors.category_id.message}
+                  </div>
                 )}
               </>
             )}
           />
         </Form.Group>
-
       </Form>
     </Modal>
-  )
+  );
 }

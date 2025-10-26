@@ -44,8 +44,6 @@ export default function AuthorsPage() {
     debouncedSearch
   );
 
-  console.log("allAuthors", allAuthors);
-
   const authorColumns = AuthorColumns(handleEditValue, handleDeleteValue);
 
   return (
