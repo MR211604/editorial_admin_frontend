@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { MagazineColumns } from "../components/magazines/MagazineColumns";
-import CreatePublishing from "../components/publishings/CreatePublishing";
+import PublishingCreate from "../components/publishings/PublishingCreate";
 import SelectPublishingCategories from "../components/ui/SelectPublishingCategories";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { MAGAZINE_CATEGORY } from "../constants/common";
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
-import DeletePublishing from "../components/publishings/DeletePublishing";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
+import PublishingDelete from "../components/publishings/PublishingDelete";
 
 export default function MagazinesPage() {
   const {
@@ -110,7 +110,7 @@ export default function MagazinesPage() {
       </div>
 
       {/* Modales separados */}
-      <CreatePublishing
+      <PublishingCreate
         modalTitle="Crear Nueva Revista"
         modalSaveButtonText="Crear Revista"
         isOpen={isModalOpen("create")}
@@ -129,7 +129,7 @@ export default function MagazinesPage() {
       )}
 
       {isModalOpen("delete") && selectedPublishing && (
-        <DeletePublishing
+        <PublishingDelete
           isOpen={isModalOpen("delete")}
           onClose={() => closeModal("delete")}
           onSuccess={onDeleteSuccess}
