@@ -10,10 +10,17 @@ import { BOOK_CATEGORY } from "../../constants/common";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import { getImageURL } from "../../helpers/getImageURL";
 
-export default function BookUpdateForm({ publishing }) {
+export default function BookUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
 
   const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
+
+  console.log("Publishing Data in Form:", publishing?.data);
+
+  const currentTranslation = publishing?.data.translations?.find(
+    (t) => t.language.shortname === languageShortName
+  );
+  console.log("current translation", currentTranslation);
 
   const navigate = useNavigate();
 
@@ -25,12 +32,12 @@ export default function BookUpdateForm({ publishing }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: publishing?.data.title || "",
+      title: currentTranslation?.title || "-",
       pages: publishing?.data.description || "",
       publish_date: publishing?.data.publish_date || "",
       publish_code: formatISBN(publishing?.data.publish_code || ""),
       category_id: publishing?.data.category_id || undefined,
-      URL: publishing?.data.URL || "",
+      URL: currentTranslation?.URL || "-",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       cover: publishing?.data.cover || null,
     },
@@ -39,17 +46,17 @@ export default function BookUpdateForm({ publishing }) {
   useEffect(() => {
     if (publishing?.data) {
       reset({
-        title: publishing.data.title,
+        title: currentTranslation?.title,
         pages: publishing.data.pages || "",
         publish_date: publishing.data.publish_date || "",
         publish_code: formatISBN(publishing.data.publish_code || ""),
         category_id: publishing.data.category_id || undefined,
-        URL: publishing.data.URL || "",
+        URL: currentTranslation?.URL || "-",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         cover: publishing?.data.cover || null,
       });
     }
-  }, [publishing, reset]);
+  }, [publishing, reset, currentTranslation]);
 
   useEffect(() => {
     if (localStorage.getItem("bookUpdateSuccess") === "1") {

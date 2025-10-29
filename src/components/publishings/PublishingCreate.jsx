@@ -76,8 +76,15 @@ export default function PublishingCreate({
     const publishingData = {
       ...data,
       publishing_type: publishingType,
+      translations: [
+        {
+          language_id: 1,
+          title: data.title,
+          URL: data.URL,
+        },
+      ],
     };
-
+    console.log("Creating publishing with data:", publishingData);
     createPublishing(publishingData, {
       onSuccess: () => {
         toast.success(`${publishingLabel} creado exitosamente`);

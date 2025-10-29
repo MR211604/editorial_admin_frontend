@@ -24,10 +24,10 @@ export default function BookUpdate() {
         <Card.Body>
           <Tabs defaultActiveKey={"basic-info"} id="bookTabs" className="mb-3">
             <Tab eventKey={"basic-info"} title="Español">
-              <BookUpdateForm publishing={publishing} />
+              <BookUpdateForm publishing={publishing} languageShortName="ES" />
             </Tab>
             <Tab eventKey={"basic-info-english"} title="Inglés">
-              <BookUpdateForm publishing={publishing} />
+              <BookUpdateForm publishing={publishing} languageShortName="EN" />
             </Tab>
           </Tabs>
         </Card.Body>

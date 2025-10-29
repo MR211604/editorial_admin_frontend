@@ -57,6 +57,7 @@ export default function AppRouter() {
       >
         <Route index element={<Dashboard />} />
         <Route path="authors" element={<AuthorsPage />} />
+
         <Route path="books">
           <Route index element={<BooksPage />} />
           <Route path="edit/:id" element={<BookUpdate />} />
@@ -66,10 +67,14 @@ export default function AppRouter() {
           <Route path="edit/:id" element={<MagazineUpdate />} />
           <Route path="articles/:id" element={<MagazineArticles />} />
         </Route>
-        <Route path="categories">
-          <Route index element={<CategoriesPage />} />
-          <Route path="edit/:id" element={<CategoryUpdate />} />
-        </Route>
+
+        {/* Los editores de publicaciones no pueden entrar a la seccion de categorias */}
+        {auth.rol === "Editor de publicaciones" ? null : (
+          <Route path="categories">
+            <Route index element={<CategoriesPage />} />
+            <Route path="edit/:id" element={<CategoryUpdate />} />
+          </Route>
+        )}
 
         {/* Los gestores y editores no pueden entrar a estas rutas */}
         {auth.rol === "Gestor de Publicaciones" ||
