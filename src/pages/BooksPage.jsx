@@ -8,7 +8,8 @@ import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_CATEGORY } from "../constants/common";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
-import PublishingDelete from "../components/publishings/PublishingDelete";
+import { useDeletePublishing } from "../hooks/usePublishings";
+import ModalDelete from "../components/ui/modal/ModalDelete";
 
 export default function BooksPage() {
   const {
@@ -48,6 +49,10 @@ export default function BooksPage() {
 
   const handleUpdateBook = (row) =>
     navigate(`/dashboard/books/edit/${row.original.id}`);
+
+  const { deletePublishingMutation } = useDeletePublishing(
+    selectedPublishing?.original.id
+  );
 
   const bookColumns = BookColumns(
     handleUpdateBook,
@@ -123,11 +128,13 @@ export default function BooksPage() {
         )}
 
         {isModalOpen("delete") && selectedPublishing && (
-          <PublishingDelete
+          <ModalDelete
             isOpen={isModalOpen("delete")}
             onClose={() => closeModal("delete")}
             onSuccess={onDeleteSuccess}
-            selectedPublishing={selectedPublishing}
+            selectedValue={selectedPublishing}
+            deleteMutationFn={deletePublishingMutation}
+            title={selectedPublishing?.original.title}
           />
         )}
       </div>

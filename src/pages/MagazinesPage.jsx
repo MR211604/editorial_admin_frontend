@@ -8,7 +8,8 @@ import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { MAGAZINE_CATEGORY } from "../constants/common";
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
 import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
-import PublishingDelete from "../components/publishings/PublishingDelete";
+import ModalDelete from "../components/ui/modal/ModalDelete";
+import { useDeletePublishing } from "../hooks/usePublishings";
 
 export default function MagazinesPage() {
   const {
@@ -52,6 +53,10 @@ export default function MagazinesPage() {
 
   const handleEditArticles = (row) =>
     navigate(`/dashboard/magazines/articles/${row.original.id}`);
+
+  const { deletePublishingMutation } = useDeletePublishing(
+    selectedPublishing?.original.id
+  );
 
   const magazineColumns = MagazineColumns(
     handleUpdateMagazine,
@@ -129,11 +134,13 @@ export default function MagazinesPage() {
       )}
 
       {isModalOpen("delete") && selectedPublishing && (
-        <PublishingDelete
+        <ModalDelete
           isOpen={isModalOpen("delete")}
           onClose={() => closeModal("delete")}
           onSuccess={onDeleteSuccess}
-          selectedPublishing={selectedPublishing}
+          selectedValue={selectedPublishing}
+          deleteMutationFn={deletePublishingMutation}
+          title={selectedPublishing?.original.title}
         />
       )}
     </div>

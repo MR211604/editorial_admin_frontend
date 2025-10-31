@@ -1,4 +1,8 @@
-export default function MagazineArticlesTable({ publishing, handleEdit }) {
+export default function MagazineArticlesTable({
+  publishing,
+  handleEdit,
+  handleDelete,
+}) {
   return (
     <div className="table-responsive table-bordered">
       <table className="table table-striped">
@@ -22,7 +26,10 @@ export default function MagazineArticlesTable({ publishing, handleEdit }) {
                   >
                     <i className="bi bi-pencil-square"></i>
                   </button>
-                  <button className="btn btn-danger btn-sm">
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(article)}
+                  >
                     <i className="bi bi-trash"></i>
                   </button>
                 </div>

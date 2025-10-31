@@ -1,20 +1,40 @@
-import { Button, Card, Container, Row } from 'react-bootstrap';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { useNavigate, useParams } from 'react-router-dom';
-import MagazineArticlesTable from '../../components/magazines/MagazineArticlesTable';
-import MagazineCreateArticle from '../../components/magazines/MagazineCreateArticle';
-import MagazineUpdateArticle from '../../components/magazines/MagazineUpdateArticle';
-import { usePublishing } from '../../hooks/usePublishings';
-import { useModalCRUD } from '../../hooks/utils/useModalCRUD';
-
+import { Button, Card, Container, Row } from "react-bootstrap";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import { useNavigate, useParams } from "react-router-dom";
+import MagazineArticlesTable from "../../components/magazines/MagazineArticlesTable";
+import MagazineCreateArticle from "../../components/magazines/MagazineCreateArticle";
+import MagazineUpdateArticle from "../../components/magazines/MagazineUpdateArticle";
+import { usePublishing } from "../../hooks/usePublishings";
+import { useModalCRUD } from "../../hooks/utils/useModalCRUD";
+import ModalDelete from "../../components/ui/modal/ModalDelete";
+import { useDeletePublishingDetail } from "../../hooks/usePublishingsDetails";
 
 export default function MagazineArticles() {
   const { id } = useParams();
   const { publishing } = usePublishing(id);
   const navigate = useNavigate();
-  const { isModalOpen, closeModal, onCreateSuccess, onEditSuccess, handleCreateValue, selectedValue, handleEditValue } = useModalCRUD();
-  
+  const {
+    isModalOpen,
+    closeModal,
+    onCreateSuccess,
+    onEditSuccess,
+    onDeleteSuccess,
+    handleCreateValue,
+    selectedValue,
+    handleEditValue,
+    handleDeleteValue,
+  } = useModalCRUD();
+
+  const { deletePublishingMutation } = useDeletePublishingDetail(
+    selectedValue?.id
+  );
+
+  const onDeleteArticleSuccess = () => {
+    onDeleteSuccess();
+    navigate(0);
+  };
+
   return (
     <>
       <h1>Articulos de {publishing?.data.title}</h1>
@@ -23,21 +43,43 @@ export default function MagazineArticles() {
       <Card className="mb-3">
         <Card.Header>Lista de articulos</Card.Header>
         <Card.Body>
-          <Tabs defaultActiveKey="basic-info" id="magazineTabs" className="mb-3">
+          <Tabs
+            defaultActiveKey="basic-info"
+            id="magazineTabs"
+            className="mb-3"
+          >
             <Tab eventKey="basic-info" title="Español">
               <Container>
                 <Row>
-                  <div className='d-flex justify-content-between align-items-center'>
-                    <Button variant="success" className="mb-3" onClick={handleCreateValue}>Agregar Articulo</Button>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Button
+                      variant="success"
+                      className="mb-3"
+                      onClick={handleCreateValue}
+                    >
+                      Agregar Articulo
+                    </Button>
                   </div>
                 </Row>
                 <Row>
-                  <MagazineArticlesTable publishing={publishing} handleEdit={handleEditValue} />
+                  <MagazineArticlesTable
+                    publishing={publishing}
+                    handleEdit={handleEditValue}
+                    handleDelete={handleDeleteValue}
+                  />
                 </Row>
                 <Row className="mt-3">
                   <div className="col-12 d-flex justify-content-end gap-2">
-                    <Button variant="secondary" className="mb-3" onClick={() => navigate(-1)}>Cancelar</Button>
-                    <Button variant="primary" className="mb-3">Guardar cambios</Button>
+                    <Button
+                      variant="secondary"
+                      className="mb-3"
+                      onClick={() => navigate(-1)}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button variant="primary" className="mb-3">
+                      Guardar cambios
+                    </Button>
                   </div>
                 </Row>
               </Container>
@@ -49,18 +91,35 @@ export default function MagazineArticles() {
         </Card.Body>
       </Card>
 
-
       {/* Modales para las opciones de la sub-pagina */}
-      {
-        isModalOpen('create') &&
-        <MagazineCreateArticle publishing={publishing} isOpen={isModalOpen('create')} onClose={() => closeModal('create')} onCreateSuccess={onCreateSuccess} />
-      }
+      {isModalOpen("create") && (
+        <MagazineCreateArticle
+          publishing={publishing}
+          isOpen={isModalOpen("create")}
+          onClose={() => closeModal("create")}
+          onCreateSuccess={onCreateSuccess}
+        />
+      )}
 
-      {
-        isModalOpen('edit') && selectedValue &&
-        <MagazineUpdateArticle isOpen={isModalOpen('edit')} onClose={() => closeModal('edit')} onEditSuccess={onEditSuccess} article={selectedValue} />
-      }
+      {isModalOpen("edit") && selectedValue && (
+        <MagazineUpdateArticle
+          isOpen={isModalOpen("edit")}
+          onClose={() => closeModal("edit")}
+          onEditSuccess={onEditSuccess}
+          article={selectedValue}
+        />
+      )}
 
+      {isModalOpen("delete") && selectedValue && (
+        <ModalDelete
+          isOpen={isModalOpen("delete")}
+          onClose={() => closeModal("delete")}
+          onSuccess={onDeleteArticleSuccess}
+          selectedValue={selectedValue}
+          title={selectedValue?.title}
+          deleteMutationFn={deletePublishingMutation}
+        />
+      )}
     </>
-  )
+  );
 }

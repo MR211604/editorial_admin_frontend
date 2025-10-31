@@ -15,12 +15,9 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
 
   const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
 
-  console.log("Publishing Data in Form:", publishing?.data);
-
   const currentTranslation = publishing?.data.translations?.find(
     (t) => t.language.shortname === languageShortName
   );
-  console.log("current translation", currentTranslation);
 
   const navigate = useNavigate();
 
@@ -70,15 +67,22 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
     const authorsData = authorsTableRef.current.getAuthorsData();
 
     const formData = new FormData();
-    formData.append("title", data.title);
+    // formData.append("title", data.title);
     formData.append("pages", data.pages);
     formData.append("publish_date", data.publish_date);
     formData.append("publish_code", data.publish_code);
     formData.append("category_id", data.category_id);
-    formData.append("URL", data.URL);
+    // formData.append("URL", data.URL);
     formData.append("is_new_arrival", data.is_new_arrival);
     formData.append("id", publishing?.data.id);
     formData.append("publishing_type", publishing?.data.publishing_type);
+
+    formData.append(
+      "translations[0][language_id]",
+      currentTranslation.language.id
+    );
+    formData.append("translations[0][title]", data.title);
+    formData.append("translations[0][URL]", data.URL);
 
     authorsData?.visibleAuthors.forEach((author, index) => {
       formData.append(`authors[${index}]`, author.id);

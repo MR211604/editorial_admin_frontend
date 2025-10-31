@@ -82,6 +82,12 @@ export default function PublishingCreate({
           title: data.title,
           URL: data.URL,
         },
+        // Por defecto se crea la traduccion en ingles vacia
+        {
+          language_id: 2,
+          title: "-",
+          URL: "-",
+        },
       ],
     };
     console.log("Creating publishing with data:", publishingData);

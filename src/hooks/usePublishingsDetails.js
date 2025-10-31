@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createPublishingDetail, updatePublishingDetail } from "../api/publishings/publishingDetailsService";
+import {
+  createPublishingDetail,
+  deletePublishingDetail,
+  updatePublishingDetail,
+} from "../api/publishings/publishingDetailsService";
 
 export const useCreatePublishingDetail = () => {
   const queryClient = useQueryClient();
@@ -8,9 +12,9 @@ export const useCreatePublishingDetail = () => {
     mutationFn: (data) => createPublishingDetail(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['publishings']
+        queryKey: ["publishings"],
       });
-    }
+    },
   });
 
   return {
@@ -18,19 +22,19 @@ export const useCreatePublishingDetail = () => {
     isCreating: createPublishingDetailMutation.isPending,
     createError: createPublishingDetailMutation.error,
   };
-}
+};
 
 export const useUpdatePublishingDetail = (id) => {
   const queryClient = useQueryClient();
 
   const updatePublishingDetailMutation = useMutation({
-    queryKey: ['publishing', id],
+    queryKey: ["publishing", id],
     mutationFn: (data) => updatePublishingDetail(id, data), // Assuming the same function is used for update
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['publishing', id]
+        queryKey: ["publishing", id],
       });
-    }
+    },
   });
 
   return {
@@ -38,4 +42,20 @@ export const useUpdatePublishingDetail = (id) => {
     isUpdating: updatePublishingDetailMutation.isPending,
     updateError: updatePublishingDetailMutation.error,
   };
-}
+};
+
+export const useDeletePublishingDetail = (id) => {
+  const queryClient = useQueryClient();
+
+  const deletePublishingMutation = useMutation({
+    mutationFn: () => deletePublishingDetail(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["publishings"] });
+    },
+  });
+
+  return {
+    deletePublishingMutation: deletePublishingMutation.mutate,
+    isDeleting: deletePublishingMutation.isPending,
+  };
+};
