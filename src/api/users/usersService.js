@@ -30,7 +30,20 @@ export const getUsers = async (
 };
 
 export const createUser = async (userData) => {
-  return userData;
+  try {
+    const response = await fetchWithToken(
+      "api/users/createUser",
+      userData,
+      "POST"
+    );
+    if (!response.ok) {
+      throw new Error(`Error creando usuario: ${response.message}`);
+    }
+    return response;
+  } catch (error) {
+    console.error("Error creating user:", error.message);
+    throw error;
+  }
 };
 
 export const updateUser = async (userData) => {

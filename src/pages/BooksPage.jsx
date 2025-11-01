@@ -10,6 +10,8 @@ import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishing
 import ArchivePublishing from "../components/publishings/ArchivePublishing";
 import { useDeletePublishing } from "../hooks/usePublishings";
 import ModalDelete from "../components/ui/modal/ModalDelete";
+import CustomSelect from "../components/ui/CustomSelect";
+import { archivedPublishingSelectValues } from "../components/ui/utils/selectStaticValues";
 
 export default function BooksPage() {
   const {
@@ -88,10 +90,16 @@ export default function BooksPage() {
               selectedCategory={selectedCategory}
               className="form-select form-select-md w-50 ms-2"
             />
-            <SelectArchivedPublishings
+            {/* <SelectArchivedPublishings
               onSelectChange={handleArchivedFilterChange}
               selectedValue={filterArchived}
               className="form-select form-select-md w-25 ms-2"
+            />*/}
+            <CustomSelect
+              onSelectChange={handleArchivedFilterChange}
+              selectedValue={filterArchived}
+              className="form-select form-select-md w-25 ms-2"
+              optionValues={archivedPublishingSelectValues}
             />
           </ToolBar>
 

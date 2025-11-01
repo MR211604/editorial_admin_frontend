@@ -1,15 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { MagazineColumns } from "../components/magazines/MagazineColumns";
+import ArchivePublishing from "../components/publishings/ArchivePublishing";
 import PublishingCreate from "../components/publishings/PublishingCreate";
+import CustomSelect from "../components/ui/CustomSelect";
+import ModalDelete from "../components/ui/modal/ModalDelete";
 import SelectPublishingCategories from "../components/ui/SelectPublishingCategories";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
-import { usePublishingsPage } from "./hooks/usePublishingsPage";
+import { archivedPublishingSelectValues } from "../components/ui/utils/selectStaticValues";
 import { MAGAZINE_CATEGORY } from "../constants/common";
-import ArchivePublishing from "../components/publishings/ArchivePublishing";
-import SelectArchivedPublishings from "../components/ui/SelectArchivedPublishings";
-import ModalDelete from "../components/ui/modal/ModalDelete";
 import { useDeletePublishing } from "../hooks/usePublishings";
+import { usePublishingsPage } from "./hooks/usePublishingsPage";
 
 export default function MagazinesPage() {
   const {
@@ -94,10 +95,12 @@ export default function MagazinesPage() {
               defaultValue="Todas las revistas"
               className="form-select form-select-md w-50 ms-2"
             />
-            <SelectArchivedPublishings
+
+            <CustomSelect
               onSelectChange={handleArchivedFilterChange}
               selectedValue={filterArchived}
               className="form-select form-select-md w-25 ms-2"
+              optionValues={archivedPublishingSelectValues}
             />
           </ToolBar>
 

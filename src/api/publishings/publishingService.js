@@ -56,11 +56,7 @@ export const updatePublishing = async (id, data) => {
       "POST"
     );
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
+      throw new Error(`HTTP error! status: ${response.message}`);
     }
     return response;
   } catch (error) {
@@ -77,11 +73,7 @@ export const createPublishing = async (data) => {
       "POST"
     );
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
+      throw new Error(`HTTP error! status: ${response.message}`);
     }
     return response;
   } catch (error) {
@@ -98,11 +90,7 @@ export const toggleArchivePublishing = async (id, isArchived) => {
       "POST"
     );
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
+      throw new Error(`HTTP error! status: ${response.message}`);
     }
     return response;
   } catch (error) {
@@ -119,11 +107,7 @@ export const deletePublishing = async (id) => {
       "POST"
     );
     if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
+      throw new Error(`HTTP error! status: ${response.message}`);
     }
     return response;
   } catch (error) {
