@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 export default function MagazineCreateArticle({
   publishing,
+  languageId,
   isOpen,
   onClose,
   onCreateSuccess,
@@ -32,7 +33,7 @@ export default function MagazineCreateArticle({
   const onSubmit = (data) => {
     const articleData = {
       ...data,
-      language_id: 1,
+      language_id: languageId,
       repository_URL: data.URL,
       publishing_id: publishing?.data?.id,
     };

@@ -1,8 +1,14 @@
 export default function MagazineArticlesTable({
   publishing,
+  languageId,
   handleEdit,
   handleDelete,
 }) {
+  //Filtrando por el shortname
+  const filteredArticles = publishing?.data?.details.filter(
+    (detail) => detail.language_id === languageId
+  );
+
   return (
     <div className="table-responsive table-bordered">
       <table className="table table-striped">
@@ -14,7 +20,7 @@ export default function MagazineArticlesTable({
           </tr>
         </thead>
         <tbody>
-          {publishing?.data.details.map((article, index) => (
+          {filteredArticles?.map((article, index) => (
             <tr key={article.id} className="align-middle text-center">
               <td>{index + 1}</td>
               <td>{article.title}</td>

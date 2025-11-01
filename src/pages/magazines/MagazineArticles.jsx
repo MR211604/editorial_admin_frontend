@@ -9,11 +9,13 @@ import { usePublishing } from "../../hooks/usePublishings";
 import { useModalCRUD } from "../../hooks/utils/useModalCRUD";
 import ModalDelete from "../../components/ui/modal/ModalDelete";
 import { useDeletePublishingDetail } from "../../hooks/usePublishingsDetails";
+import { useState } from "react";
 
 export default function MagazineArticles() {
   const { id } = useParams();
   const { publishing } = usePublishing(id);
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("basic-info");
   const {
     isModalOpen,
     closeModal,
@@ -35,6 +37,13 @@ export default function MagazineArticles() {
     navigate(0);
   };
 
+  //TODO: obtener el id de los lenguajes dinamicamente
+  const getCurrentLanguageId = () => {
+    return activeTab === "spanish" ? 1 : 2;
+  };
+
+  console.log("current language id", getCurrentLanguageId());
+
   return (
     <>
       <h1>Articulos de {publishing?.data.title}</h1>
@@ -44,11 +53,12 @@ export default function MagazineArticles() {
         <Card.Header>Lista de articulos</Card.Header>
         <Card.Body>
           <Tabs
-            defaultActiveKey="basic-info"
+            defaultActiveKey="spanish"
+            onSelect={(k) => setActiveTab(k)}
             id="magazineTabs"
             className="mb-3"
           >
-            <Tab eventKey="basic-info" title="Español">
+            <Tab eventKey="spanish" title="Español">
               <Container>
                 <Row>
                   <div className="d-flex justify-content-between align-items-center">
@@ -64,6 +74,7 @@ export default function MagazineArticles() {
                 <Row>
                   <MagazineArticlesTable
                     publishing={publishing}
+                    languageId={1}
                     handleEdit={handleEditValue}
                     handleDelete={handleDeleteValue}
                   />
@@ -84,8 +95,42 @@ export default function MagazineArticles() {
                 </Row>
               </Container>
             </Tab>
-            <Tab eventKey="authors" title="Inglés">
-              <MagazineArticlesTable />
+            <Tab eventKey="english" title="Inglés">
+              <Container>
+                <Row>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Button
+                      variant="success"
+                      className="mb-3"
+                      onClick={handleCreateValue}
+                    >
+                      Agregar Articulo
+                    </Button>
+                  </div>
+                </Row>
+                <Row>
+                  <MagazineArticlesTable
+                    publishing={publishing}
+                    languageId={2}
+                    handleEdit={handleEditValue}
+                    handleDelete={handleDeleteValue}
+                  />
+                </Row>
+                <Row className="mt-3">
+                  <div className="col-12 d-flex justify-content-end gap-2">
+                    <Button
+                      variant="secondary"
+                      className="mb-3"
+                      onClick={() => navigate(-1)}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button variant="primary" className="mb-3">
+                      Guardar cambios
+                    </Button>
+                  </div>
+                </Row>
+              </Container>
             </Tab>
           </Tabs>
         </Card.Body>
@@ -95,6 +140,7 @@ export default function MagazineArticles() {
       {isModalOpen("create") && (
         <MagazineCreateArticle
           publishing={publishing}
+          languageId={getCurrentLanguageId()}
           isOpen={isModalOpen("create")}
           onClose={() => closeModal("create")}
           onCreateSuccess={onCreateSuccess}
