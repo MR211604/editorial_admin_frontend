@@ -49,3 +49,20 @@ export const createUser = async (userData) => {
 export const updateUser = async (userData) => {
   return userData;
 };
+
+export const toggleUserState = async (id) => {
+  try {
+    const response = await fetchWithToken(
+      `api/users/toggleActive/${id}`,
+      {},
+      "POST"
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.message}`);
+    }
+    return response;
+  } catch (error) {
+    console.error("Error creating publishing:", error);
+    throw error;
+  }
+};

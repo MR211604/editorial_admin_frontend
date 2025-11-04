@@ -1,5 +1,6 @@
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
+import UserChangeState from "../components/users/UserChangeState";
 import { UserColumns } from "../components/users/UserColumns";
 import UserCreate from "../components/users/UserCreate";
 import { useUsers } from "../hooks/useUsers";
@@ -14,7 +15,7 @@ export default function UserAccountsPage() {
     setSorting,
     search,
     setSearch,
-    // selectedValue,
+    selectedValue,
 
     // Modal handlers
     isModalOpen,
@@ -24,18 +25,17 @@ export default function UserAccountsPage() {
     searchHandler,
     handleCreateValue,
     handleEditValue,
-    // handleDeleteValue,
+    handleDeleteValue,
 
     // Callbacks de éxito
     onCreateSuccess,
     // onEditSuccess,
+    onDeleteSuccess,
   } = usePage();
 
-  const onDelete = (id) => {
-    console.log("id a eliminar", id);
-  };
-
   const debouncedSearch = useDebounce(search, 300);
+
+  console.log("selectedValue", selectedValue?.original);
 
   const { allUsers, isAllUsersLoading } = useUsers(
     pagination.pageIndex + 1,
@@ -44,7 +44,7 @@ export default function UserAccountsPage() {
     debouncedSearch
   );
 
-  const userColumns = UserColumns(handleEditValue, onDelete);
+  const userColumns = UserColumns(handleEditValue, handleDeleteValue);
 
   return (
     <>
@@ -84,6 +84,15 @@ export default function UserAccountsPage() {
           isOpen={isModalOpen("create")}
           onClose={() => closeModal("create")}
           onSuccess={onCreateSuccess}
+        />
+      )}
+
+      {isModalOpen("delete") && selectedValue && (
+        <UserChangeState
+          isOpen={isModalOpen("delete")}
+          onClose={() => closeModal("delete")}
+          onSuccess={onDeleteSuccess}
+          selectedUser={selectedValue?.original}
         />
       )}
     </>
