@@ -15,7 +15,7 @@ export default function SelectPublishingCategories({
   categoryType,
   ...props
 }) {
-  const { allCategories } = useCategories();
+  const { allCategories } = useCategories(false);
   const filteredCategories = allCategories?.data?.filter(
     (category) => category.category_type === categoryType
   );

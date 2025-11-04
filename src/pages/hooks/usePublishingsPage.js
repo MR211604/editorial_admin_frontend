@@ -51,6 +51,7 @@ export const usePublishingsPage = (publishing_type) => {
   };
 
   const handleCategoryChange = (e) => {
+    console.log("category selected: ", e.target.value);
     setSelectedCategory(e.target.value);
   };
 

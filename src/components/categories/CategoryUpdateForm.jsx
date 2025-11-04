@@ -24,7 +24,7 @@ function CategoryUpdateForm({ category }) {
     defaultValues: {
       title: category?.data.title,
       description: category?.data.description,
-      main_category: category?.data.main_category ?? DEFAULT_MAIN_CATEGORY_ID,
+      main_category: category?.data.main_category ?? "",
       is_featured: category?.data.is_featured,
 
       // Agregando campos de MDXEditor
@@ -77,6 +77,8 @@ function CategoryUpdateForm({ category }) {
       },
     });
   };
+
+  console.log("category data", category);
 
   const renderBasicFields = () => (
     <Row>

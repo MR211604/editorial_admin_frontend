@@ -1,30 +1,40 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createCategory, getCategories, getCategoryById, updateCategory } from "../api/categories/categoriesService"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createCategory,
+  getCategories,
+  getCategoryById,
+  toggleCategoryStatus,
+  updateCategory,
+} from "../api/categories/categoriesService";
 
 export const useCategories = (getAll) => {
-  const { data: allCategories, error, isLoading } = useQuery({
-    queryKey: ['categories', getAll],
+  const {
+    data: allCategories,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["categories", getAll],
     queryFn: () => getCategories(getAll),
   });
 
   return {
     allCategories,
     isLoading,
-    error
-  }
-}
+    error,
+  };
+};
 
 export const useCategory = (id) => {
   const { data: category, isLoading } = useQuery({
-    queryKey: ['category', id],
-    queryFn: () => getCategoryById(id)
-  })
+    queryKey: ["category", id],
+    queryFn: () => getCategoryById(id),
+  });
 
   return {
     category,
     isLoading,
-  }
-}
+  };
+};
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
@@ -33,34 +43,50 @@ export const useCreateCategory = () => {
     mutationFn: (categoryData) => createCategory(categoryData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['categories']
-      })
-    }
-  })
+        queryKey: ["categories"],
+      });
+    },
+  });
 
   return {
     createCategory: createCategoryMutation.mutate,
     isCreating: createCategoryMutation.isPending,
     createError: createCategoryMutation.error,
-  }
-}
+  };
+};
 
 export const useUpdateCategory = (id) => {
   const queryClient = useQueryClient();
 
   const updateCategoryMutation = useMutation({
-    queryKey: ['category', id],
+    queryKey: ["category", id],
     mutationFn: (categoryData) => updateCategory(id, categoryData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['category', id]
-      })
-    }
-  })
+        queryKey: ["category", id],
+      });
+    },
+  });
 
   return {
     updateCategory: updateCategoryMutation.mutate,
     isUpdating: updateCategoryMutation.isPending,
     updateError: updateCategoryMutation.error,
-  }
-}
+  };
+};
+
+export const useCategoryChangeStatus = (id) => {
+  const queryClient = useQueryClient();
+  const changeCategoryStatusMutation = useMutation({
+    mutationFn: () => toggleCategoryStatus(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["category", id] });
+    },
+  });
+
+  return {
+    changeCategoryStatus: changeCategoryStatusMutation.mutate,
+    isChanging: changeCategoryStatusMutation.isPending,
+  };
+};
