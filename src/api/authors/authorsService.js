@@ -50,11 +50,11 @@ export const createAuthor = async (authorData) => {
     throw error;
   }
 };
-//?authorData: { id: string, name: string, lastname: string }
-export const updateAuthor = async (authorData) => {
+
+export const updateAuthor = async (id, authorData) => {
   try {
     const response = await fetchWithToken(
-      "api/authors/updateAuthor",
+      `api/authors/updateAuthor/${id}`,
       authorData,
       "POST"
     );
@@ -68,6 +68,23 @@ export const updateAuthor = async (authorData) => {
     return response;
   } catch (error) {
     console.error("Error updating author:", error);
+    throw error;
+  }
+};
+
+export const deleteAuthor = async (id) => {
+  try {
+    const response = await fetchWithToken(
+      `api/authors/deleteAuthor/${id}`,
+      {},
+      "POST"
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.message}`);
+    }
+    return response;
+  } catch (error) {
+    console.error("Error deleting author:", error);
     throw error;
   }
 };

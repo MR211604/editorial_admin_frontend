@@ -1,9 +1,10 @@
 import { AuthorColumns } from "../components/authors/AuthorColumns";
 import AuthorCreate from "../components/authors/AuthorCreate";
 import AuthorUpdate from "../components/authors/AuthorUpdate";
+import ModalDelete from "../components/ui/modal/ModalDelete";
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
-import { useAuthors } from "../hooks/useAuthors";
+import { useAuthors, useDeleteAuthor } from "../hooks/useAuthors";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
 
@@ -31,6 +32,7 @@ export default function AuthorsPage() {
     // Callbacks de éxito
     onCreateSuccess,
     onEditSuccess,
+    onDeleteSuccess,
   } = usePage();
 
   //Logica para mantener un debounce
@@ -43,6 +45,8 @@ export default function AuthorsPage() {
     sorting,
     debouncedSearch
   );
+
+  const { deleteAuthor } = useDeleteAuthor(selectedValue?.original.id);
 
   const authorColumns = AuthorColumns(handleEditValue, handleDeleteValue);
 
@@ -94,6 +98,16 @@ export default function AuthorsPage() {
           onClose={() => closeModal("edit")}
           onSuccess={onEditSuccess}
           author={selectedValue}
+        />
+      )}
+
+      {isModalOpen("delete") && selectedValue && (
+        <ModalDelete
+          isOpen={isModalOpen("delete")}
+          onClose={() => closeModal("delete")}
+          onSuccess={onDeleteSuccess}
+          deleteMutationFn={deleteAuthor}
+          title={selectedValue?.original.name}
         />
       )}
     </div>

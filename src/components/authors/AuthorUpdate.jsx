@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import Modal from "../ui/modal/Modal";
-import { useAuthors } from "../../hooks/useAuthors";
+import { useUpdateAuthor } from "../../hooks/useAuthors";
 import { Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
-  const { updateAuthor, isUpdating } = useAuthors();
+  const { updateAuthor, isUpdating } = useUpdateAuthor(author.original?.id);
   const {
     register,
     handleSubmit,
@@ -18,8 +18,8 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      name: "",
-      lastname: "",
+      name: author.original?.name || "",
+      lastname: author.original?.lastname || "",
     },
   });
 
@@ -36,10 +36,10 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
   const lastnameValue = watch("lastname");
   useEffect(() => {
     if (errors.name?.type === "server") clearErrors("name");
-  }, [nameValue]);
+  }, [nameValue, clearErrors, errors.name]);
   useEffect(() => {
     if (errors.lastname?.type === "server") clearErrors("lastname");
-  }, [lastnameValue]);
+  }, [lastnameValue, clearErrors, errors.lastname]);
 
   const handleClose = () => {
     reset({ name: "", lastname: "" });
@@ -62,7 +62,9 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
         console.error("Error editando autor:", error);
         const fieldErrors = error?.errors || {};
         Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages) ? messages.join(", ") : messages;
+          const messageText = Array.isArray(messages)
+            ? messages.join(", ")
+            : messages;
           setError(field, { type: "server", message: messageText });
         });
         if (error?.message) toast.error(error.message);
@@ -92,7 +94,8 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
               required: "El nombre es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
               maxLength: { value: 50, message: "Máximo 50 caracteres" },
-              validate: (v) => (v?.trim().length ? true : "El nombre es obligatorio"),
+              validate: (v) =>
+                v?.trim().length ? true : "El nombre es obligatorio",
             })}
           />
           <Form.Control.Feedback type="invalid">
@@ -110,7 +113,8 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
               required: "El apellido es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
               maxLength: { value: 50, message: "Máximo 50 caracteres" },
-              validate: (v) => (v?.trim().length ? true : "El apellido es obligatorio"),
+              validate: (v) =>
+                v?.trim().length ? true : "El apellido es obligatorio",
             })}
           />
           <Form.Control.Feedback type="invalid">

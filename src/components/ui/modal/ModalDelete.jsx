@@ -33,8 +33,8 @@ export default function ModalDelete({
       showFooter={true}
     >
       <p>
-        ¿Está seguro que desea borrar "<b>{title}</b>"? Esta acción no se puede
-        deshacer.
+        ¿Está seguro que desea borrar el registro "<b>{title}</b>"? Esta acción
+        no se puede deshacer.
       </p>
     </Modal>
   );

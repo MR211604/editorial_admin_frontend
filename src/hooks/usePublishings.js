@@ -76,8 +76,8 @@ export const useUpdatePublishing = (id) => {
   const updatePublishingMutation = useMutation({
     mutationFn: (publishingData) => updatePublishing(id, publishingData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publishing", id] });
       queryClient.invalidateQueries({ queryKey: ["publishings"] });
+      queryClient.invalidateQueries({ queryKey: ["publishing"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
     },
   });
