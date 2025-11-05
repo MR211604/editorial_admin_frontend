@@ -3,6 +3,7 @@ import ToolBar from "../components/ui/ToolBar";
 import UserChangeState from "../components/users/UserChangeState";
 import { UserColumns } from "../components/users/UserColumns";
 import UserCreate from "../components/users/UserCreate";
+import UserUpdate from "../components/users/UserUpdate";
 import { useUsers } from "../hooks/useUsers";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
@@ -29,13 +30,11 @@ export default function UserAccountsPage() {
 
     // Callbacks de éxito
     onCreateSuccess,
-    // onEditSuccess,
+    onEditSuccess,
     onDeleteSuccess,
   } = usePage();
 
   const debouncedSearch = useDebounce(search, 300);
-
-  console.log("selectedValue", selectedValue?.original);
 
   const { allUsers, isAllUsersLoading } = useUsers(
     pagination.pageIndex + 1,
@@ -84,6 +83,15 @@ export default function UserAccountsPage() {
           isOpen={isModalOpen("create")}
           onClose={() => closeModal("create")}
           onSuccess={onCreateSuccess}
+        />
+      )}
+
+      {isModalOpen("edit") && selectedValue && (
+        <UserUpdate
+          isOpen={isModalOpen("edit")}
+          onClose={() => closeModal("edit")}
+          onSuccess={onEditSuccess}
+          selectedUser={selectedValue?.original}
         />
       )}
 

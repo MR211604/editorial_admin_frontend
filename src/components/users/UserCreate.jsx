@@ -93,7 +93,7 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
             disabled={isCreating}
             {...register("password", {
               required: "La contraseña es obligatoria",
-              minLength: { value: 6, message: "Mínimo 6 caracteres" },
+              minLength: { value: 8, message: "Mínimo 8 caracteres" },
               maxLength: { value: 100, message: "Máximo 100 caracteres" },
               validate: (v) =>
                 v?.trim().length ? true : "La contraseña es obligatoria",

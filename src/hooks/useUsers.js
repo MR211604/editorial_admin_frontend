@@ -23,15 +23,6 @@ export const useUsers = (pagination, rows, sorting, search) => {
     },
   });
 
-  const updateUserMutation = useMutation({
-    mutationFn: (userData) => updateUser(userData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["users"],
-      });
-    },
-  });
-
   const changeUserStatus = useMutation({
     mutationFn: ({ id }) => toggleUserState(id),
     onSuccess: () => {
@@ -47,16 +38,31 @@ export const useUsers = (pagination, rows, sorting, search) => {
 
     //Mutations
     createUser: createUserMutation.mutate,
-    updateUserMutation: updateUserMutation.mutate,
     changeUserStatus: changeUserStatus.mutate,
 
     //Estados de las mutaciones
     isCreating: createUserMutation.isPending,
-    isUpdating: updateUserMutation.isPending,
     isChangingStatus: changeUserStatus.isPending,
 
     //Errores
     createError: createUserMutation.error,
+  };
+};
+
+export const useUpdateUser = (id) => {
+  const queryClient = useQueryClient();
+  const updateUserMutation = useMutation({
+    mutationFn: (userData) => updateUser(id, userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  });
+
+  return {
+    updateUser: updateUserMutation.mutate,
+    isUpdating: updateUserMutation.isPending,
     updateError: updateUserMutation.error,
   };
 };

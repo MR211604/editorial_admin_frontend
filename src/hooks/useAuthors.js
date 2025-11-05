@@ -1,12 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAuthor, getAuthors, updateAuthor } from "../api/authors/authorsService";
+import {
+  createAuthor,
+  deleteAuthor,
+  getAuthors,
+  updateAuthor,
+} from "../api/authors/authorsService";
 
 export const useAuthors = (pagination, rows, sorting, search) => {
-
   const queryClient = useQueryClient();
 
-  const { data: allAuthors, isLoading: isAllAuthorsLoading, isPending: isAllAuthorsPending } = useQuery({
-    queryKey: ['authors', pagination, rows, sorting, search],
+  const {
+    data: allAuthors,
+    isLoading: isAllAuthorsLoading,
+    isPending: isAllAuthorsPending,
+  } = useQuery({
+    queryKey: ["authors", pagination, rows, sorting, search],
     queryFn: () => getAuthors(pagination, rows, sorting, search),
     keepPreviousData: true,
   });
@@ -15,19 +23,10 @@ export const useAuthors = (pagination, rows, sorting, search) => {
     mutationFn: (authorData) => createAuthor(authorData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['authors']
-      })
-    }
-  })
-
-  const updateAuthorMutation = useMutation({
-    mutationFn: (authorData) => updateAuthor(authorData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['authors']
-      })
-    }
-  })
+        queryKey: ["authors"],
+      });
+    },
+  });
 
   return {
     allAuthors,
@@ -35,13 +34,53 @@ export const useAuthors = (pagination, rows, sorting, search) => {
     isAllAuthorsPending,
     // Mutations
     createAuthor: createAuthorMutation.mutate,
-    updateAuthor: updateAuthorMutation.mutate,
     //States
     isCreating: createAuthorMutation.isPending,
-    isUpdating: updateAuthorMutation.isPending,
-
     // Errors
     createError: createAuthorMutation.error,
+  };
+};
+
+export const useUpdateAuthor = (id) => {
+  const queryClient = useQueryClient();
+
+  const updateAuthorMutation = useMutation({
+    mutationFn: (authorData) => updateAuthor(id, authorData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["authors"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["publishings"],
+      });
+    },
+  });
+
+  return {
+    updateAuthor: updateAuthorMutation.mutate,
+    isUpdating: updateAuthorMutation.isPending,
     updateError: updateAuthorMutation.error,
   };
-}
+};
+
+export const useDeleteAuthor = (id) => {
+  const queryClient = useQueryClient();
+
+  const deleteAuthorMutation = useMutation({
+    mutationFn: () => deleteAuthor(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["authors"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["publishings"],
+      });
+    },
+  });
+
+  return {
+    deleteAuthor: deleteAuthorMutation.mutate,
+    isDeleting: deleteAuthorMutation.isPending,
+    deleteError: deleteAuthorMutation.error,
+  };
+};

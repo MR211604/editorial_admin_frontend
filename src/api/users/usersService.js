@@ -46,8 +46,25 @@ export const createUser = async (userData) => {
   }
 };
 
-export const updateUser = async (userData) => {
-  return userData;
+export const updateUser = async (id, userData) => {
+  try {
+    const response = await fetchWithToken(
+      `api/users/updateUser/${id}`,
+      userData,
+      "POST"
+    );
+    if (!response.ok) {
+      const err = new Error(response.message || "Error updating user");
+      err.status = response.error;
+      err.errors = response.errors;
+      err.response = response;
+      throw err;
+    }
+    return response;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
 };
 
 export const toggleUserState = async (id) => {
