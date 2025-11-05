@@ -89,10 +89,9 @@ export default function MagazinesPage() {
           >
             <SelectPublishingCategories
               categoryType={MAGAZINE_CATEGORY}
-              defaultCategoryValue={""} // Valor vacío para seleccionar todas las categorías
+              enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
-              defaultValue="Todas las revistas"
               className="form-select form-select-md w-50 ms-2"
             />
 

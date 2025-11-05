@@ -7,11 +7,10 @@ import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
 import toast from "react-hot-toast";
-import { DEFAULT_MAIN_CATEGORY_ID } from "../../constants/common";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
-  const { allCategories } = useCategories(1);
+  const { allCategories } = useCategories({ getAll: true });
   const { updateCategory } = useUpdateCategory(category?.data.id);
 
   const {

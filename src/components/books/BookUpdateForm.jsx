@@ -223,10 +223,6 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
               <Controller
                 name="category_id"
                 control={control}
-                rules={{
-                  required: "La categoría es obligatoria",
-                  validate: (value) => value !== "" || "Todas las categorias",
-                }}
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories

@@ -1,4 +1,3 @@
-import { DEFAULT_MAIN_CATEGORY_ID } from "../../constants/common";
 import { useCategories } from "../../hooks/useCategories";
 
 //Esto trae los datos de las categorias con los children_recursive
@@ -10,19 +9,22 @@ import { useCategories } from "../../hooks/useCategories";
 export default function SelectPublishingCategories({
   onCategoryChange,
   selectedCategory,
-  defaultValue = "Sin categoria",
-  defaultCategoryValue = DEFAULT_MAIN_CATEGORY_ID,
+  enableAllCategoriesOption = false,
   categoryType,
   ...props
 }) {
-  const { allCategories } = useCategories(false);
+  const { allCategories } = useCategories({ getAll: false });
   const filteredCategories = allCategories?.data?.filter(
-    (category) => category.category_type === categoryType
+    (category) =>
+      category.category_type === categoryType ||
+      category.title === "Sin categoria"
   );
 
   return (
     <select {...props} value={selectedCategory} onChange={onCategoryChange}>
-      <option value={defaultCategoryValue}>{defaultValue}</option>
+      {enableAllCategoriesOption && (
+        <option value="">Todas las categorías</option>
+      )}
       {filteredCategories?.map((category) =>
         category.children_recursive.length > 0 ? (
           <optgroup key={category.id + category.title} label={category.title}>

@@ -38,7 +38,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
       age_number: publishing?.data.age_number || "",
       volume: publishing?.data.volume || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
-      category_id: publishing?.data.category_id || undefined,
+      category_id: publishing?.data.category_id || "",
       cover: null,
     },
   });
@@ -52,7 +52,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
         publish_code: formatISBN(publishing.data.publish_code || ""),
         volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
-        category_id: publishing.data.category_id || undefined,
+        category_id: publishing.data.category_id || "",
         cover: null,
       });
     }
@@ -222,10 +222,6 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
               <Controller
                 name="category_id"
                 control={control}
-                rules={{
-                  required: "La categoría es obligatoria",
-                  validate: (value) => value !== "" || "Todas las categorias",
-                }}
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories

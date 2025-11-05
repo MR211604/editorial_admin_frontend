@@ -7,7 +7,7 @@ import {
   updateCategory,
 } from "../api/categories/categoriesService";
 
-export const useCategories = (getAll) => {
+export const useCategories = ({ getAll = false } = {}) => {
   const {
     data: allCategories,
     error,

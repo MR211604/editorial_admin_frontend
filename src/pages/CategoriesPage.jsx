@@ -7,7 +7,7 @@ import CategoryChangeStatus from "../components/categories/CategoryChangeStatus"
 
 //!TODO: REFACTOR ESTE COMPONENTE PARA QUE SOLAMENTE TENGA UN NIVEL DE CHILDREN
 export default function CategoriesPage() {
-  const { allCategories } = useCategories();
+  const { allCategories } = useCategories({ getAll: false });
   const navigate = useNavigate();
 
   const {

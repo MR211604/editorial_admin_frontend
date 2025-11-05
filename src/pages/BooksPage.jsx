@@ -83,17 +83,11 @@ export default function BooksPage() {
           >
             <SelectPublishingCategories
               categoryType={BOOK_CATEGORY}
-              defaultValue="Todos los libros"
-              defaultCategoryValue={""}
+              enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
               className="form-select form-select-md w-50 ms-2"
             />
-            {/* <SelectArchivedPublishings
-              onSelectChange={handleArchivedFilterChange}
-              selectedValue={filterArchived}
-              className="form-select form-select-md w-25 ms-2"
-            />*/}
             <CustomSelect
               onSelectChange={handleArchivedFilterChange}
               selectedValue={filterArchived}
