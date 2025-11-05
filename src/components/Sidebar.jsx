@@ -33,13 +33,15 @@ export default function Sidebar() {
           Autores
         </CustomLink>
 
-        <CustomLink
-          to="/dashboard/categories"
-          icon="bi-list-check"
-          data-tooltip="Categorías"
-        >
-          Categorías
-        </CustomLink>
+        {auth.rol === "Editor de Publicaciones" ? null : (
+          <CustomLink
+            to="/dashboard/categories"
+            icon="bi-list-check"
+            data-tooltip="Categorías"
+          >
+            Categorías
+          </CustomLink>
+        )}
 
         {auth.rol === "Gestor de Publicaciones" ||
         auth.rol === "Editor de Publicaciones" ? null : (

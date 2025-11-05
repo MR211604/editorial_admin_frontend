@@ -69,7 +69,7 @@ export default function AppRouter() {
         </Route>
 
         {/* Los editores de publicaciones no pueden entrar a la seccion de categorias */}
-        {auth.rol === "Editor de publicaciones" ? null : (
+        {auth.rol === "Editor de Publicaciones" ? null : (
           <Route path="categories">
             <Route index element={<CategoriesPage />} />
             <Route path="edit/:id" element={<CategoryUpdate />} />

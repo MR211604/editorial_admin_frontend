@@ -27,7 +27,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: true,
         name: response.user.name,
-        rol: response.user.rol,
+        rol: response.user.rol.name,
       });
     }
     return response;
