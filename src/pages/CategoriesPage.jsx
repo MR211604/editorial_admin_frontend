@@ -5,7 +5,6 @@ import { useCategories } from "../hooks/useCategories";
 import { useModalCRUD } from "../hooks/utils/useModalCRUD";
 import CategoryChangeStatus from "../components/categories/CategoryChangeStatus";
 
-//!TODO: REFACTOR ESTE COMPONENTE PARA QUE SOLAMENTE TENGA UN NIVEL DE CHILDREN
 export default function CategoriesPage() {
   const { allCategories } = useCategories({ getAll: false });
   const navigate = useNavigate();
@@ -34,11 +33,32 @@ export default function CategoriesPage() {
     setExpandedCategory(newExpanded);
   };
 
+  // Funcion para renderizar una fila de categoría y sus subcategorías recursivamente
   const renderCategoryRow = (category, level = 0) => {
     const hasChildren =
       category?.children_recursive && category?.children_recursive?.length > 0;
     const isExpanded = expandedCategory.has(category.id);
     const paddingLeft = level * 2; // 2rem por cada nivel de profundidad
+
+    const getCategoryStatus = () => {
+      if (!hasChildren) {
+        return category.state ? "active" : "inactive";
+      }
+
+      const hasActiveChildren = category.children_recursive.some(
+        (child) => child.state === 1
+      );
+
+      if (category.state === 1 && hasActiveChildren) {
+        return "active"; // Padre e hijos activos
+      } else if (category.state === 0 && hasActiveChildren) {
+        return "partial"; // Padre inactivo pero tiene hijos activos
+      } else {
+        return "inactive"; // Padre e hijos inactivos
+      }
+    };
+
+    const status = getCategoryStatus();
 
     return [
       <tr key={category.id}>
@@ -70,9 +90,15 @@ export default function CategoriesPage() {
           </div>
         </td>
         <td className="text-center align-middle">
-          {category.state ? (
+          {status === "active" && (
             <span className="badge bg-success">Activo</span>
-          ) : (
+          )}
+          {status === "partial" && (
+            <span className="badge bg-warning text-dark">
+              Parcialmente activa
+            </span>
+          )}
+          {status === "inactive" && (
             <span className="badge bg-danger">Inactivo</span>
           )}
         </td>

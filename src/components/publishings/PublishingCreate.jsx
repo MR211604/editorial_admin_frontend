@@ -90,7 +90,6 @@ export default function PublishingCreate({
         },
       ],
     };
-    console.log("Creating publishing with data:", publishingData);
     createPublishing(publishingData, {
       onSuccess: () => {
         toast.success(`${publishingLabel} creado exitosamente`);
@@ -174,9 +173,9 @@ export default function PublishingCreate({
               <>
                 <SelectPublishingCategories
                   categoryType={publishingType}
-                  defaultCategoryValue={NO_CATEGORY}
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
+                  filterActiveCategories={true}
                   className={
                     "form-select " + (errors.category_id ? "is-invalid" : "")
                   }
