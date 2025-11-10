@@ -5,7 +5,6 @@ import Modal from "../ui/modal/Modal";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import { useCreatePublishing } from "../../hooks/usePublishings";
 import toast from "react-hot-toast";
-import { NO_CATEGORY } from "../../constants/common";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
 
 export default function PublishingCreate({
@@ -13,6 +12,7 @@ export default function PublishingCreate({
   onClose,
   onSuccess,
   publishingType,
+  categoryType,
   modalTitle,
   modalSaveButtonText,
 }) {
@@ -63,8 +63,6 @@ export default function PublishingCreate({
         return "Libro";
       case 2:
         return "Revista";
-      case 3:
-        return "Manual";
       default:
         return "Publicacion";
     }
@@ -172,7 +170,10 @@ export default function PublishingCreate({
             render={({ field }) => (
               <>
                 <SelectPublishingCategories
-                  categoryType={publishingType}
+                  categoryType={categoryType}
+                  enableDefaultValue={true}
+                  defaultLabel="Seleccione una categoría"
+                  defaultValue=""
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
                   filterActiveCategories={true}

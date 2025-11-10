@@ -8,9 +8,9 @@ import SelectPublishingCategories from "../components/ui/SelectPublishingCategor
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { archivedPublishingSelectValues } from "../components/ui/utils/selectStaticValues";
-import { BOOK_CATEGORY } from "../constants/common";
 import { useDeletePublishing } from "../hooks/usePublishings";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
+import { BOOK_PUBLISHING } from "../constants/common";
 
 export default function BooksPage() {
   const {
@@ -44,7 +44,7 @@ export default function BooksPage() {
     onCreateSuccess,
     onEditSuccess,
     onDeleteSuccess,
-  } = usePublishingsPage(1);
+  } = usePublishingsPage(BOOK_PUBLISHING);
 
   const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ export default function BooksPage() {
             optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
-              categoryType={BOOK_CATEGORY}
+              categoryType={"Libro"}
               enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
@@ -93,6 +93,7 @@ export default function BooksPage() {
               selectedValue={filterArchived}
               className="form-select form-select-md w-25 ms-2"
               optionValues={archivedPublishingSelectValues}
+              showDefaultOption={false}
             />
           </ToolBar>
 
@@ -115,7 +116,8 @@ export default function BooksPage() {
             isOpen={isModalOpen("create")}
             onClose={() => closeModal("create")}
             onSuccess={onCreateSuccess}
-            publishingType={BOOK_CATEGORY}
+            publishingType={BOOK_PUBLISHING}
+            categoryType={"Libro"}
           />
         )}
 

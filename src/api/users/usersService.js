@@ -20,7 +20,9 @@ export const getUsers = async (
       }`
     );
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.error}`);
+      const error = new Error(`Error fetching users: ${response.message}`);
+      error.errors = response.errors;
+      throw error;
     }
     return response;
   } catch (error) {
@@ -37,11 +39,13 @@ export const createUser = async (userData) => {
       "POST"
     );
     if (!response.ok) {
-      throw new Error(`Error creando usuario: ${response.message}`);
+      const error = new Error("Error de validación");
+      error.errors = response.errors;
+      throw error;
     }
     return response;
   } catch (error) {
-    console.error("Error creating user:", error.message);
+    console.error("Error creando usuario", error);
     throw error;
   }
 };

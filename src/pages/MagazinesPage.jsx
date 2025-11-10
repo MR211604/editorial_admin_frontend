@@ -8,9 +8,9 @@ import SelectPublishingCategories from "../components/ui/SelectPublishingCategor
 import Table from "../components/ui/table/Table";
 import ToolBar from "../components/ui/ToolBar";
 import { archivedPublishingSelectValues } from "../components/ui/utils/selectStaticValues";
-import { MAGAZINE_CATEGORY } from "../constants/common";
 import { useDeletePublishing } from "../hooks/usePublishings";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
+import { MAGAZINE_PUBLISHING } from "../constants/common";
 
 export default function MagazinesPage() {
   const {
@@ -45,7 +45,7 @@ export default function MagazinesPage() {
     onCreateSuccess,
     onEditSuccess,
     onDeleteSuccess,
-  } = usePublishingsPage(2);
+  } = usePublishingsPage(MAGAZINE_PUBLISHING);
 
   const navigate = useNavigate();
 
@@ -88,7 +88,7 @@ export default function MagazinesPage() {
             optionSelectedValue="Todas las revistas"
           >
             <SelectPublishingCategories
-              categoryType={MAGAZINE_CATEGORY}
+              categoryType={"Revista"}
               enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}
@@ -100,6 +100,7 @@ export default function MagazinesPage() {
               selectedValue={filterArchived}
               className="form-select form-select-md w-25 ms-2"
               optionValues={archivedPublishingSelectValues}
+              showDefaultOption={false}
             />
           </ToolBar>
 
@@ -123,7 +124,8 @@ export default function MagazinesPage() {
         isOpen={isModalOpen("create")}
         onClose={() => closeModal("create")}
         onSuccess={onCreateSuccess}
-        publishingType={MAGAZINE_CATEGORY}
+        publishingType={MAGAZINE_PUBLISHING}
+        categoryType={"Revista"}
       />
 
       {isModalOpen("edit") && selectedPublishing && (

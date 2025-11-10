@@ -16,7 +16,7 @@ export const useUsers = (pagination, rows, sorting, search) => {
 
   const createUserMutation = useMutation({
     mutationFn: (userData) => createUser(userData),
-    onSucces: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["users"],
       });

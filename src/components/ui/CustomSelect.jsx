@@ -2,6 +2,8 @@ export default function CustomSelect({
   onSelectChange,
   selectedValue,
   optionValues = [],
+  defaultOptionLabel,
+  showDefaultOption = true,
   ...props
 }) {
   return (
@@ -12,6 +14,11 @@ export default function CustomSelect({
       value={selectedValue}
       {...props}
     >
+      {showDefaultOption && (
+        <option value="" disabled>
+          {defaultOptionLabel || "Seleccione una opción"}
+        </option>
+      )}
       {optionValues.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

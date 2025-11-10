@@ -3,8 +3,12 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useCreateCategory } from "../../hooks/useCategories";
 import Modal from "../ui/modal/Modal";
+import { formatErrors } from "../../helpers/formatErrors";
+import { useCategoryTypes } from "../../hooks/useCategoryTypes";
+import CustomSelect from "../ui/CustomSelect";
 
 export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
+  const { allCategoryTypes } = useCategoryTypes();
   const { createCategory, isCreating } = useCreateCategory();
 
   const {
@@ -18,7 +22,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
     defaultValues: {
       title: "",
       description: "",
-      category_type: 3,
+      category_type: "",
     },
   });
 
@@ -32,13 +36,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
       },
       onError: (error) => {
         if (error?.errors && typeof error.errors === "object") {
-          Object.entries(error.errors).forEach(([field, messages]) => {
-            const messageText = Array.isArray(messages)
-              ? messages.join(", ")
-              : messages;
-            setError(field, { type: "server", message: messageText });
-          });
-          toast.error("Corrija los errores del formulario");
+          formatErrors(error, setError);
         } else {
           toast.error(error?.message || "Error creando categoría");
         }
@@ -101,13 +99,32 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
           <Controller
             name="category_type"
             control={control}
-            rules={{ required: "El tipo de categoría es obligatorio" }}
+            rules={{
+              required: "El tipo de categoría es obligatorio",
+              validate: (value) =>
+                value !== "" || "El tipo de categoría es obligatorio",
+            }}
             render={({ field }) => (
-              <Form.Control as="select" {...field} isInvalid={!!errors.category_type}>
-                <option value="0">Sin Categoria</option>
-                <option value="1">Libro</option>
-                <option value="2">Revista</option>
-              </Form.Control>
+              <>
+                <CustomSelect
+                  onSelectChange={(e) => field.onChange(e.target.value)}
+                  selectedValue={field.value}
+                  defaultOptionLabel="Seleccione un tipo de categoría"
+                  className={
+                    "form-select " + (errors.category_type ? "is-invalid" : "")
+                  }
+                  optionValues={allCategoryTypes?.data?.map((categoryType) => ({
+                    label: categoryType.name,
+                    value: categoryType.id,
+                  }))}
+                  disabled={isCreating}
+                />
+                {errors.rol_id && (
+                  <div className="invalid-feedback">
+                    {errors.rol_id.message}
+                  </div>
+                )}
+              </>
             )}
           />
           <Form.Control.Feedback type="invalid">
@@ -118,4 +135,3 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
     </Modal>
   );
 }
-

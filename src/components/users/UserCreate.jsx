@@ -2,10 +2,10 @@ import { Controller, useForm } from "react-hook-form";
 import Modal from "../ui/modal/Modal";
 import { useUsers } from "../../hooks/useUsers";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 import { Form } from "react-bootstrap";
 import CustomSelect from "../ui/CustomSelect";
 import { useUserRoles } from "../../hooks/useUserRoles";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function UserCreate({ isOpen, onClose, onSuccess }) {
   const { allRoles } = useUserRoles();
@@ -15,8 +15,7 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
     register,
     handleSubmit,
     reset,
-    clearErrors,
-    watch,
+    setError,
     control,
     formState: { errors },
   } = useForm({
@@ -24,17 +23,9 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
     defaultValues: {
       name: "",
       password: "",
+      rol_id: "",
     },
   });
-
-  const nameValue = watch("name");
-  const passwordValue = watch("password");
-  useEffect(() => {
-    if (errors.name?.type === "server") clearErrors("name");
-  }, [nameValue, clearErrors, errors.name]);
-  useEffect(() => {
-    if (errors.password?.type === "server") clearErrors("password");
-  }, [passwordValue, clearErrors, errors.password]);
 
   const handleClose = () => {
     reset();
@@ -44,12 +35,16 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
   const onSubmit = (data) => {
     createUser(data, {
       onSuccess: () => {
-        toast.success("Autor creado exitosamente");
+        toast.success("Usuario creado exitosamente");
         onSuccess();
         handleClose();
       },
       onError: (error) => {
-        toast.error(error.message);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al crear usuario");
+        }
       },
     });
   };
@@ -117,6 +112,7 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
             render={({ field }) => (
               <>
                 <CustomSelect
+                  defaultOptionLabel="Seleccione un rol"
                   onSelectChange={(e) => field.onChange(e.target.value)}
                   selectedValue={field.value}
                   className={

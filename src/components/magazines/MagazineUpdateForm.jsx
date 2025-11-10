@@ -225,7 +225,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
-                      categoryType={MAGAZINE_CATEGORY}
+                      categoryType={"Revista"}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${

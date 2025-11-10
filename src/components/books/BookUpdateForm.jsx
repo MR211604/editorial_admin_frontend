@@ -226,7 +226,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                 render={({ field }) => (
                   <>
                     <SelectPublishingCategories
-                      categoryType={BOOK_CATEGORY}
+                      categoryType={"Libro"}
                       onCategoryChange={(e) => field.onChange(e.target.value)}
                       selectedCategory={field.value}
                       className={`form-select ${
