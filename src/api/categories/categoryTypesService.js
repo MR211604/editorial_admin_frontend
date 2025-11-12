@@ -1,18 +1,13 @@
 import { fetchWithToken } from "../../helpers/fetch";
+import { handleApiCall } from "../../helpers/formatApi";
 
 export const getCategoryTypes = async (page = 1, limit = 10) => {
-  try {
-    const response = await fetchWithToken(
-      `api/categoryTypes/getCategoryTypes?limit=${limit}&page=${page}`
-    );
-    if (!response.ok) {
-      const error = new Error(`HTTP error! status: ${response.status}`);
-      error.errors = response.errors;
-      throw error;
-    }
-    return response;
-  } catch (error) {
-    console.error("Error fetching category types:", error);
-    throw error;
-  }
+  return handleApiCall(
+    async () =>
+      fetchWithToken(
+        `api/categoryTypes/getCategoryTypes?limit=${limit}&page=${page}`
+      ),
+    "Error fetching category types",
+    "Error obteniendo los tipos de categorías"
+  );
 };

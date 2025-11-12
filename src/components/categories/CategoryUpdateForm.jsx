@@ -7,6 +7,7 @@ import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
 import toast from "react-hot-toast";
+import { formatErrors } from "../../helpers/formatErrors";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
@@ -63,12 +64,7 @@ function CategoryUpdateForm({ category }) {
       onError: (error) => {
         const fieldErrors = error?.errors || {};
         if (fieldErrors && typeof fieldErrors === "object") {
-          Object.entries(fieldErrors).forEach(([field, messages]) => {
-            const messageText = Array.isArray(messages)
-              ? messages.join(", ")
-              : messages;
-            setError(field, { type: "server", message: messageText });
-          });
+          formatErrors(fieldErrors, setError);
           toast.error("Corrija los errores del formulario");
         } else {
           toast.error(error?.message || "Error actualizando categoría");

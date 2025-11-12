@@ -49,12 +49,20 @@ export default function CategoriesPage() {
         (child) => child.state === 1
       );
 
-      if (category.state === 1 && hasActiveChildren) {
-        return "active"; // Padre e hijos activos
+      const allChildrenActive = category.children_recursive.every(
+        (child) => child.state === 1
+      );
+
+      if (category.state === 1 && allChildrenActive) {
+        return "active";
       } else if (category.state === 0 && hasActiveChildren) {
-        return "partial"; // Padre inactivo pero tiene hijos activos
+        return "partial";
+      } else if (category.state === 1 && !allChildrenActive) {
+        return "partial";
+      } else if (category.state === 1 && !hasActiveChildren) {
+        return "partial";
       } else {
-        return "inactive"; // Padre e hijos inactivos
+        return "inactive";
       }
     };
 

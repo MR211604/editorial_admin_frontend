@@ -101,10 +101,10 @@ export const usePublishing = (id) => {
   };
 };
 
-export const useArchivePublishing = (id) => {
+export const useArchivePublishing = () => {
   const queryClient = useQueryClient();
   const archivePublishingMutation = useMutation({
-    mutationFn: (publishingData) => toggleArchivePublishing(id, publishingData),
+    mutationFn: ({ id }) => toggleArchivePublishing(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["publishings"] });
     },

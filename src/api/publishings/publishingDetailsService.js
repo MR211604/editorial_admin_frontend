@@ -1,64 +1,41 @@
 import { fetchWithToken } from "../../helpers/fetch";
+import { handleApiCall } from "../../helpers/formatApi";
 
 export const createPublishingDetail = async (data) => {
-  try {
-    const response = await fetchWithToken(
-      "api/publishingDetails/createPublishingDetail",
-      data,
-      "POST"
-    );
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
-    }
-    return response;
-  } catch (error) {
-    console.error("Error creating publishing detail:", error);
-    throw error;
-  }
+  return handleApiCall(
+    async () =>
+      fetchWithToken(
+        "api/publishingDetails/createPublishingDetail",
+        data,
+        "POST"
+      ),
+    "Error creating publishing detail",
+    "Error creando detalle de publicación"
+  );
 };
 
 export const updatePublishingDetail = async (id, data) => {
-  try {
-    const response = await fetchWithToken(
-      `api/publishingDetails/updatePublishingDetail/${id}`,
-      data,
-      "POST"
-    );
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
-    }
-    return response;
-  } catch (error) {
-    console.error("Error updating publishing detail:", error);
-    throw error;
-  }
+  return handleApiCall(
+    async () =>
+      fetchWithToken(
+        `api/publishingDetails/updatePublishingDetail/${id}`,
+        data,
+        "POST"
+      ),
+    "Error updating publishing detail",
+    "Error actualizando detalle de publicación"
+  );
 };
 
 export const deletePublishingDetail = async (id) => {
-  try {
-    const response = await fetchWithToken(
-      `api/publishingDetails/deletePublishingDetail/${id}`,
-      {},
-      "POST"
-    );
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error! status: ${response.message} - ${JSON.stringify(
-          response.errors
-        )}`
-      );
-    }
-    return response;
-  } catch (error) {
-    console.error("Error deleting publishing detail:", error);
-    throw error;
-  }
+  return handleApiCall(
+    async () =>
+      fetchWithToken(
+        `api/publishingDetails/deletePublishingDetail/${id}`,
+        {},
+        "POST"
+      ),
+    "Error deleting publishing detail",
+    "Error eliminando detalle de publicación"
+  );
 };

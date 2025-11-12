@@ -6,7 +6,6 @@ import { useUpdatePublishing } from "../../hooks/usePublishings";
 import AuthorsTable from "../publishings/AuthorsTable";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
-import { BOOK_CATEGORY } from "../../constants/common";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import { getImageURL } from "../../helpers/getImageURL";
 

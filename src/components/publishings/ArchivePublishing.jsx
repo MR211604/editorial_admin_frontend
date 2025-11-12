@@ -9,28 +9,28 @@ export default function ArchivePublishing({
   onSuccess,
   selectedPublishing,
 }) {
-  const { archivePublishing } = useArchivePublishing(
-    selectedPublishing?.original.id
-  );
+  const { archivePublishing } = useArchivePublishing();
 
   const onArchive = () => {
-    if (selectedPublishing?.original.is_archived === 1) {
-      archivePublishing(0, {
+    archivePublishing(
+      { id: selectedPublishing?.original.id },
+      {
         onSuccess: () => {
-          toast.success("Publicación desarchivada exitosamente");
+          toast.success(
+            `Publicación ${
+              selectedPublishing?.original.is_archived === 1
+                ? "desarchivada"
+                : "archivada"
+            } exitosamente`
+          );
           onSuccess();
           onClose();
         },
-      });
-    } else {
-      archivePublishing(1, {
-        onSuccess: () => {
-          toast.success("Publicación archivada exitosamente");
-          onSuccess();
-          onClose();
+        onError: () => {
+          toast.error("Error al cambiar el estado del usuario");
         },
-      });
-    }
+      }
+    );
   };
 
   return (

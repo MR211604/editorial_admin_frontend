@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { useAuthors } from "../../hooks/useAuthors";
 import Modal from "../ui/modal/Modal";
 import { Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
   const { createAuthor, isCreating } = useAuthors();
@@ -12,8 +12,6 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
     handleSubmit,
     reset,
     setError,
-    clearErrors,
-    watch,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -22,15 +20,6 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
       lastname: "",
     },
   });
-
-  const nameValue = watch("name");
-  const lastnameValue = watch("lastname");
-  useEffect(() => {
-    if (errors.name?.type === "server") clearErrors("name");
-  }, [nameValue]);
-  useEffect(() => {
-    if (errors.lastname?.type === "server") clearErrors("lastname");
-  }, [lastnameValue]);
 
   const handleClose = () => {
     reset();
@@ -45,14 +34,9 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
         handleClose();
       },
       onError: (error) => {
-        console.error("Error creando autor:", error);
-        const fieldErrors = error?.errors || {};
-        Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages)
-            ? messages.join(", ")
-            : messages;
-          setError(field, { type: "server", message: messageText });
-        });
+        if (error?.errors) {
+          formatErrors(error, setError);
+        }
         if (error?.message) toast.error(error.message);
       },
     });

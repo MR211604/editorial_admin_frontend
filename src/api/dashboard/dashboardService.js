@@ -6,7 +6,6 @@ import { fetchWithToken } from "../../helpers/fetch";
  * Lanza error si la petición falla
  * Normaliza la respuesta para valores numéricos
  */
-
 export const getDashboardSummary = async () => {
   const response = await fetchWithToken("api/publishings/summary");
 
