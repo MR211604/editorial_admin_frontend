@@ -75,13 +75,12 @@ export const useUpdateCategory = (id) => {
   };
 };
 
-export const useCategoryChangeStatus = (id) => {
+export const useCategoryChangeStatus = () => {
   const queryClient = useQueryClient();
   const changeCategoryStatusMutation = useMutation({
-    mutationFn: () => toggleCategoryStatus(id),
+    mutationFn: ({ id }) => toggleCategoryStatus(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-      queryClient.invalidateQueries({ queryKey: ["category", id] });
     },
   });
 
