@@ -4,6 +4,7 @@ import { useUpdateAuthor } from "../../hooks/useAuthors";
 import { Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
   const { updateAuthor, isUpdating } = useUpdateAuthor(author.original?.id);
@@ -59,15 +60,11 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
         handleClose();
       },
       onError: (error) => {
-        console.error("Error editando autor:", error);
-        const fieldErrors = error?.errors || {};
-        Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages)
-            ? messages.join(", ")
-            : messages;
-          setError(field, { type: "server", message: messageText });
-        });
-        if (error?.message) toast.error(error.message);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al actualizar el autor");
+        }
       },
     });
   };

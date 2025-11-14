@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useUpdateUser } from "../../hooks/useUsers";
 import { useUserRoles } from "../../hooks/useUserRoles";
 import CustomSelect from "../ui/CustomSelect";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function UserUpdate({
   isOpen,
@@ -59,15 +60,11 @@ export default function UserUpdate({
         onSuccess();
       },
       onError: (error) => {
-        console.error("Error editando usuario:", error);
-        const fieldErrors = error?.errors || {};
-        Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages)
-            ? messages.join(", ")
-            : messages;
-          setError(field, { type: "server", message: messageText });
-        });
-        if (error?.message) toast.error(error.message);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al actualizar usuario");
+        }
       },
     });
   };

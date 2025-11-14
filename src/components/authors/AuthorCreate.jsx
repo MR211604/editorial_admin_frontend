@@ -37,7 +37,8 @@ export default function AuthorCreate({ isOpen, onClose, onSuccess }) {
         if (error?.errors) {
           formatErrors(error, setError);
         }
-        if (error?.message) toast.error(error.message);
+        if (error?.message)
+          toast.error(error.message || "Error al crear el autor");
       },
     });
   };

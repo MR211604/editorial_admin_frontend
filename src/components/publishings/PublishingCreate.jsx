@@ -6,6 +6,7 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import { useCreatePublishing } from "../../hooks/usePublishings";
 import toast from "react-hot-toast";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function PublishingCreate({
   isOpen,
@@ -95,18 +96,14 @@ export default function PublishingCreate({
         reset();
       },
       onError: (error) => {
-        console.error("Error creating publishing:", error);
-        const fieldErrors = error?.errors || {};
-        Object.entries(fieldErrors).forEach(([field, messages]) => {
-          const messageText = Array.isArray(messages)
-            ? messages.join(", ")
-            : messages;
-          setError(field, { type: "server", message: messageText });
-        });
-        toast.error(
-          error?.message ||
-            `No se pudo crear la ${publishingLabel.toLowerCase()}`
-        );
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(
+            error?.message ||
+              `No se pudo crear la ${publishingLabel.toLowerCase()}`
+          );
+        }
       },
     });
   };

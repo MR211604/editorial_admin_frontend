@@ -8,6 +8,7 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import { getImageURL } from "../../helpers/getImageURL";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function MagazineUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
@@ -26,6 +27,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     handleSubmit,
     control,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -96,14 +98,17 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
       formData.append("cover", data.cover[0]);
     }
 
-    console.log("Form Data to be submitted:", [...formData.entries()]);
     updatePublishing(formData, {
       onSuccess: () => {
         localStorage.setItem("magazineUpdateSuccess", "1");
         navigate(0);
       },
       onError: (error) => {
-        toast.error("Error actualizando publicación: " + error.message);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al crear publicación");
+        }
       },
     });
   };

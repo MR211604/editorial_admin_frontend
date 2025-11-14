@@ -62,18 +62,14 @@ function CategoryUpdateForm({ category }) {
         navigate(0);
       },
       onError: (error) => {
-        const fieldErrors = error?.errors || {};
-        if (fieldErrors && typeof fieldErrors === "object") {
-          formatErrors(fieldErrors, setError);
-          toast.error("Corrija los errores del formulario");
+        if (error.errors) {
+          formatErrors(error, setError);
         } else {
           toast.error(error?.message || "Error actualizando categoría");
         }
       },
     });
   };
-
-  console.log("category data", category);
 
   const renderBasicFields = () => (
     <Row>

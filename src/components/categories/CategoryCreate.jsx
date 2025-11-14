@@ -35,12 +35,11 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
         onClose();
       },
       onError: (error) => {
-        if (error?.errors && typeof error.errors === "object") {
+        if (error?.errors) {
           formatErrors(error, setError);
         } else {
           toast.error(error?.message || "Error creando categoría");
         }
-        console.error("Error creando categoría:", error);
       },
     });
   };

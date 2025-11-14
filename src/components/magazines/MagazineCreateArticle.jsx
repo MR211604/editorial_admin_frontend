@@ -5,6 +5,7 @@ import MDXEditorField from "../ui/MDXEditorField";
 import Modal from "../ui/modal/Modal";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { formatErrors } from "../../helpers/formatErrors";
 
 export default function MagazineCreateArticle({
   publishing,
@@ -21,6 +22,7 @@ export default function MagazineCreateArticle({
     register,
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -44,7 +46,11 @@ export default function MagazineCreateArticle({
         navigate(0);
       },
       onError: (error) => {
-        toast.error("Error creando artículo:", error);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al crear publicación");
+        }
       },
     });
   };

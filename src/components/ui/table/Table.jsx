@@ -32,10 +32,10 @@ export default function Table({
     // Pagination configuration
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    rowCount: Number(paginatedTableData?.pagination.total),
+    rowCount: Number(paginatedTableData?.pagination?.total) || 0,
     pageCount: Math.ceil(
-      (paginatedTableData?.pagination.total || 0) /
-        (Number(paginatedTableData?.pagination.per_page) || 1)
+      (paginatedTableData?.pagination?.total || 0) /
+        (Number(paginatedTableData?.pagination?.per_page) || 1)
     ),
     manualPagination: true,
     state: {

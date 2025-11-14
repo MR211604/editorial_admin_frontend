@@ -4,6 +4,8 @@ import MDXEditorField from "../ui/MDXEditorField";
 import Modal from "../ui/modal/Modal";
 import { useUpdatePublishingDetail } from "../../hooks/usePublishingsDetails";
 import { useNavigate } from "react-router-dom";
+import { formatErrors } from "../../helpers/formatErrors";
+import toast from "react-hot-toast";
 
 export default function MagazineUpdateArticle({
   isOpen,
@@ -18,6 +20,7 @@ export default function MagazineUpdateArticle({
   const {
     register,
     control,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -40,7 +43,11 @@ export default function MagazineUpdateArticle({
         navigate(0);
       },
       onError: (error) => {
-        console.error("Error updating article:", error);
+        if (error.errors) {
+          formatErrors(error, setError);
+        } else {
+          toast.error(error.message || "Error al crear publicación");
+        }
       },
     });
   };

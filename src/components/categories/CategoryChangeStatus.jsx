@@ -8,15 +8,11 @@ function CategoryChangeStatus({
   onSuccess,
   selectedCategory,
 }) {
-  const { changeCategoryStatus } = useCategoryChangeStatus(
-    selectedCategory?.id
-  );
-
-  console.log("Selected Category in ChangeStatus:", selectedCategory);
+  const { changeCategoryStatus } = useCategoryChangeStatus();
 
   const onChangeStatus = () => {
     changeCategoryStatus(
-      {},
+      { id: selectedCategory?.id },
       {
         onSuccess: () => {
           toast.success(
