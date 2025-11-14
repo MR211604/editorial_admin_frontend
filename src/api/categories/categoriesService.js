@@ -41,8 +41,7 @@ export const updateCategory = async (id, categoryData) => {
 
 export const toggleCategoryStatus = async (id) => {
   return handleApiCall(
-    async () =>
-      fetchWithToken(`api/categories/toggleCategoryStatus/${id}`, {}, "POST"),
+    async () => fetchWithToken(`api/categories/toggleState/${id}`, {}, "POST"),
     "Error toggling category status",
     "Error cambiando estado de categoria"
   );

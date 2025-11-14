@@ -31,9 +31,7 @@ export const getAuthors = async (
 //?authorData: { name: string, lastname: string }
 export const createAuthor = async (authorData) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken("api/authors/createAuthor", authorData, "POST");
-    },
+    async () => fetchWithToken("api/authors/createAuthor", authorData, "POST"),
     "Error creating author",
     "Error creando autor"
   );
@@ -41,9 +39,8 @@ export const createAuthor = async (authorData) => {
 
 export const updateAuthor = async (id, authorData) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken(`api/authors/updateAuthor/${id}`, authorData, "POST");
-    },
+    async () =>
+      fetchWithToken(`api/authors/updateAuthor/${id}`, authorData, "POST"),
     "Error updating author",
     "Error actualizando autor"
   );
@@ -51,9 +48,7 @@ export const updateAuthor = async (id, authorData) => {
 
 export const deleteAuthor = async (id) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken(`api/authors/deleteAuthor/${id}`, {}, "POST");
-    },
+    async () => fetchWithToken(`api/authors/deleteAuthor/${id}`, {}, "POST"),
     "Error deleting author",
     "Error eliminando autor"
   );

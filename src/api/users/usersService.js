@@ -30,9 +30,7 @@ export const getUsers = async (
 
 export const createUser = async (userData) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken("api/users/createUser", userData, "POST");
-    },
+    async () => fetchWithToken("api/users/createUser", userData, "POST"),
     "Error creating user",
     "Error creando usuario"
   );
@@ -40,9 +38,7 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (id, userData) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken(`api/users/updateUser/${id}`, userData, "POST");
-    },
+    async () => fetchWithToken(`api/users/updateUser/${id}`, userData, "POST"),
     "Error updating user",
     "Error actualizando usuario"
   );
@@ -50,9 +46,7 @@ export const updateUser = async (id, userData) => {
 
 export const toggleUserState = async (id) => {
   return handleApiCall(
-    async () => {
-      fetchWithToken(`api/users/toggleActive/${id}`, {}, "POST");
-    },
+    async () => fetchWithToken(`api/users/toggleActive/${id}`, {}, "POST"),
     "Error toggling user state",
     "Error alternando estado de usuario"
   );
