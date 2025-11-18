@@ -4,7 +4,7 @@ export default function MagazineArticlesTable({
   handleEdit,
   handleDelete,
 }) {
-  //Filtrando por el shortname
+  //Filtrando por el id del lenguaje
   const filteredArticles = publishing?.data?.details.filter(
     (detail) => detail.language_id === languageId
   );

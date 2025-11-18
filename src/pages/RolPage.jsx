@@ -1,50 +1,93 @@
-import { useState } from "react";
 import { useUserRoles } from "../hooks/useUserRoles";
 import Table from "../components/ui/table/Table";
+import { usePage } from "./hooks/usePage";
+import ToolBar from "../components/ui/ToolBar";
+import { useDebounce } from "../hooks/utils/useDebounce";
+import RolCreate from "../components/rol/RolCreate";
 
 export default function RolPage() {
+  const {
+    pagination,
+    setPagination,
+    search,
+    setSearch,
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10
-  });
+    // Modal handlers
+    isModalOpen,
+    closeModal,
 
-  const { allRoles, isAllRolesLoading } = useUserRoles(pagination.pageIndex + 1, pagination.pageSize);
+    // Handlers específicos
+    searchHandler,
+    handleCreateValue,
+
+    // Callbacks de éxito
+    onCreateSuccess,
+  } = usePage();
+
+  const debouncedSearch = useDebounce(search, 300);
+
+  const { allRoles, isAllRolesLoading } = useUserRoles(
+    pagination.pageIndex + 1,
+    pagination.pageSize,
+    debouncedSearch
+  );
 
   const rolesColumns = [
     {
-      header: 'ID',
-      accessorKey: 'id',
+      header: "ID",
+      accessorKey: "id",
+      enableSorting: false,
     },
     {
-      header: 'Nombre',
-      accessorKey: 'name',
+      header: "Nombre",
+      accessorKey: "name",
+      enableSorting: false,
     },
     {
-      header: 'Descripcion',
-      accessorKey: 'description',
+      header: "Descripcion",
+      accessorKey: "description",
+      enableSorting: false,
     },
-  ]
-
+  ];
 
   return (
     <>
       <h1>Roles</h1>
       <hr />
-      <p>Aqui puedes encontrar una lista de todos los roles dentro de la plataforma.</p>
+      <p>
+        Aqui puedes encontrar una lista de todos los roles dentro de la
+        plataforma.
+      </p>
 
       <div className="card">
-        <div className="card-header">
-          Listado de roles
-        </div>
+        <div className="card-header">Listado de roles</div>
 
         <div className="card-body">
-          <div className="d-flex align-items-center mb-3">
-            <button className="btn btn-success">Agregar nuevo rol</button>
-          </div>
-          <Table paginatedTableData={allRoles} columns={rolesColumns} pagination={pagination} setPagination={setPagination} isTableDataLoading={isAllRolesLoading} />
+          <ToolBar
+            onCreateClick={handleCreateValue}
+            search={search}
+            onSearchChange={searchHandler}
+            createButtonText="Agregar nuevo rol"
+            searchPlaceholder="Buscar rol..."
+          />
+          <Table
+            paginatedTableData={allRoles}
+            columns={rolesColumns}
+            pagination={pagination}
+            setPagination={setPagination}
+            isTableDataLoading={isAllRolesLoading}
+            setSearch={setSearch}
+          />
         </div>
       </div>
+
+      {isModalOpen("create") && (
+        <RolCreate
+          isOpen={isModalOpen("create")}
+          onClose={() => closeModal("create")}
+          onSuccess={onCreateSuccess}
+        />
+      )}
     </>
-  )
+  );
 }

@@ -59,7 +59,6 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
           <Form.Label>Nombre de la Categoría</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Ingrese el nombre de la categoría"
             isInvalid={!!errors.title}
             {...register("title", {
               required: "El nombre de la categoría es obligatorio",
@@ -77,8 +76,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
         <Form.Group className="mb-3">
           <Form.Label>Descripcion</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Ingrese la descripción de la categoría"
+            as="textarea"
             isInvalid={!!errors.description}
             {...register("description", {
               required: "La descripción de la categoría es obligatoria",

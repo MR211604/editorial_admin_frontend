@@ -42,8 +42,6 @@ export default function MagazineArticles() {
     return activeTab === "spanish" ? 1 : 2;
   };
 
-  console.log("current language id", getCurrentLanguageId());
-
   return (
     <>
       <h1>Articulos de {publishing?.data.title}</h1>

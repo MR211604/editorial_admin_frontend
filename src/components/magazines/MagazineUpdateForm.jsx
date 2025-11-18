@@ -20,6 +20,8 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     (t) => t.language.shortname === languageShortName
   );
 
+  console.log("current translation", currentTranslation);
+
   const navigate = useNavigate();
 
   const {
