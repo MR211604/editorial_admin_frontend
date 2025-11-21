@@ -8,7 +8,7 @@ export const generateUrlFromTitle = (title) => {
   url = url.replace(/\s+/g, "_");
 
   // Eliminar caracteres especiales y mantener solo letras (incluyendo acentuadas) y guiones bajos
-  url = url.replace(/[^a-záéíóúñü_]/g, "");
+  url = url.replace(/[^a-záéíóúñü0-9_]/g, "");
 
   // Reducir múltiples guiones bajos consecutivos a uno solo
   url = url.replace(/_+/g, "_");
