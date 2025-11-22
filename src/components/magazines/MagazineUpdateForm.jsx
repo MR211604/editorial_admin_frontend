@@ -61,6 +61,13 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     }
   }, [publishing, reset, currentTranslation]);
 
+  useEffect(() => {
+    if (localStorage.getItem("magazineUpdateSuccess") === "1") {
+      toast.success("Revista actualizada exitosamente");
+      localStorage.removeItem("magazineUpdateSuccess");
+    }
+  }, []);
+
   const onSubmit = async (data) => {
     const authorsData = authorsTableRef.current.getAuthorsData();
     const formData = new FormData();
@@ -94,7 +101,8 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
-        toast.success("Publicación actualizada exitosamente");
+        localStorage.setItem("magazineUpdateSuccess", "1");
+        navigate(0);
       },
       onError: (error) => {
         if (error.errors) {
@@ -303,10 +311,10 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
             <Form.Group className="mb-3">
               <Form.Label>Epoca</Form.Label>
               <Form.Control
-                type="number"
+                type="text"
                 isInvalid={!!errors.age}
                 {...register("age", {
-                  required: "La época es obligatoria",
+                  required: false,
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -321,10 +329,10 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
             <Form.Group className="mb-3">
               <Form.Label>Numero de epoca</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 isInvalid={!!errors.age_number}
                 {...register("age_number", {
-                  required: "El número de época es obligatorio",
+                  required: false,
                 })}
               />
               <Form.Control.Feedback type="invalid">

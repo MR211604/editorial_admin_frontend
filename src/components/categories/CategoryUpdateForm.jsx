@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, memo } from "react";
+import { useCallback, useMemo, memo } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,8 @@ import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
 import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
+import { useEffect } from "react";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
@@ -55,6 +57,7 @@ function CategoryUpdateForm({ category }) {
     const categoryData = {
       ...data,
       category_id: category.data.id,
+      slug: generateUrlFromTitle(data.title),
     };
     updateCategory(categoryData, {
       onSuccess: () => {

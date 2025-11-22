@@ -50,10 +50,10 @@ export default function MagazinesPage() {
   const navigate = useNavigate();
 
   const handleUpdateMagazine = (row) =>
-    navigate(`/dashboard/magazines/edit/${row.original?.URL}`);
+    navigate(`/dashboard/magazines/edit/${row.original?.id}`);
 
   const handleEditArticles = (row) =>
-    navigate(`/dashboard/magazines/articles/${row.original?.URL}`);
+    navigate(`/dashboard/magazines/articles/${row.original?.id}`);
 
   const { deletePublishingMutation } = useDeletePublishing(
     selectedPublishing?.original.id

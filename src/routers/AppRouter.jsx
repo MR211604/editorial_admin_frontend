@@ -59,12 +59,12 @@ export default function AppRouter() {
 
         <Route path="books">
           <Route index element={<BooksPage />} />
-          <Route path="edit/:book_url" element={<BookUpdate />} />
+          <Route path="edit/:id" element={<BookUpdate />} />
         </Route>
         <Route path="magazines">
           <Route index element={<MagazinesPage />} />
-          <Route path="edit/:magazine_url" element={<MagazineUpdate />} />
-          <Route path="articles/:magazine_url" element={<MagazineArticles />} />
+          <Route path="edit/:id" element={<MagazineUpdate />} />
+          <Route path="articles/:id" element={<MagazineArticles />} />
         </Route>
 
         {/* Los editores de publicaciones no pueden entrar a la seccion de categorias */}

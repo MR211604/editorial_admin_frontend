@@ -6,6 +6,7 @@ import Modal from "../ui/modal/Modal";
 import { formatErrors } from "../../helpers/formatErrors";
 import { useCategoryTypes } from "../../hooks/useCategoryTypes";
 import CustomSelect from "../ui/CustomSelect";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
 
 export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
   const { allCategoryTypes } = useCategoryTypes();
@@ -27,21 +28,27 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
   });
 
   const handleSave = (data) => {
-    createCategory(data, {
-      onSuccess: () => {
-        toast.success("Categoría creada exitosamente");
-        onSuccess();
-        reset();
-        onClose();
+    createCategory(
+      {
+        ...data,
+        slug: generateUrlFromTitle(data.title),
       },
-      onError: (error) => {
-        if (error?.errors) {
-          formatErrors(error, setError);
-        } else {
-          toast.error(error?.message || "Error creando categoría");
-        }
-      },
-    });
+      {
+        onSuccess: () => {
+          toast.success("Categoría creada exitosamente");
+          onSuccess();
+          reset();
+          onClose();
+        },
+        onError: (error) => {
+          if (error?.errors) {
+            formatErrors(error, setError);
+          } else {
+            toast.error(error?.message || "Error creando categoría");
+          }
+        },
+      }
+    );
   };
 
   return (
