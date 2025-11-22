@@ -6,9 +6,9 @@ import MagazineUpdateForm from "../../components/magazines/MagazineUpdateForm";
 import { usePublishing } from "../../hooks/usePublishings";
 
 export default function MagazineUpdate() {
-  const { id } = useParams();
+  const { magazine_url } = useParams();
 
-  const { publishing, isPublishingLoading } = usePublishing(id);
+  const { publishing, isPublishingLoading } = usePublishing(magazine_url);
 
   if (isPublishingLoading) {
     return <div>Cargando revista...</div>;

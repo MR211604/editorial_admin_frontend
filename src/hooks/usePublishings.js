@@ -89,10 +89,10 @@ export const useUpdatePublishing = (id) => {
   };
 };
 
-export const usePublishing = (id) => {
+export const usePublishing = (book_url) => {
   const { data: publishing, isLoading: isPublishingLoading } = useQuery({
-    queryKey: ["publishing", id],
-    queryFn: () => getPublishingById(id),
+    queryKey: ["publishing", book_url],
+    queryFn: () => getPublishingById(book_url),
   });
 
   return {

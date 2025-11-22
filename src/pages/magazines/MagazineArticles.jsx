@@ -12,8 +12,8 @@ import { useDeletePublishingDetail } from "../../hooks/usePublishingsDetails";
 import { useState } from "react";
 
 export default function MagazineArticles() {
-  const { id } = useParams();
-  const { publishing } = usePublishing(id);
+  const { magazine_url } = useParams();
+  const { publishing } = usePublishing(magazine_url);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("basic-info");
   const {

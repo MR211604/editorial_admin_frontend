@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import { getImageURL } from "../../helpers/getImageURL";
 import { formatErrors } from "../../helpers/formatErrors";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
 
 export default function MagazineUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
@@ -19,9 +20,6 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
   const currentTranslation = publishing?.data.translations?.find(
     (t) => t.language.shortname === languageShortName
   );
-
-  console.log("current translation", currentTranslation);
-
   const navigate = useNavigate();
 
   const {
@@ -42,6 +40,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
       volume: publishing?.data.volume || "",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       category_id: publishing?.data.category_id || "",
+      URL: publishing?.data.URL,
       cover: null,
     },
   });
@@ -56,23 +55,15 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
         volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || "",
+        URL: publishing?.data.URL,
         cover: null,
       });
     }
   }, [publishing, reset, currentTranslation]);
 
-  useEffect(() => {
-    if (localStorage.getItem("magazineUpdateSuccess") === "1") {
-      toast.success("Publicación actualizada exitosamente");
-      localStorage.removeItem("magazineUpdateSuccess");
-    }
-  }, []);
-
   const onSubmit = async (data) => {
     const authorsData = authorsTableRef.current.getAuthorsData();
     const formData = new FormData();
-    //!  formData.append("title", data.title);
-
     formData.append("pages", data.pages);
     formData.append("publish_date", data.publish_date);
     formData.append("publish_code", data.publish_code);
@@ -82,13 +73,14 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     formData.append("is_new_arrival", data.is_new_arrival);
     formData.append("category_id", data.category_id);
     formData.append("publishing_type", publishing?.data.publishing_type);
+    formData.append("URL", generateUrlFromTitle(data.title));
 
     // TODO: Manejar múltiples traducciones en el futuro
     // Solo enviar la traducción del idioma actual
     // Cuando no se tenga el id de lenguaje correcto, se asume 1 para español y 2 para inglés
     formData.append(
       "translations[0][language_id]",
-      languageShortName === "ES" ? 1 : 2
+      currentTranslation.language.id
     );
     formData.append("translations[0][title]", data.title);
 
@@ -102,8 +94,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
-        localStorage.setItem("magazineUpdateSuccess", "1");
-        navigate(0);
+        toast.success("Publicación actualizada exitosamente");
       },
       onError: (error) => {
         if (error.errors) {

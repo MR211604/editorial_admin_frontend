@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import { getImageURL } from "../../helpers/getImageURL";
 import { formatErrors } from "../../helpers/formatErrors";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
 
 export default function BookUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
@@ -35,7 +36,8 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
       publish_date: publishing?.data.publish_date || "",
       publish_code: formatISBN(publishing?.data.publish_code || ""),
       category_id: publishing?.data.category_id || undefined,
-      URL: currentTranslation?.URL || "-",
+      URL: publishing?.data.URL,
+      resource_URL: publishing?.data.resource_URL || "-",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       cover: publishing?.data.cover || null,
     },
@@ -49,41 +51,33 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
         publish_date: publishing.data.publish_date || "",
         publish_code: formatISBN(publishing.data.publish_code || ""),
         category_id: publishing.data.category_id || undefined,
-        URL: currentTranslation?.URL || "-",
+        URL: publishing?.data.URL,
+        resource_URL: publishing?.data.resource_URL || "-",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         cover: publishing?.data.cover || null,
       });
     }
   }, [publishing, reset, currentTranslation]);
 
-  useEffect(() => {
-    if (localStorage.getItem("bookUpdateSuccess") === "1") {
-      toast.success("Publicación actualizada exitosamente");
-      localStorage.removeItem("bookUpdateSuccess");
-    }
-  }, []);
-
   //! ENVIO DE FORMULARIO USANDO FORM-DATA
   const onSubmit = async (data) => {
     const authorsData = authorsTableRef.current.getAuthorsData();
 
     const formData = new FormData();
-    // formData.append("title", data.title);
     formData.append("pages", data.pages);
     formData.append("publish_date", data.publish_date);
     formData.append("publish_code", data.publish_code);
     formData.append("category_id", data.category_id);
-    // formData.append("URL", data.URL);
+    formData.append("resource_URL", data.resource_URL);
     formData.append("is_new_arrival", data.is_new_arrival);
     formData.append("id", publishing?.data.id);
     formData.append("publishing_type", publishing?.data.publishing_type);
-
+    formData.append("URL", generateUrlFromTitle(data.title));
     formData.append(
       "translations[0][language_id]",
       currentTranslation.language.id
     );
     formData.append("translations[0][title]", data.title);
-    formData.append("translations[0][URL]", data.URL);
 
     authorsData?.visibleAuthors.forEach((author, index) => {
       formData.append(`authors[${index}]`, author.id);
@@ -95,8 +89,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
-        localStorage.setItem("bookUpdateSuccess", "1");
-        navigate(0);
+        toast.success("Publicación actualizada exitosamente");
       },
       onError: (error) => {
         if (error.errors) {
@@ -274,27 +267,26 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                 accept="image/*"
                 isInvalid={!!errors.cover}
                 {...register("cover", {
-                  validate: {
-                    fileSize: (files) => {
-                      if (!files || files.length === 0) return true;
-                      return (
-                        files[0].size <= 5000000 ||
-                        "El archivo debe ser menor a 5MB"
-                      );
-                    },
-                    fileType: (files) => {
-                      if (!files || files.length === 0) return true;
-                      const validTypes = [
-                        "image/jpeg",
-                        "image/png",
-                        "image/jpg",
-                      ];
-                      return (
-                        validTypes.includes(files[0].type) ||
-                        "Solo se permiten imágenes JPG, JPEG o PNG"
-                      );
-                    },
-                  },
+                  required: false,
+                  // validate: {
+                  //   fileSize: (files) => {
+                  //     return (
+                  //       files[0].size <= 5000000 ||
+                  //       "El archivo debe ser menor a 5MB"
+                  //     );
+                  //   },
+                  //   fileType: (files) => {
+                  //     const validTypes = [
+                  //       "image/jpeg",
+                  //       "image/png",
+                  //       "image/jpg",
+                  //     ];
+                  //     return (
+                  //       validTypes.includes(files[0].type) ||
+                  //       "Solo se permiten imágenes JPG, JPEG o PNG"
+                  //     );
+                  //   },
+                  // },
                 })}
               />
               <Form.Control.Feedback type="invalid">
@@ -331,8 +323,8 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
               <Form.Label>URL del recurso</Form.Label>
               <Form.Control
                 type="text"
-                isInvalid={!!errors.URL}
-                {...register("URL", {
+                isInvalid={!!errors.resource_URL}
+                {...register("resource_URL", {
                   required: "La URL del recurso es obligatoria",
                   minLength: {
                     value: 3,
@@ -342,7 +334,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                 })}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.URL?.message}
+                {errors.resource_URL?.message}
               </Form.Control.Feedback>
               <Form.Text className="text-muted">
                 Ingrese la URL del recurso

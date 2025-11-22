@@ -32,6 +32,19 @@ export default function MDXEditorField({
   helpText,
   placeholder = "Inserte su contenido aquí",
 }) {
+  const handleInputImageUpload = (image) => {
+    const formData = new FormData();
+    formData.append("image", image);
+    console.log("Uploading image...", image);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const imageUrl = URL.createObjectURL(image);
+        console.log("Image uploaded:", imageUrl);
+        resolve(imageUrl);
+      }, 2000);
+    });
+  };
+
   const plugins = [
     // Plugins básicos
     headingsPlugin(),
@@ -43,7 +56,10 @@ export default function MDXEditorField({
     // Plugins de links e imágenes
     linkPlugin(),
     linkDialogPlugin(),
-    imagePlugin(),
+    imagePlugin({
+      imageUploadHandler: handleInputImageUpload,
+      imageAutocompleteSuggestions: [],
+    }),
 
     // Plugins de tablas y código
     tablePlugin(),

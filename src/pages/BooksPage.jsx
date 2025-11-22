@@ -49,7 +49,7 @@ export default function BooksPage() {
   const navigate = useNavigate();
 
   const handleUpdateBook = (row) =>
-    navigate(`/dashboard/books/edit/${row.original.id}`);
+    navigate(`/dashboard/books/edit/${row.original.URL}`);
 
   const { deletePublishingMutation } = useDeletePublishing(
     selectedPublishing?.original.id

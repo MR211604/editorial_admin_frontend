@@ -31,9 +31,9 @@ export const getPublishings = async (
   );
 };
 
-export const getPublishingById = async (id) => {
+export const getPublishingById = async (book_url) => {
   return handleApiCall(
-    () => fetchWithToken(`api/publishings/getPublishing/${id}`),
+    () => fetchWithToken(`api/publishings/getPublishing/${book_url}`),
     "Error fetching publishing by ID",
     "Error obteniendo publicación"
   );

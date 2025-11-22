@@ -4,9 +4,8 @@ import { Card, Tab, Tabs } from "react-bootstrap";
 import BookUpdateForm from "../../components/books/BookUpdateForm";
 
 export default function BookUpdate() {
-  const { id } = useParams();
-
-  const { publishing, isPublishingLoading } = usePublishing(id);
+  const { book_url } = useParams();
+  const { publishing, isPublishingLoading } = usePublishing(book_url);
 
   if (isPublishingLoading) {
     return <div>Cargando...</div>;
