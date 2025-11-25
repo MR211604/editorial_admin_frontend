@@ -8,7 +8,6 @@ export default function MagazineArticlesTable({
   const filteredArticles = publishing?.data?.details.filter(
     (detail) => detail.language_id === languageId
   );
-
   return (
     <div className="table-responsive table-bordered">
       <table className="table table-striped">

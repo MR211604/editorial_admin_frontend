@@ -31,7 +31,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
     createCategory(
       {
         ...data,
-        slug: generateUrlFromTitle(data.title),
+        URL: generateUrlFromTitle(data.title),
       },
       {
         onSuccess: () => {

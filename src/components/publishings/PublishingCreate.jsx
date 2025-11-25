@@ -38,38 +38,11 @@ export default function PublishingCreate({
   });
 
   const titleValue = watch("title");
-  const urlValue = watch("URL");
-  const categoryValue = watch("category_id");
 
   useEffect(() => {
     const generatedUrl = generateUrlFromTitle(titleValue);
     setValue("URL", generatedUrl);
   }, [titleValue, setValue]);
-
-  useEffect(() => {
-    if (errors.title?.type === "server") clearErrors("title");
-  }, [clearErrors, errors.title?.type, titleValue]);
-
-  useEffect(() => {
-    if (errors.URL?.type === "server") clearErrors("URL");
-  }, [clearErrors, errors.URL?.type, urlValue]);
-
-  useEffect(() => {
-    if (errors.category_id?.type === "server") clearErrors("category_id");
-  }, [categoryValue, clearErrors, errors.category_id?.type]);
-
-  const getPublishingLabel = () => {
-    switch (publishingType) {
-      case 1:
-        return "Libro";
-      case 2:
-        return "Revista";
-      default:
-        return "Publicacion";
-    }
-  };
-
-  const publishingLabel = getPublishingLabel();
 
   const handleSave = (data) => {
     const publishingData = {
@@ -91,7 +64,7 @@ export default function PublishingCreate({
     };
     createPublishing(publishingData, {
       onSuccess: () => {
-        toast.success(`${publishingLabel} creado exitosamente`);
+        toast.success(`Publicación creada exitosamente`);
         onSuccess();
         reset();
       },
@@ -99,10 +72,7 @@ export default function PublishingCreate({
         if (error.errors) {
           formatErrors(error, setError);
         } else {
-          toast.error(
-            error?.message ||
-              `No se pudo crear la ${publishingLabel.toLowerCase()}`
-          );
+          toast.error(error?.message || `No se pudo crear la publicación.`);
         }
       },
     });
@@ -169,8 +139,8 @@ export default function PublishingCreate({
                 <SelectPublishingCategories
                   categoryType={categoryType}
                   enableDefaultValue={true}
-                  defaultLabel="Seleccione una categoría"
                   defaultValue=""
+                  defaultLabel="Seleccione una categoría"
                   onCategoryChange={(e) => field.onChange(e.target.value)}
                   selectedCategory={field.value}
                   filterActiveCategories={true}

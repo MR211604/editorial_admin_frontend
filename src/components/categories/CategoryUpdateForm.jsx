@@ -56,8 +56,8 @@ function CategoryUpdateForm({ category }) {
   const onSubmit = (data) => {
     const categoryData = {
       ...data,
-      category_id: category.data.id,
-      slug: generateUrlFromTitle(data.title),
+      category_id: category?.data.id,
+      URL: generateUrlFromTitle(data.title),
     };
     updateCategory(categoryData, {
       onSuccess: () => {

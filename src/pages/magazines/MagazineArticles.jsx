@@ -12,10 +12,10 @@ import { useDeletePublishingDetail } from "../../hooks/usePublishingsDetails";
 import { useState } from "react";
 
 export default function MagazineArticles() {
-  const { magazine_url } = useParams();
-  const { publishing } = usePublishing(magazine_url);
+  const { id } = useParams();
+  const { publishing } = usePublishing(id);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("basic-info");
+  const [activeTab, setActiveTab] = useState("spanish");
   const {
     isModalOpen,
     closeModal,
