@@ -29,7 +29,7 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
       <>
         {row.original.publish_date
           ? new Date(row.original.publish_date).getFullYear()
-          : "-"}{" "}
+          : row.original.volume}{" "}
         / {row.original.pages || "-"}
       </>
     ),
@@ -37,6 +37,7 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
   {
     header: "Estado",
     accessorKey: "is_archived",
+    enableSorting: false,
     cell: ({ row }) => {
       return row.original.is_archived ? (
         <Badge bg="secondary">Archivado</Badge>

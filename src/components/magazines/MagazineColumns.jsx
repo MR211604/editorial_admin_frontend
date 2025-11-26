@@ -50,6 +50,7 @@ export const MagazineColumns = (
         <Badge bg="success">Activo</Badge>
       );
     },
+    enableSorting: false,
   },
   {
     header: "Operaciones",
