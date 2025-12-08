@@ -6,10 +6,12 @@ import "bootstrap-icons/font/bootstrap-icons.min.css";
 import "./index.css";
 import AuthProvider from "./context/AuthProvider.jsx";
 import "@mdxeditor/editor/style.css";
+import { env } from "./config/env.js";
 
+const basename = env.BASE_URL;
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </AuthProvider>
