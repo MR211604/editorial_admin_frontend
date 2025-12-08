@@ -6,9 +6,12 @@ import { useCategoryTypes } from "../../hooks/useCategoryTypes";
 // Props:
 // - onCategoryChange: función que se llama cuando se selecciona una categoría
 // - selectedCategory: categoría seleccionada actualmente
+// - categoryType: tipo de categoría a filtrar
 // - enableAllCategoriesOption: muestra la opción "Todas las categorías"
 // - filterActiveCategories: filtra las categorías para mostrar solo las activas
-// - categoryType: tipo de categoría a filtrar
+// - enableDefaultValue: habilita un valor predeterminado deshabilitado
+// - defaultValue: valor predeterminado para la opción deshabilitada
+// - defaultLabel: etiqueta para la opción deshabilitada
 export default function SelectPublishingCategories({
   onCategoryChange,
   selectedCategory,
@@ -23,11 +26,12 @@ export default function SelectPublishingCategories({
   const { allCategories } = useCategories({ getAll: false });
   const { allCategoryTypes } = useCategoryTypes();
 
-  //Find a match for categoryType in allCategoryTypes to get its ID
+  // Encontrar el tipo de categoría que coincide con el categoryType proporcionado
   const matchedCategoryType = allCategoryTypes?.data?.find(
     (type) => type.name === categoryType
   );
 
+  // Filtar las categorías según el tipo de categoría, agregando adicionalmente "Sin Categoria"
   const filteredCategories = allCategories?.data
     ?.filter((category) => {
       return (

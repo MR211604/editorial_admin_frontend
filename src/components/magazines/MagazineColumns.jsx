@@ -20,11 +20,13 @@ export const MagazineColumns = (
     cell: ({ row }) => {
       const authors = row.original.authors;
       if (!authors || !Array.isArray(authors)) return "-";
-      return authors.map((author) => author.name || author).join(", ");
+      return authors
+        .map((author) => author.name + " " + author.lastname || author)
+        .join(", ");
     },
   },
   {
-    header: "ISBN",
+    header: "ISSN",
     accessorKey: "publish_code",
   },
   {

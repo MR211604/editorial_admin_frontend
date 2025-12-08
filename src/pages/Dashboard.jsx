@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import CardButton from "../components/dashboard/CardButton";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { useDashboardSummary } from "../hooks/useDashboardSummary";
+import { env } from "../config/env";
 
 /**
  * Formatea la métrica para la UI:
@@ -30,7 +31,9 @@ export default function Dashboard() {
   }, [isError, error]);
 
   const booksCount = formatMetric(dashboardSummary?.books, { isLoading });
-  const magazinesCount = formatMetric(dashboardSummary?.magazines, { isLoading });
+  const magazinesCount = formatMetric(dashboardSummary?.magazines, {
+    isLoading,
+  });
 
   return (
     <>
@@ -56,7 +59,10 @@ export default function Dashboard() {
             count={booksCount}
             buttonComponent={true}
           >
-            <CardButton className="btn-primary" href="/dashboard/books">
+            <CardButton
+              className="btn-primary"
+              href={`${env.BASE_URL}dashboard/books`}
+            >
               Ver libros
             </CardButton>
           </DashboardCard>
@@ -79,7 +85,10 @@ export default function Dashboard() {
             }
             buttonComponent={true}
           >
-            <CardButton className="btn-primary" href="/dashboard/magazines">
+            <CardButton
+              className="btn-primary"
+              href={`${env.BASE_URL}dashboard/magazines`}
+            >
               Ver revistas
             </CardButton>
           </DashboardCard>

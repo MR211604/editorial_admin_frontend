@@ -82,7 +82,7 @@ export default function BooksPage() {
             optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
-              categoryType={"Libro"}
+              categoryType={BOOK_PUBLISHING}
               enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}

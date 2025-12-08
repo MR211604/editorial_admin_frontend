@@ -88,7 +88,7 @@ export default function MagazinesPage() {
             optionSelectedValue="Todas las revistas"
           >
             <SelectPublishingCategories
-              categoryType={"Revista"}
+              categoryType={MAGAZINE_PUBLISHING}
               enableAllCategoriesOption={true}
               onCategoryChange={handleCategoryChange}
               selectedCategory={selectedCategory}

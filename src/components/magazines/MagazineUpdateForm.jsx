@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useUpdatePublishing } from "../../hooks/usePublishings";
-import AuthorsTable from "../publishings/AuthorsTable";
-import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
-import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
-import { getImageURL } from "../../helpers/getImageURL";
+import { useNavigate } from "react-router-dom";
 import { formatErrors } from "../../helpers/formatErrors";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
+import { getImageURL } from "../../helpers/getImageURL";
+import { useUpdatePublishing } from "../../hooks/usePublishings";
+import { formatISSN, ISSN_FORMAT_REGEX } from "../../utils/isbn";
+import AuthorsTable from "../publishings/AuthorsTable";
+import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 
 export default function MagazineUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
@@ -34,7 +34,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
       title: currentTranslation?.title || "-",
       pages: publishing?.data.pages || "",
       publish_date: publishing?.data.publish_date || "",
-      publish_code: formatISBN(publishing?.data.publish_code || ""),
+      publish_code: formatISSN(publishing?.data.publish_code || ""),
       age: publishing?.data.age || "",
       age_number: publishing?.data.age_number || "",
       volume: publishing?.data.volume || "",
@@ -51,7 +51,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
         title: currentTranslation?.title,
         pages: publishing.data.pages || "",
         publish_date: publishing.data.publish_date || "",
-        publish_code: formatISBN(publishing.data.publish_code || ""),
+        publish_code: formatISSN(publishing.data.publish_code || ""),
         volume: publishing.data.volume || "",
         is_new_arrival: publishing.data.is_new_arrival || 0,
         category_id: publishing.data.category_id || "",
@@ -190,21 +190,21 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
                 name="publish_code"
                 control={control}
                 rules={{
-                  required: "El ISBN es obligatorio",
+                  required: "El ISSN es obligatorio",
                   validate: (value) =>
-                    ISBN_FORMAT_REGEX.test(value || "") ||
-                    "El ISBN debe seguir el formato ###-##-####-###-#",
+                    ISSN_FORMAT_REGEX.test(value || "") ||
+                    "El ISSN debe seguir el formato ####-####",
                 }}
                 render={({ field }) => (
                   <Form.Control
                     {...field}
                     type="text"
                     inputMode="numeric"
-                    placeholder="123-45-6789-012-3"
+                    placeholder="1234-5678"
                     value={field.value || ""}
                     isInvalid={!!errors.publish_code}
                     onChange={(event) => {
-                      const formattedValue = formatISBN(event.target.value);
+                      const formattedValue = formatISSN(event.target.value);
                       field.onChange(formattedValue);
                     }}
                   />
@@ -214,7 +214,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
                 {errors.publish_code?.message}
               </Form.Control.Feedback>
               <Form.Text className="text-muted">
-                Formato requerido: ###-##-####-###-#
+                Formato requerido: ####-####
               </Form.Text>
             </Form.Group>
           </Col>

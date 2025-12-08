@@ -195,7 +195,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                   required: "El ISBN es obligatorio",
                   validate: (value) =>
                     ISBN_FORMAT_REGEX.test(value || "") ||
-                    "El ISBN debe seguir el formato ###-##-####-###-#",
+                    "El ISBN debe seguir el formato ###-#####-##-##-#",
                 }}
                 render={({ field }) => (
                   <Form.Control

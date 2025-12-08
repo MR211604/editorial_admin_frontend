@@ -25,6 +25,7 @@ export default function Table({
     enableMultiSort: true,
     manualSorting: true,
     sortDescFirst: true,
+
     // Filter configuration
     onColumnFiltersChange: setSearch,
     manualFiltering: true,

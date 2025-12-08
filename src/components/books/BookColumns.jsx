@@ -15,7 +15,9 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
     cell: ({ row }) => {
       const authors = row.original.authors;
       if (!authors || !Array.isArray(authors)) return "-";
-      return authors.map((author) => author.name || author).join(", ");
+      return authors
+        .map((author) => author.name + " " + author.lastname || author)
+        .join(", ");
     },
   },
   {

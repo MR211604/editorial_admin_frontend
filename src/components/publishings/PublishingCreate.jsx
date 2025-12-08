@@ -52,13 +52,11 @@ export default function PublishingCreate({
         {
           language_id: 1,
           title: data.title,
-          URL: data.URL,
         },
         // Por defecto se crea la traduccion en ingles vacia
         {
           language_id: 2,
           title: "-",
-          URL: "-",
         },
       ],
     };

@@ -1,9 +1,9 @@
-import React from "react";
 import { AuthContext } from "../../context/authContext";
 import { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { getImagePath } from "../../utils/imagePath";
 
 export default function LoginPage() {
   const { login } = useContext(AuthContext);
@@ -46,7 +46,7 @@ export default function LoginPage() {
         <div className="card-header text-center">
           {/* <h3>Iniciar sesión</h3> */}
           <img
-            src="/img/Logo_Normal.png"
+            src={getImagePath("img/Logo_Normal.png")}
             style={{ maxWidth: "40%", height: "auto", objectFit: "contain" }}
             alt=""
           />

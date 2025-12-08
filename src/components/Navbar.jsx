@@ -7,6 +7,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import { env } from "../config/env";
 
 export default function Navbar() {
   const {
@@ -27,7 +28,10 @@ export default function Navbar() {
       sticky="top"
     >
       <Container fluid>
-        <BootstrapNavbar.Brand href="/dashboard" className="fw-bold text-white">
+        <BootstrapNavbar.Brand
+          href={`${env.BASE_URL}dashboard`}
+          className="fw-bold text-white"
+        >
           <img
             src="https://i.imgur.com/Cm2nr2f.png"
             alt="logo editorial udb"
