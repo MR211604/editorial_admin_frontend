@@ -5,6 +5,7 @@ import {
   getCategoryById,
   toggleCategoryStatus,
   updateCategory,
+  uploadCategoryImage,
 } from "../api/categories/categoriesService";
 
 export const useCategories = ({ getAll = false } = {}) => {
@@ -72,6 +73,25 @@ export const useUpdateCategory = (id) => {
     updateCategory: updateCategoryMutation.mutate,
     isUpdating: updateCategoryMutation.isPending,
     updateError: updateCategoryMutation.error,
+  };
+};
+
+export const useUploadCategoryImage = () => {
+  const queryClient = useQueryClient();
+
+  const uploadCategoryImageMutation = useMutation({
+    mutationFn: (categoryData) => uploadCategoryImage(categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+    },
+  });
+
+  return {
+    uploadCategory: uploadCategoryImageMutation.mutateAsync,
+    isUploading: uploadCategoryImageMutation.isPending,
+    uploadError: uploadCategoryImageMutation.error,
   };
 };
 

@@ -46,3 +46,16 @@ export const toggleCategoryStatus = async (id) => {
     "Error cambiando estado de categoria"
   );
 };
+
+export const uploadCategoryImage = async (categoryData) => {
+  return handleApiCall(
+    async () =>
+      fetchWithToken(
+        `api/categories/uploadCategoryImage`,
+        categoryData,
+        "POST"
+      ),
+    "Error uploading image",
+    "Error al subir imagen de categoria"
+  );
+};
