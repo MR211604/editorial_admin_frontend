@@ -40,8 +40,10 @@ export default function UserAccountsPage() {
     pagination.pageIndex + 1,
     pagination.pageSize,
     sorting,
-    debouncedSearch
+    debouncedSearch,
   );
+
+  console.log("users", allUsers);
 
   const userColumns = UserColumns(handleEditValue, handleDeleteValue);
 

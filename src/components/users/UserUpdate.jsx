@@ -30,7 +30,7 @@ export default function UserUpdate({
     mode: "onChange",
     defaultValues: {
       name: selectedUser?.name || "",
-      rol_id: selectedUser?.rol_id || "",
+      rol_id: selectedUser?.user_roles?.[0].id || "",
     },
   });
 
@@ -38,7 +38,7 @@ export default function UserUpdate({
     if (selectedUser) {
       reset({
         name: selectedUser?.name || selectedUser.name || "",
-        rol_id: selectedUser?.rol_id || "",
+        rol_id: selectedUser?.user_roles?.[0].id || "",
       });
     }
   }, [selectedUser, reset]);

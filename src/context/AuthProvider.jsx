@@ -18,7 +18,7 @@ export default function AuthProvider({ children }) {
     const response = await fetchWithoutToken(
       "api/auth/login",
       { token: name, password },
-      "POST"
+      "POST",
     );
     if (response.ok) {
       localStorage.setItem("token", response.token);
@@ -27,7 +27,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: true,
         name: response.user.name,
-        rol: response.user.rol.name,
+        rol: response.user.user_roles[0].id,
       });
     }
     return response;
@@ -53,7 +53,7 @@ export default function AuthProvider({ children }) {
         checking: false,
         logged: true,
         name: response.user.name,
-        rol: response.user.rol,
+        rol: response.user.user_roles?.[0].id,
       });
       return true;
     } else {

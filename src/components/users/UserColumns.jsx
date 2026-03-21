@@ -15,9 +15,22 @@ export const UserColumns = (onEdit, onDelete) => [
     enableSorting: true,
   },
   {
-    header: "Rol",
-    accessorKey: "rol.name",
+    header: "Rol(es)",
+    accessorKey: "user_roles",
     enableSorting: true,
+    cell: ({ row }) => {
+      const roles = row.original?.user_roles ?? [];
+      if (!roles.length) return <span className="text-muted">—</span>;
+      return (
+        <div className="d-flex flex-wrap gap-1">
+          {roles.map((r) => (
+            <span key={r.id} className="badge bg-secondary">
+              {r.name}
+            </span>
+          ))}
+        </div>
+      );
+    },
   },
   {
     header: "Estado",

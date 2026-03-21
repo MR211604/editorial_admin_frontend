@@ -18,7 +18,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
 
   //Obtener la informacion basado en el shortname
   const currentTranslation = publishing?.data.translations?.find(
-    (t) => t.language.shortname === languageShortName
+    (t) => t.language.shortname === languageShortName,
   );
   const navigate = useNavigate();
 
@@ -87,7 +87,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     // Cuando no se tenga el id de lenguaje correcto, se asume 1 para español y 2 para inglés
     formData.append(
       "translations[0][language_id]",
-      currentTranslation.language.id
+      currentTranslation.language.id,
     );
     formData.append("translations[0][title]", data.title);
 
@@ -255,7 +255,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
               <Form.Label>Imagen de portada</Form.Label>
               <div className="mb-3 text-center">
                 <img
-                  src={getImageURL(publishing?.data.cover)}
+                  src={getImageURL(publishing?.data)}
                   alt="Portada actual"
                   style={{
                     maxWidth: "200px",
