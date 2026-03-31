@@ -7,13 +7,13 @@ function UserChangeState({ isOpen, onClose, onSuccess, selectedUser }) {
 
   const onChangeStatus = () => {
     changeUserStatus(
-      { id: selectedUser?.id },
+      { id: selectedUser?.idUser },
       {
         onSuccess: () => {
           toast.success(
             `Usuario ${
               selectedUser?.active === 1 ? "desactivado" : "activado"
-            } exitosamente`
+            } exitosamente`,
           );
           onSuccess();
           onClose();
@@ -21,7 +21,7 @@ function UserChangeState({ isOpen, onClose, onSuccess, selectedUser }) {
         onError: () => {
           toast.error("Error al cambiar el estado del usuario");
         },
-      }
+      },
     );
   };
 

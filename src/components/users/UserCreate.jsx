@@ -120,7 +120,7 @@ export default function UserCreate({ isOpen, onClose, onSuccess }) {
                   }
                   optionValues={allRoles?.data?.map((role) => ({
                     label: role.name,
-                    value: role.id,
+                    value: role.idRol,
                   }))}
                   disabled={isCreating}
                 />

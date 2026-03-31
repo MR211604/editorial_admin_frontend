@@ -1,7 +1,7 @@
 export const UserColumns = (onEdit, onDelete) => [
   {
     header: "ID",
-    accessorKey: "id",
+    accessorKey: "idUser",
     enableSorting: true,
   },
   {
@@ -22,11 +22,9 @@ export const UserColumns = (onEdit, onDelete) => [
       const roles = row.original?.user_roles ?? [];
       if (!roles.length) return <span className="text-muted">—</span>;
       return (
-        <div className="d-flex flex-wrap gap-1">
+        <div key={row.original?.name} className="d-flex flex-wrap gap-1">
           {roles.map((r) => (
-            <span key={r.id} className="badge bg-secondary">
-              {r.name}
-            </span>
+            <span className="badge bg-secondary">{r.name}</span>
           ))}
         </div>
       );

@@ -42,9 +42,6 @@ export default function UserAccountsPage() {
     sorting,
     debouncedSearch,
   );
-
-  console.log("users", allUsers);
-
   const userColumns = UserColumns(handleEditValue, handleDeleteValue);
 
   return (

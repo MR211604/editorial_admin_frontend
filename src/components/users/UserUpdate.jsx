@@ -15,7 +15,7 @@ export default function UserUpdate({
   selectedUser,
 }) {
   const { allRoles } = useUserRoles();
-  const { updateUser, isUpdating } = useUpdateUser(selectedUser?.id);
+  const { updateUser, isUpdating } = useUpdateUser(selectedUser?.idUser);
 
   const {
     register,
@@ -30,7 +30,7 @@ export default function UserUpdate({
     mode: "onChange",
     defaultValues: {
       name: selectedUser?.name || "",
-      rol_id: selectedUser?.user_roles?.[0].id || "",
+      rol_id: selectedUser?.user_roles?.[0].idRol || "",
     },
   });
 
@@ -38,7 +38,7 @@ export default function UserUpdate({
     if (selectedUser) {
       reset({
         name: selectedUser?.name || selectedUser.name || "",
-        rol_id: selectedUser?.user_roles?.[0].id || "",
+        rol_id: selectedUser?.user_roles?.[0].idRol || "",
       });
     }
   }, [selectedUser, reset]);
@@ -50,7 +50,7 @@ export default function UserUpdate({
 
   const onSubmit = (data) => {
     const updateData = {
-      id: selectedUser?.id || selectedUser.id,
+      id: selectedUser?.idUser || selectedUser.idUser,
       ...data,
     };
 
@@ -138,7 +138,7 @@ export default function UserUpdate({
                   }
                   optionValues={allRoles?.data?.map((role) => ({
                     label: role.name,
-                    value: role.id,
+                    value: role.idRol,
                   }))}
                   disabled={isUpdating}
                 />

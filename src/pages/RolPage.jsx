@@ -29,13 +29,13 @@ export default function RolPage() {
   const { allRoles, isAllRolesLoading } = useUserRoles(
     pagination.pageIndex + 1,
     pagination.pageSize,
-    debouncedSearch
+    debouncedSearch,
   );
 
   const rolesColumns = [
     {
       header: "ID",
-      accessorKey: "id",
+      accessorKey: "idRol",
       enableSorting: false,
     },
     {
