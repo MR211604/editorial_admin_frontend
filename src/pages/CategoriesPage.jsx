@@ -37,7 +37,7 @@ export default function CategoriesPage() {
   const renderCategoryRow = (category, level = 0) => {
     const hasChildren =
       category?.children_recursive && category?.children_recursive?.length > 0;
-    const isExpanded = expandedCategory.has(category.id);
+    const isExpanded = expandedCategory.has(category.idCategory);
     const paddingLeft = level * 2; // 2rem por cada nivel de profundidad
 
     const getCategoryStatus = () => {
@@ -46,11 +46,11 @@ export default function CategoriesPage() {
       }
 
       const hasActiveChildren = category.children_recursive.some(
-        (child) => child.state === 1
+        (child) => child.state === 1,
       );
 
       const allChildrenActive = category.children_recursive.every(
-        (child) => child.state === 1
+        (child) => child.state === 1,
       );
 
       if (category.state === 1 && allChildrenActive) {
@@ -69,7 +69,7 @@ export default function CategoriesPage() {
     const status = getCategoryStatus();
 
     return [
-      <tr key={category.id}>
+      <tr key={category.idCategory}>
         <td
           style={{ paddingLeft: `${paddingLeft}rem` }}
           className="align-middle"
@@ -78,7 +78,7 @@ export default function CategoriesPage() {
             {hasChildren && (
               <button
                 className="text-decoration-none text-dark btn btn-link"
-                onClick={() => toggleCategory(category.id)}
+                onClick={() => toggleCategory(category.idCategory)}
               >
                 {isExpanded ? (
                   <i className="bi bi-dash-circle" />
@@ -114,7 +114,7 @@ export default function CategoriesPage() {
           <div className="d-flex gap-2 justify-content-center">
             <button
               className="btn btn-primary btn-sm"
-              onClick={() => handleUpdateCategory(category.id)}
+              onClick={() => handleUpdateCategory(category.idCategory)}
             >
               <i className="bi bi-pencil-square"></i>
             </button>
@@ -139,7 +139,7 @@ export default function CategoriesPage() {
       // Renderizar recursivamente las subcategorías si están expandidas
       ...(isExpanded && hasChildren
         ? category.children_recursive.flatMap((child) =>
-            renderCategoryRow(child, level + 1)
+            renderCategoryRow(child, level + 1),
           )
         : []),
     ];
@@ -175,7 +175,7 @@ export default function CategoriesPage() {
             </thead>
             <tbody>
               {allCategories?.data?.flatMap((category) =>
-                renderCategoryRow(category)
+                renderCategoryRow(category),
               )}
             </tbody>
           </table>

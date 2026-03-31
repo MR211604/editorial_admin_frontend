@@ -47,7 +47,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
             toast.error(error?.message || "Error creando categoría");
           }
         },
-      }
+      },
     );
   };
 
@@ -119,7 +119,7 @@ export default function CategoryCreate({ isOpen, onClose, onSuccess }) {
                   }
                   optionValues={allCategoryTypes?.data?.map((categoryType) => ({
                     label: categoryType.name,
-                    value: categoryType.id,
+                    value: categoryType.idCategoryType,
                   }))}
                   disabled={isCreating}
                 />

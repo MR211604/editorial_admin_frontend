@@ -12,13 +12,13 @@ function CategoryChangeStatus({
 
   const onChangeStatus = () => {
     changeCategoryStatus(
-      { id: selectedCategory?.id },
+      { id: selectedCategory?.idCategory },
       {
         onSuccess: () => {
           toast.success(
             `Categoría ${
               selectedCategory?.state === 1 ? "desactivada" : "activada"
-            } exitosamente`
+            } exitosamente`,
           );
           onSuccess();
           onClose();
@@ -26,7 +26,7 @@ function CategoryChangeStatus({
         onError: () => {
           toast.error("Error al cambiar el estado de la categoría");
         },
-      }
+      },
     );
   };
 

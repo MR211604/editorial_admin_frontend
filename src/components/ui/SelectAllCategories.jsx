@@ -8,11 +8,9 @@ const SelectAllCategories = memo(function SelectAllCategories({
 }) {
   return (
     <select {...props} value={selectedCategory} onChange={onCategoryChange}>
-      <option value="" disabled>
-        -
-      </option>
+      <option value="">-</option>
       {allCategories?.data?.map((category) => (
-        <option key={category.id} value={category.id}>
+        <option key={category.idCategory} value={category.idCategory}>
           {category.title}
         </option>
       ))}

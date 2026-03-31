@@ -14,7 +14,7 @@ import { useEffect } from "react";
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
   const { allCategories } = useCategories({ getAll: true });
-  const { updateCategory } = useUpdateCategory(category?.data.id);
+  const { updateCategory } = useUpdateCategory(category?.data.idCategory);
 
   const {
     register,
@@ -50,15 +50,16 @@ function CategoryUpdateForm({ category }) {
     (fieldOnChange) => (e) => {
       fieldOnChange(e.target.value);
     },
-    []
+    [],
   );
 
   const onSubmit = (data) => {
     const categoryData = {
       ...data,
-      category_id: category?.data.id,
+      category_id: category?.data.idCategory,
       URL: generateUrlFromTitle(data.title),
     };
+    console.log("Datos a enviar para actualización:", categoryData);
     updateCategory(categoryData, {
       onSuccess: () => {
         localStorage.setItem("categoryUpdateSuccess", "1");
@@ -130,7 +131,7 @@ function CategoryUpdateForm({ category }) {
         )}
       />
     ),
-    [allCategories, control, handleCategoryChange]
+    [allCategories, control, handleCategoryChange],
   );
 
   const renderConfigFields = () => (
@@ -192,7 +193,7 @@ function CategoryUpdateForm({ category }) {
               />
             )}
           </Col>
-        </Row>
+        </Row>,
       );
     }
     return fieldPairs;
