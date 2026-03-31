@@ -43,10 +43,10 @@ export default function AuthorsPage() {
     pagination.pageIndex + 1,
     pagination.pageSize,
     sorting,
-    debouncedSearch
+    debouncedSearch,
   );
 
-  const { deleteAuthor } = useDeleteAuthor(selectedValue?.original.id);
+  const { deleteAuthor } = useDeleteAuthor(selectedValue?.original.idAuthor);
 
   const authorColumns = AuthorColumns(handleEditValue, handleDeleteValue);
 

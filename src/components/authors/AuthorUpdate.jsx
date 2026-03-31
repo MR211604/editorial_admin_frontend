@@ -7,7 +7,9 @@ import { useForm } from "react-hook-form";
 import { formatErrors } from "../../helpers/formatErrors";
 
 export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
-  const { updateAuthor, isUpdating } = useUpdateAuthor(author.original?.id);
+  const { updateAuthor, isUpdating } = useUpdateAuthor(
+    author.original?.idAuthor,
+  );
   const {
     register,
     handleSubmit,
@@ -49,7 +51,7 @@ export default function AuthorUpdate({ isOpen, onClose, onSuccess, author }) {
 
   const onSubmit = (data) => {
     const updateData = {
-      id: author.original?.id || author.id,
+      id: author.original?.idAuthor || author.idAuthor,
       ...data,
     };
 

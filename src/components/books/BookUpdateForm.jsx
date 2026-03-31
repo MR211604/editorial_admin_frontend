@@ -89,7 +89,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
     formData.append("translations[0][title]", data.title);
 
     authorsData?.visibleAuthors.forEach((author, index) => {
-      formData.append(`authors[${index}]`, author.id);
+      formData.append(`authors[${index}]`, author.idAuthor);
     });
 
     if (data.cover && data.cover[0]) {

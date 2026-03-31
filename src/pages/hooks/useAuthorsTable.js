@@ -29,13 +29,16 @@ export const useAuthorsTable = (publishing) => {
   }, [publishing?.data.authors]);
 
   const displayedAuthors = authorsState.filter(
-    (author) => author.status !== "removed"
+    (author) => author.status !== "removed",
   );
 
   const availableAuthors = useMemo(() => {
     return (
       allAuthors?.data.filter(
-        (author) => !authorsState.some((existing) => existing.id === author.id)
+        (author) =>
+          !authorsState.some(
+            (existing) => existing.idAuthor === author.idAuthor,
+          ),
       ) || []
     );
   }, [allAuthors?.data, authorsState]);
@@ -44,7 +47,7 @@ export const useAuthorsTable = (publishing) => {
     (status) => {
       return authorsState.filter((author) => author.status === status);
     },
-    [authorsState]
+    [authorsState],
   );
 
   const handleOpenAddAuthor = useCallback(
@@ -53,7 +56,7 @@ export const useAuthorsTable = (publishing) => {
       e.stopPropagation();
       openModal();
     },
-    [openModal]
+    [openModal],
   );
 
   const handleAddAuthors = useCallback(
@@ -71,7 +74,7 @@ export const useAuthorsTable = (publishing) => {
       setSearch("");
       closeModal();
     },
-    [selectedAuthorsData, closeModal]
+    [selectedAuthorsData, closeModal],
   );
 
   const handleCancelAddAuthors = useCallback(() => {
@@ -84,7 +87,7 @@ export const useAuthorsTable = (publishing) => {
     setAuthorsState((prev) =>
       prev
         .map((author) => {
-          if (author.id === authorId) {
+          if (author.idAuthor === authorId) {
             if (author.status === "temporal") {
               return null;
             } else {
@@ -97,7 +100,7 @@ export const useAuthorsTable = (publishing) => {
           }
           return author;
         })
-        .filter(Boolean)
+        .filter(Boolean),
     ); // Filtrar nulls
   }, []);
 
@@ -110,7 +113,7 @@ export const useAuthorsTable = (publishing) => {
           ...author,
           status: author.status === "removed" ? "original" : author.status,
           action: "none",
-        }))
+        })),
     );
   }, []);
 

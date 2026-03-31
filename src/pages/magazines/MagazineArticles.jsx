@@ -84,10 +84,7 @@ export default function MagazineArticles() {
                       className="mb-3"
                       onClick={() => navigate(-1)}
                     >
-                      Cancelar
-                    </Button>
-                    <Button variant="primary" className="mb-3">
-                      Guardar cambios
+                      Regresar
                     </Button>
                   </div>
                 </Row>
@@ -121,10 +118,7 @@ export default function MagazineArticles() {
                       className="mb-3"
                       onClick={() => navigate(-1)}
                     >
-                      Cancelar
-                    </Button>
-                    <Button variant="primary" className="mb-3">
-                      Guardar cambios
+                      Regresar
                     </Button>
                   </div>
                 </Row>
