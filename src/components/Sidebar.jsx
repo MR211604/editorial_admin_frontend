@@ -26,6 +26,14 @@ export default function Sidebar() {
         </CustomLink>
 
         <CustomLink
+          to="/dashboard/banner"
+          icon="bi-card-image"
+          data-tooltip="Libros"
+        >
+          Banner
+        </CustomLink>
+
+        <CustomLink
           to="/dashboard/authors"
           icon="bi-person"
           data-tooltip="Autores"

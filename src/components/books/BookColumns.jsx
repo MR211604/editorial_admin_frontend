@@ -38,10 +38,10 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
   },
   {
     header: "Estado",
-    accessorKey: "is_archived",
+    accessorKey: "state",
     enableSorting: false,
     cell: ({ row }) => {
-      return row.original.is_archived ? (
+      return row.original.state === 0 ? (
         <Badge bg="secondary">Archivado</Badge>
       ) : (
         <Badge bg="success">Activo</Badge>
@@ -56,7 +56,7 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
         <button className="btn btn-primary btn-sm" onClick={() => onEdit(row)}>
           <i className="bi bi-pencil-square"></i>
         </button>
-        {row.original.is_archived === 1 ? (
+        {row.original.state === 0 ? (
           <button
             className="btn btn-danger btn-sm"
             onClick={() => onDelete(row)}

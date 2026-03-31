@@ -18,7 +18,7 @@ export const usePublishings = (
   sorting,
   search,
   categoryFilter,
-  isArchived
+  state,
 ) => {
   const { data: allPublishings, isLoading: isAllPublishingsLoading } = useQuery(
     {
@@ -30,7 +30,7 @@ export const usePublishings = (
         sorting,
         search,
         categoryFilter,
-        isArchived,
+        state,
       ],
       queryFn: () =>
         getPublishings(
@@ -40,9 +40,9 @@ export const usePublishings = (
           sorting,
           search,
           categoryFilter,
-          isArchived
+          state,
         ),
-    }
+    },
   );
 
   return {

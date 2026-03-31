@@ -14,6 +14,7 @@ import CategoryUpdate from "../pages/categories/CategoryUpdate";
 import MagazineArticles from "../pages/magazines/MagazineArticles";
 import MagazineUpdate from "../pages/magazines/MagazineUpdate";
 import ProtectedRoute from "./ProtectedRoute";
+import BannerPage from "../pages/BannerPage";
 
 export default function AppRouter() {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -56,7 +57,10 @@ export default function AppRouter() {
       >
         <Route index element={<Dashboard />} />
         <Route path="authors" element={<AuthorsPage />} />
-
+        <Route path="banner">
+          <Route index element={<BannerPage />} />
+          <Route path="edit/:id" element={<BannerPage />} />
+        </Route>
         <Route path="books">
           <Route index element={<BooksPage />} />
           <Route path="edit/:id" element={<BookUpdate />} />

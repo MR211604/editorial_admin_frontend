@@ -8,7 +8,7 @@ export const getPublishings = async (
   sorting,
   search = "",
   categoryFilter,
-  isArchived = 0
+  state = 1,
 ) => {
   return handleApiCall(
     async () => {
@@ -23,11 +23,11 @@ export const getPublishings = async (
       return await fetchWithToken(
         `api/publishings/getPublishings?limit=${limit}&page=${page}&publishing_type=${$publishing_type}&sort=${sortParam}&direction=${sortOrder}&search=${search}&category=${
           categoryFilter || ""
-        }&is_archived=${isArchived}`
+        }&state=${state}`,
       );
     },
     "Error recuperando publicaciones",
-    "Error obteniendo publicaciones"
+    "Error obteniendo publicaciones",
   );
 };
 
@@ -35,7 +35,7 @@ export const getPublishingById = async (book_url) => {
   return handleApiCall(
     () => fetchWithToken(`api/publishings/getPublishing/${book_url}`),
     "Error fetching publishing by ID",
-    "Error obteniendo publicación"
+    "Error obteniendo publicación",
   );
 };
 
@@ -44,7 +44,7 @@ export const updatePublishing = async (id, data) => {
     () =>
       fetchWithToken(`api/publishings/updatePublishing/${id}`, data, "POST"),
     "Error updating publishing",
-    "Error actualizando publicación"
+    "Error actualizando publicación",
   );
 };
 
@@ -52,7 +52,7 @@ export const createPublishing = async (data) => {
   return handleApiCall(
     () => fetchWithToken(`api/publishings/createPublishing`, data, "POST"),
     "Error creating publishing",
-    "Error creando publicación"
+    "Error creando publicación",
   );
 };
 
@@ -60,7 +60,7 @@ export const toggleArchivePublishing = async (id) => {
   return handleApiCall(
     () => fetchWithToken(`api/publishings/updateStatus/${id}`, {}, "POST"),
     "Error actualizando estado de publicación",
-    "Error actualizando estado"
+    "Error actualizando estado",
   );
 };
 
@@ -68,6 +68,6 @@ export const deletePublishing = async (id) => {
   return handleApiCall(
     () => fetchWithToken(`api/publishings/deletePublishing/${id}`, {}, "POST"),
     "Error deleting publishing",
-    "Error eliminando publicación"
+    "Error eliminando publicación",
   );
 };

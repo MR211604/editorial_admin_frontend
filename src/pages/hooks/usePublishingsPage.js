@@ -14,7 +14,7 @@ export const usePublishingsPage = (publishing_type) => {
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [filterArchived, setFilterArchived] = useState(0);
+  const [filterArchived, setFilterArchived] = useState("");
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const usePublishingsPage = (publishing_type) => {
     sorting,
     debouncedSearch,
     selectedCategory,
-    filterArchived
+    filterArchived,
   );
 
   const searchHandler = (e) => {

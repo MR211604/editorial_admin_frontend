@@ -18,10 +18,10 @@ export default function ArchivePublishing({
         onSuccess: () => {
           toast.success(
             `Publicación ${
-              selectedPublishing?.original.is_archived === 1
+              selectedPublishing?.original.state === 0
                 ? "desarchivada"
                 : "archivada"
-            } exitosamente`
+            } exitosamente`,
           );
           onSuccess();
           onClose();
@@ -29,7 +29,7 @@ export default function ArchivePublishing({
         onError: () => {
           toast.error("Error al cambiar el estado del usuario");
         },
-      }
+      },
     );
   };
 
@@ -38,21 +38,17 @@ export default function ArchivePublishing({
       isOpen={isOpen}
       onClose={onClose}
       title={`${
-        selectedPublishing?.original.is_archived === 1
-          ? "Desarchivar"
-          : "Archivar"
+        selectedPublishing?.original.state === 0 ? "Desarchivar" : "Archivar"
       } Publicación`}
       saveButtonText={
-        selectedPublishing?.original.is_archived === 1
-          ? "Desarchivar"
-          : "Archivar"
+        selectedPublishing?.original.state === 0 ? "Desarchivar" : "Archivar"
       }
       onSave={() => onArchive()}
       closeButtonText="Cancelar"
       showFooter={true}
     >
       <p>
-        {selectedPublishing?.original.is_archived === 1
+        {selectedPublishing?.original.state === 0
           ? `¿Está seguro que desea desarchivar la publicación "${selectedPublishing?.original.title}"?`
           : `¿Está seguro que desea archivar la publicación "${selectedPublishing?.original.title}"?`}
       </p>
