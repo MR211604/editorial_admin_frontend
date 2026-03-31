@@ -8,7 +8,7 @@ export const MagazineColumns = (
 ) => [
   {
     header: "ID",
-    accessorKey: "id",
+    accessorKey: "idPublishing",
   },
   {
     header: "Titulo",

@@ -13,7 +13,9 @@ export default function MagazineUpdateArticle({
   onEditSuccess,
   article,
 }) {
-  const { updatePublishingDetail } = useUpdatePublishingDetail(article?.id);
+  const { updatePublishingDetail } = useUpdatePublishingDetail(
+    article?.idPublishingDetail,
+  );
 
   const navigate = useNavigate();
 

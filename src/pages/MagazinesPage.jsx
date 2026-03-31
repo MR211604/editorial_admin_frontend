@@ -50,20 +50,20 @@ export default function MagazinesPage() {
   const navigate = useNavigate();
 
   const handleUpdateMagazine = (row) =>
-    navigate(`/dashboard/magazines/edit/${row.original?.id}`);
+    navigate(`/dashboard/magazines/edit/${row.original?.idPublishing}`);
 
   const handleEditArticles = (row) =>
-    navigate(`/dashboard/magazines/articles/${row.original?.id}`);
+    navigate(`/dashboard/magazines/articles/${row.original?.idPublishing}`);
 
   const { deletePublishingMutation } = useDeletePublishing(
-    selectedPublishing?.original.id
+    selectedPublishing?.original.idPublishing,
   );
 
   const magazineColumns = MagazineColumns(
     handleUpdateMagazine,
     handleEditValue, //Temporal, aun no existe funcion para archivar
     handleDeleteValue,
-    handleEditArticles
+    handleEditArticles,
   );
 
   return (
@@ -142,7 +142,6 @@ export default function MagazinesPage() {
           isOpen={isModalOpen("delete")}
           onClose={() => closeModal("delete")}
           onSuccess={onDeleteSuccess}
-          selectedValue={selectedPublishing}
           deleteMutationFn={deletePublishingMutation}
           title={selectedPublishing?.original.title}
         />

@@ -29,7 +29,7 @@ export default function MagazineArticles() {
   } = useModalCRUD();
 
   const { deletePublishingMutation } = useDeletePublishingDetail(
-    selectedValue?.id
+    selectedValue?.idPublishingDetail,
   );
 
   const onDeleteArticleSuccess = () => {

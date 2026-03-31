@@ -3,7 +3,7 @@ import { Badge } from "react-bootstrap";
 export const BookColumns = (onEdit, onArchive, onDelete) => [
   {
     header: "ID",
-    accessorKey: "id",
+    accessorKey: "idPublishing",
   },
   {
     header: "Titulo",

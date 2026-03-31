@@ -49,16 +49,16 @@ export default function BooksPage() {
   const navigate = useNavigate();
 
   const handleUpdateBook = (row) =>
-    navigate(`/dashboard/books/edit/${row.original.id}`);
+    navigate(`/dashboard/books/edit/${row.original.idPublishing}`);
 
   const { deletePublishingMutation } = useDeletePublishing(
-    selectedPublishing?.original.id
+    selectedPublishing?.original.idPublishing,
   );
 
   const bookColumns = BookColumns(
     handleUpdateBook,
     handleEditValue,
-    handleDeleteValue
+    handleDeleteValue,
   );
 
   return (
@@ -135,7 +135,6 @@ export default function BooksPage() {
             isOpen={isModalOpen("delete")}
             onClose={() => closeModal("delete")}
             onSuccess={onDeleteSuccess}
-            selectedValue={selectedPublishing}
             deleteMutationFn={deletePublishingMutation}
             title={selectedPublishing?.original.title}
           />

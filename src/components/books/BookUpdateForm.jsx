@@ -14,10 +14,12 @@ import { generateUrlFromTitle } from "../../helpers/generateURL";
 export default function BookUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
 
-  const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
+  const { updatePublishing } = useUpdatePublishing(
+    publishing?.data?.idPublishing,
+  );
 
-  const currentTranslation = publishing?.data.translations?.find(
-    (t) => t.language.shortname === languageShortName
+  const currentTranslation = publishing?.data?.translations?.find(
+    (t) => t.language.shortname === languageShortName,
   );
 
   const navigate = useNavigate();
@@ -77,12 +79,12 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
     formData.append("category_id", data.category_id);
     formData.append("resource_URL", data.resource_URL);
     formData.append("is_new_arrival", data.is_new_arrival);
-    formData.append("id", publishing?.data.id);
+    formData.append("id", publishing?.data.idPublishing);
     formData.append("publishing_type", publishing?.data.publishing_type);
     formData.append("URL", generateUrlFromTitle(data.title));
     formData.append(
       "translations[0][language_id]",
-      currentTranslation.language.id
+      currentTranslation.language.idLanguage,
     );
     formData.append("translations[0][title]", data.title);
 

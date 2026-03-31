@@ -13,7 +13,7 @@ export default function ArchivePublishing({
 
   const onArchive = () => {
     archivePublishing(
-      { id: selectedPublishing?.original.id },
+      { id: selectedPublishing?.original.idPublishing },
       {
         onSuccess: () => {
           toast.success(

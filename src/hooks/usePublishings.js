@@ -10,7 +10,7 @@ import {
 
 //Pagination: la pagina actual
 //Rows: cantidad de filas por pagina
-//Publishing_type: tipo de publicacion (1: libros, 2: revistas, 3: manuales)
+//Publishing_type: tipo de publicacion (1: libros, 2: revistas)
 export const usePublishings = (
   pagination,
   rows,

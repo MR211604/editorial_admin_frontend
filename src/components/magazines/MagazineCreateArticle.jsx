@@ -37,7 +37,7 @@ export default function MagazineCreateArticle({
       ...data,
       language_id: languageId,
       repository_URL: data.URL,
-      publishing_id: publishing?.data?.id,
+      publishing_id: publishing?.data?.idPublishing,
     };
     createPublishingDetail(articleData, {
       onSuccess: () => {

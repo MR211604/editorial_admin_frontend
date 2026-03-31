@@ -14,7 +14,9 @@ import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 export default function MagazineUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
 
-  const { updatePublishing } = useUpdatePublishing(publishing?.data.id);
+  const { updatePublishing } = useUpdatePublishing(
+    publishing?.data.idPublishing,
+  );
 
   //Obtener la informacion basado en el shortname
   const currentTranslation = publishing?.data.translations?.find(
@@ -87,7 +89,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     // Cuando no se tenga el id de lenguaje correcto, se asume 1 para español y 2 para inglés
     formData.append(
       "translations[0][language_id]",
-      currentTranslation.language.id,
+      currentTranslation.language.idLanguage,
     );
     formData.append("translations[0][title]", data.title);
 
