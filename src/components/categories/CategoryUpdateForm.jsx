@@ -59,7 +59,6 @@ function CategoryUpdateForm({ category }) {
       category_id: category?.data.idCategory,
       URL: generateUrlFromTitle(data.title),
     };
-    console.log("Datos a enviar para actualización:", categoryData);
     updateCategory(categoryData, {
       onSuccess: () => {
         localStorage.setItem("categoryUpdateSuccess", "1");

@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
-import Modal from "../ui/modal/Modal";
 import { useBanners } from "../../hooks/useBanners";
+import Modal from "../ui/modal/Modal";
 
 export default function BannerChangeState({
   isOpen,
@@ -12,7 +12,7 @@ export default function BannerChangeState({
 
   const onChangeStatus = () => {
     changeBannerStatus(
-      { id: selectedBanner?.id },
+      { id: selectedBanner?.idBanner },
       {
         onSuccess: () => {
           toast.success(

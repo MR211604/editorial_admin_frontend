@@ -1,13 +1,12 @@
-import React from "react";
+import BannerChangeState from "../components/banner/BannerChangeState";
+import { BannerColumns } from "../components/banner/BannerColumns";
+import BannerCreate from "../components/banner/BannerCreate";
+import BannerUpdate from "../components/banner/BannerUpdate";
 import ToolBar from "../components/ui/ToolBar";
 import Table from "../components/ui/table/Table";
-import { usePage } from "./hooks/usePage";
-import BannerCreate from "../components/banner/BannerCreate";
-import { BannerColumns } from "../components/banner/BannerColumns";
-import BannerChangeState from "../components/banner/BannerChangeState";
-import CustomSelect from "../components/ui/CustomSelect";
 import { useBanners } from "../hooks/useBanners";
-import BannerUpdate from "../components/banner/BannerUpdate";
+import { useDebounce } from "../hooks/utils/useDebounce";
+import { usePage } from "./hooks/usePage";
 
 export default function BannerPage() {
   const {
@@ -35,7 +34,14 @@ export default function BannerPage() {
     onDeleteSuccess,
   } = usePage();
 
-  const { allBanners, isAllBannersLoading } = useBanners();
+  const debouncedSearch = useDebounce(search, 300);
+
+  const { allBanners, isAllBannersLoading } = useBanners(
+    pagination.pageIndex + 1,
+    pagination.pageSize,
+    sorting,
+    debouncedSearch,
+  );
 
   const bannerColumns = BannerColumns(handleEditValue, handleDeleteValue);
 
@@ -58,9 +64,6 @@ export default function BannerPage() {
             onSearchChange={searchHandler}
             createButtonText="Agregar nuevo banner"
             searchPlaceholder="Buscar banner..."
-            hasSelect={true}
-            // selectName="Filtrar: "
-            // optionSelectedValue="Todos los banner"
           />
 
           <Table
@@ -97,7 +100,7 @@ export default function BannerPage() {
             isOpen={isModalOpen("delete")}
             onClose={() => closeModal("delete")}
             onSuccess={onDeleteSuccess}
-            selectedUser={selectedValue?.original}
+            selectedBanner={selectedValue?.original}
           />
         )}
       </div>

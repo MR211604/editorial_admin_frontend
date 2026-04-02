@@ -6,7 +6,6 @@ export const getBanners = async (
   limit = 10,
   sorting = null,
   search = "",
-  isActive = 1,
 ) => {
   return handleApiCall(
     async () => {
@@ -21,7 +20,7 @@ export const getBanners = async (
       return await fetchWithToken(
         `api/banners/getBanners?limit=${limit}&page=${page}&sort=${sortParam}&direction=${sortOrder}&search=${
           search || ""
-        }&state=${isActive}`,
+        }`,
       );
     },
     "Error fetching banners",
