@@ -26,14 +26,6 @@ export default function Sidebar() {
         </CustomLink>
 
         <CustomLink
-          to="/dashboard/banner"
-          icon="bi-card-image"
-          data-tooltip="Libros"
-        >
-          Banner
-        </CustomLink>
-
-        <CustomLink
           to="/dashboard/authors"
           icon="bi-person"
           data-tooltip="Autores"
@@ -68,6 +60,22 @@ export default function Sidebar() {
               data-tooltip="Roles"
             >
               Roles
+            </CustomLink>
+
+            <CustomLink
+              to="/dashboard/emails"
+              icon="bi bi-envelope"
+              data-tooltip="Correos"
+            >
+              Correos
+            </CustomLink>
+
+            <CustomLink
+              to="/dashboard/banner"
+              icon="bi-card-image"
+              data-tooltip="Libros"
+            >
+              Banner
             </CustomLink>
           </>
         )}
