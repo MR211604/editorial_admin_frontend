@@ -24,7 +24,6 @@ import {
 } from "@mdxeditor/editor";
 import { Form } from "react-bootstrap";
 import { Controller } from "react-hook-form";
-import { useUploadCategoryImage } from "../../hooks/useCategories";
 import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useMemo } from "react";
@@ -35,36 +34,31 @@ const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB en bytes
 export default function MDXEditorField({
   name,
   control,
+  onImageAdded,
   label,
   helpText,
   placeholder = "Inserte su contenido aquí",
 }) {
-  const { uploadCategory } = useUploadCategoryImage();
   const editorRef = useRef(null);
 
   const handleInputImageUpload = useCallback(
     async (image) => {
-      // Validar tamaño primero
       if (image.size > MAX_FILE_SIZE) {
         toast.error("La imagen debe ser menor a 1MB");
         throw new Error("La imagen debe ser menor a 1MB");
       }
 
-      const formData = new FormData();
-      formData.append("file", image);
-      const nombreSinExtension = image.name.replace(/\.[^/.]+$/, "");
-      formData.append("title", nombreSinExtension);
+      // Crear URL temporal para la vista previa
+      const objectUrl = URL.createObjectURL(image);
 
-      try {
-        const { data } = await uploadCategory(formData);
-        toast.success("Imagen subida correctamente");
-        return data.url;
-      } catch (error) {
-        toast.error(error.message || "Error al subir imagen");
-        throw error;
+      // Pasar la imagen y la URL al padre para guardarla en estado
+      if (onImageAdded) {
+        onImageAdded(objectUrl, image);
       }
+
+      return objectUrl;
     },
-    [uploadCategory]
+    [onImageAdded],
   );
 
   const plugins = useMemo(
@@ -114,7 +108,7 @@ export default function MDXEditorField({
         ),
       }),
     ],
-    [handleInputImageUpload]
+    [handleInputImageUpload],
   );
 
   return (

@@ -2,7 +2,11 @@ import { useCallback, useMemo, memo } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useCategories, useUpdateCategory } from "../../hooks/useCategories";
+import {
+  useCategories,
+  useUpdateCategory,
+  useUploadCategoryImage,
+} from "../../hooks/useCategories";
 import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
@@ -10,11 +14,14 @@ import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
 import { useEffect } from "react";
+import { useState } from "react";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
   const { allCategories } = useCategories({ getAll: true });
   const { updateCategory } = useUpdateCategory(category?.data.idCategory);
+  const { uploadCategory } = useUploadCategoryImage();
+  const [pendingImages, setPendingImages] = useState({});
 
   const {
     register,
@@ -53,9 +60,44 @@ function CategoryUpdateForm({ category }) {
     [],
   );
 
-  const onSubmit = (data) => {
+  const handleImageAdded = useCallback((url, file) => {
+    setPendingImages((prev) => ({ ...prev, [url]: file }));
+  }, []);
+
+  const onSubmit = async (data) => {
+    let finalData = { ...data };
+
+    const uploadPromises = Object.entries(pendingImages).map(
+      async ([localUrl, file]) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("title", file.name.replace(/\.[^/.]+$/, ""));
+
+        const { data: uploadInfo } = await uploadCategory(formData);
+        return { localUrl, serverUrl: uploadInfo.url };
+      },
+    );
+
+    try {
+      const uploadedImages = await Promise.all(uploadPromises);
+      // Reemplazar URLs en todos los campos MDX
+      uploadedImages.forEach(({ localUrl, serverUrl }) => {
+        Object.keys(finalData).forEach((key) => {
+          if (
+            typeof finalData[key] === "string" &&
+            finalData[key].includes(localUrl)
+          ) {
+            finalData[key] = finalData[key].replaceAll(localUrl, serverUrl);
+          }
+        });
+      });
+    } catch (error) {
+      toast.error("Error al subir las imágenes durante el guardado.");
+      throw error;
+    }
+
     const categoryData = {
-      ...data,
+      ...finalData,
       category_id: category?.data.idCategory,
       URL: generateUrlFromTitle(data.title),
     };
@@ -180,6 +222,7 @@ function CategoryUpdateForm({ category }) {
               control={control}
               label={leftField.label}
               helpText={leftField.helpText}
+              onImageAdded={handleImageAdded}
             />
           </Col>
           <Col lg={6} sm={12}>
@@ -189,6 +232,7 @@ function CategoryUpdateForm({ category }) {
                 control={control}
                 label={rightField.label}
                 helpText={rightField.helpText}
+                onImageAdded={handleImageAdded}
               />
             )}
           </Col>
