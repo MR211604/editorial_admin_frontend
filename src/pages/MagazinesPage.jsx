@@ -85,6 +85,7 @@ export default function MagazinesPage() {
             createButtonText="Agregar nueva revista"
             searchPlaceholder="Buscar revista..."
             hasSelect={true}
+            selectName="Categoría: "
             optionSelectedValue="Todas las revistas"
           >
             <SelectPublishingCategories

@@ -28,14 +28,14 @@ export default function SelectPublishingCategories({
 
   // Encontrar el tipo de categoría que coincide con el categoryType proporcionado
   const matchedCategoryType = allCategoryTypes?.data?.find(
-    (type) => type.name === categoryType
+    (type) => type.name === categoryType,
   );
 
   // Filtar las categorías según el tipo de categoría, agregando adicionalmente "Sin Categoria"
   const filteredCategories = allCategories?.data
     ?.filter((category) => {
       return (
-        category.category_type === matchedCategoryType?.id ||
+        category.category_type === matchedCategoryType?.idCategoryType ||
         category.title === "Sin categoria"
       );
     })
@@ -43,7 +43,7 @@ export default function SelectPublishingCategories({
       if (filterActiveCategories) {
         // Filtrar hijos activos
         const activeChildren = category.children_recursive.filter(
-          (child) => child.state === 1
+          (child) => child.state === 1,
         );
 
         // Si la categoría padre está activa O tiene hijos activos
@@ -82,7 +82,7 @@ export default function SelectPublishingCategories({
           <option key={category.id} value={category.id}>
             {category.title}
           </option>
-        )
+        ),
       )}
     </select>
   );

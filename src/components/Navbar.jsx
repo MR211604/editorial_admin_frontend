@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { env } from "../config/env";
+import { getImagePath } from "../../../frontend-udb-editorial/src/helpers/imagePath";
 
 export default function Navbar() {
   const {
@@ -33,7 +34,7 @@ export default function Navbar() {
           className="fw-bold text-white"
         >
           <img
-            src="https://i.imgur.com/Cm2nr2f.png"
+            src={getImagePath("img/Logo_Blanco.png")}
             alt="logo editorial udb"
             className="me-2"
           />

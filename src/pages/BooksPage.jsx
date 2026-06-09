@@ -78,7 +78,7 @@ export default function BooksPage() {
             createButtonText="Agregar nuevo libro"
             searchPlaceholder="Buscar libro..."
             hasSelect={true}
-            selectName="Filtrar: "
+            selectName="Categoría: "
             optionSelectedValue="Todos los libros"
           >
             <SelectPublishingCategories
