@@ -74,8 +74,8 @@ const AuthorMultiselect = memo(
               >
                 {availableAuthors.map((author) => (
                   <option
-                    key={author.id}
-                    value={author.id}
+                    key={author.idAuthor}
+                    value={author.idAuthor}
                     onClick={() => handleClick(author.idAuthor)}
                     style={{
                       backgroundColor: isAuthorSelected(author.idAuthor)

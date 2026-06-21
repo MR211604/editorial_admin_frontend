@@ -35,7 +35,7 @@ export const UserColumns = (onEdit, onDelete) => [
     accessorKey: "active",
     enableSorting: false,
     cell: ({ row }) => (
-      <div id={row.id} className="d-flex gap-2">
+      <div id={row.original?.idUser} className="d-flex gap-2">
         {row.original?.active === 1 ? (
           <span className="badge bg-success">Activo</span>
         ) : (
@@ -53,7 +53,7 @@ export const UserColumns = (onEdit, onDelete) => [
     header: "Operaciones",
     accessor: "operations",
     cell: ({ row }) => (
-      <div id={row.id} className="d-flex gap-2">
+      <div id={row.original?.idUser} className="d-flex gap-2">
         <button className="btn btn-primary btn-sm" onClick={() => onEdit(row)}>
           <i className="bi bi-pencil-square"></i>
         </button>

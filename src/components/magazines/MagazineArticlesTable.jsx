@@ -6,8 +6,9 @@ export default function MagazineArticlesTable({
 }) {
   //Filtrando por el id del lenguaje
   const filteredArticles = publishing?.data?.details.filter(
-    (detail) => detail.language_id === languageId
+    (detail) => detail.language_id === languageId,
   );
+
   return (
     <div className="table-responsive table-bordered">
       <table className="table table-striped">
@@ -20,7 +21,10 @@ export default function MagazineArticlesTable({
         </thead>
         <tbody>
           {filteredArticles?.map((article, index) => (
-            <tr key={article.id} className="align-middle text-center">
+            <tr
+              key={article.idPublishingDetail}
+              className="align-middle text-center"
+            >
               <td>{index + 1}</td>
               <td>{article.title}</td>
               <td>

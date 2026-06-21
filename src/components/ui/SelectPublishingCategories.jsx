@@ -59,6 +59,8 @@ export default function SelectPublishingCategories({
     })
     .filter(Boolean);
 
+  console.log("filteredCategories", filteredCategories);
+
   return (
     <select {...props} value={selectedCategory} onChange={onCategoryChange}>
       {enableAllCategoriesOption && (
@@ -71,15 +73,18 @@ export default function SelectPublishingCategories({
       )}
       {filteredCategories?.map((category) =>
         category.children_recursive.length > 0 ? (
-          <optgroup key={category.id + category.title} label={category.title}>
+          <optgroup
+            key={category.idCategory + category.title}
+            label={category.title}
+          >
             {category.children_recursive.map((child) => (
-              <option key={child.id} value={child.id}>
+              <option key={child.idCategory} value={child.idCategory}>
                 {child.title}
               </option>
             ))}
           </optgroup>
         ) : (
-          <option key={category.id} value={category.id}>
+          <option key={category.idCategory} value={category.idCategory}>
             {category.title}
           </option>
         ),

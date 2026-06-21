@@ -22,12 +22,13 @@ export default function AuthProvider({ children }) {
     );
     if (response.ok) {
       localStorage.setItem("token", response.token);
+      console.log("auth response", response);
       setAuth({
-        id: response.user.id,
+        id: response.user.idUser,
         checking: false,
         logged: true,
         name: response.user.name,
-        rol: response.user.user_roles[0].id,
+        rol: response.user.user_roles[0].idRol,
       });
     }
     return response;
@@ -49,11 +50,11 @@ export default function AuthProvider({ children }) {
     if (response.ok) {
       localStorage.setItem("token", response.token);
       setAuth({
-        id: response.user.id,
+        id: response.user.idUser,
         checking: false,
         logged: true,
         name: response.user.name,
-        rol: response.user.user_roles?.[0].id,
+        rol: response.user.user_roles?.[0].idRol,
       });
       return true;
     } else {
