@@ -19,13 +19,13 @@ const AuthorsTable = memo(
       displayedAuthors,
       availableAuthors,
       authorsState,
-      setAuthorsState,
       isOpen,
       handleAddAuthors,
       handleOpenAddAuthor,
       handleCancelAddAuthors,
       handleRemoveAuthor,
       handleDiscardTemporalChanges,
+      confirmSavedAuthors,
       getAuthorsByStatus,
     } = useAuthorsTable(publishing);
 
@@ -44,14 +44,10 @@ const AuthorsTable = memo(
             hasChanges: temporalAuthors.length > 0 || removedAuthors.length > 0,
           };
         },
-        clearTemporalAuthors: () => {
-          setAuthorsState((prev) =>
-            prev.filter((author) => author.status === "original"),
-          );
-        },
+        confirmSavedAuthors,
       }),
       [
-        setAuthorsState,
+        confirmSavedAuthors,
         displayedAuthors,
         publishing?.data.authors,
         getAuthorsByStatus,
@@ -95,6 +91,7 @@ const AuthorsTable = memo(
                   <td>
                     {author.status === "temporal" ? (
                       <button
+                        type="button"
                         className="btn btn-warning btn-sm"
                         onClick={() => handleRemoveAuthor(author.idAuthor)}
                       >
@@ -102,6 +99,7 @@ const AuthorsTable = memo(
                       </button>
                     ) : (
                       <button
+                        type="button"
                         className="btn btn-danger btn-sm"
                         onClick={() => handleRemoveAuthor(author.idAuthor)}
                       >
@@ -117,6 +115,7 @@ const AuthorsTable = memo(
                 <td className="text-end" colSpan="4">
                   {(temporalCount > 0 || removedCount > 0) && (
                     <button
+                      type="button"
                       className="btn btn-outline-secondary btn-sm me-2"
                       onClick={handleDiscardTemporalChanges}
                     >

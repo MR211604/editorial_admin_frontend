@@ -3,6 +3,13 @@ import { useAuthors } from "../../hooks/useAuthors";
 import { useDebounce } from "../../hooks/utils/useDebounce";
 import { useModal } from "../../hooks/utils/useModal";
 
+const getOriginalAuthorsState = (authors = []) =>
+  authors.map((author) => ({
+    ...author,
+    status: "original",
+    action: "none",
+  }));
+
 export const useAuthorsTable = (publishing) => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
@@ -16,14 +23,16 @@ export const useAuthorsTable = (publishing) => {
   useEffect(() => {
     if (publishing?.data.authors) {
       setAuthorsState((prev) => {
-        if (prev.length === 0) {
-          return publishing.data.authors.map((author) => ({
-            ...author,
-            status: "original",
-            action: "none",
-          }));
+        const hasPendingChanges = prev.some(
+          (author) =>
+            author.status === "temporal" || author.action === "remove",
+        );
+
+        if (hasPendingChanges) {
+          return prev;
         }
-        return prev;
+
+        return getOriginalAuthorsState(publishing.data.authors);
       });
     }
   }, [publishing?.data.authors]);
@@ -138,6 +147,13 @@ export const useAuthorsTable = (publishing) => {
     handleCancelAddAuthors,
     handleRemoveAuthor,
     handleDiscardTemporalChanges,
+    confirmSavedAuthors: () => {
+      setAuthorsState((prev) =>
+        getOriginalAuthorsState(
+          prev.filter((author) => author.status !== "removed"),
+        ),
+      );
+    },
 
     getAuthorsByStatus,
   };

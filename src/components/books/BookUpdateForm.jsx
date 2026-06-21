@@ -91,6 +91,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
+        authorsTableRef.current?.confirmSavedAuthors();
         toast.success("Libro actualizado exitosamente");
       },
       onError: (error) => {
