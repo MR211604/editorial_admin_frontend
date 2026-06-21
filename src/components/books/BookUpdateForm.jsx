@@ -61,13 +61,6 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
     }
   }, [publishing, reset, currentTranslation]);
 
-  useEffect(() => {
-    if (localStorage.getItem("bookUpdateSuccess") === "1") {
-      toast.success("Libro actualizado exitosamente");
-      localStorage.removeItem("bookUpdateSuccess");
-    }
-  }, []);
-
   //! ENVIO DE FORMULARIO USANDO FORM-DATA
   const onSubmit = async (data) => {
     const authorsData = authorsTableRef.current.getAuthorsData();
@@ -98,8 +91,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
-        localStorage.setItem("bookUpdateSuccess", "1");
-        navigate(0);
+        toast.success("Libro actualizado exitosamente");
       },
       onError: (error) => {
         if (error.errors) {

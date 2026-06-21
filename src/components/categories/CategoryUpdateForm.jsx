@@ -1,7 +1,10 @@
-import { useCallback, useMemo, memo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { formatErrors } from "../../helpers/formatErrors";
+import { generateUrlFromTitle } from "../../helpers/generateURL";
 import {
   useCategories,
   useUpdateCategory,
@@ -10,23 +13,20 @@ import {
 import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
-import toast from "react-hot-toast";
-import { formatErrors } from "../../helpers/formatErrors";
-import { generateUrlFromTitle } from "../../helpers/generateURL";
 import { useEffect } from "react";
-import { useState } from "react";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
   const { allCategories } = useCategories({ getAll: true });
   const { updateCategory } = useUpdateCategory(category?.data.idCategory);
-  const { uploadCategory } = useUploadCategoryImage();
+  const { uploadCategory: uploadCategoryImage } = useUploadCategoryImage();
   const [pendingImages, setPendingImages] = useState({});
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     setError,
     formState: { errors },
   } = useForm({
@@ -47,11 +47,21 @@ function CategoryUpdateForm({ category }) {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("categoryUpdateSuccess") === "1") {
-      toast.success("Categoría actualizada exitosamente");
-      localStorage.removeItem("categoryUpdateSuccess");
+    if (category?.data) {
+      reset({
+        title: category.data.title,
+        description: category.data.description,
+        main_category: category.data.main_category ?? "",
+        is_featured: category.data.is_featured,
+        about: category.data.detail?.about || "",
+        editorial_board: category.data.detail?.editorial_board || "",
+        policy: category.data.detail?.policy || "",
+        norms: category.data.detail?.norms || "",
+        process: category.data.detail?.process || "",
+        contact: category.data.detail?.contact || "",
+      });
     }
-  }, []);
+  }, [category, reset]);
 
   const handleCategoryChange = useCallback(
     (fieldOnChange) => (e) => {
@@ -73,14 +83,13 @@ function CategoryUpdateForm({ category }) {
         formData.append("file", file);
         formData.append("title", file.name.replace(/\.[^/.]+$/, ""));
 
-        const { data: uploadInfo } = await uploadCategory(formData);
+        const { data: uploadInfo } = await uploadCategoryImage(formData);
         return { localUrl, serverUrl: uploadInfo.url };
       },
     );
 
     try {
       const uploadedImages = await Promise.all(uploadPromises);
-      // Reemplazar URLs en todos los campos MDX
       uploadedImages.forEach(({ localUrl, serverUrl }) => {
         Object.keys(finalData).forEach((key) => {
           if (
@@ -103,8 +112,7 @@ function CategoryUpdateForm({ category }) {
     };
     updateCategory(categoryData, {
       onSuccess: () => {
-        localStorage.setItem("categoryUpdateSuccess", "1");
-        navigate(0);
+        toast.success("Categoria actualizada exitosamente");
       },
       onError: (error) => {
         if (error.errors) {

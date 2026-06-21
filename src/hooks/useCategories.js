@@ -60,11 +60,13 @@ export const useUpdateCategory = (id) => {
   const queryClient = useQueryClient();
 
   const updateCategoryMutation = useMutation({
-    queryKey: ["categoryUpdate"],
     mutationFn: (categoryData) => updateCategory(id, categoryData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["categoryUpdate"],
+        queryKey: ["category"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
       });
     },
   });

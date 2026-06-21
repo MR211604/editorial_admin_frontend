@@ -70,6 +70,18 @@ export const useCreatePublishing = () => {
   };
 };
 
+export const usePublishing = (id) => {
+  const { data: publishing, isLoading: isPublishingLoading } = useQuery({
+    queryKey: ["publishing", id],
+    queryFn: () => getPublishingById(id),
+  });
+
+  return {
+    publishing,
+    isPublishingLoading,
+  };
+};
+
 export const useUpdatePublishing = (id) => {
   const queryClient = useQueryClient();
 
@@ -86,18 +98,6 @@ export const useUpdatePublishing = (id) => {
     updatePublishing: updatePublishingMutation.mutate,
     isUpdating: updatePublishingMutation.isPending,
     updateError: updatePublishingMutation.error,
-  };
-};
-
-export const usePublishing = (book_url) => {
-  const { data: publishing, isLoading: isPublishingLoading } = useQuery({
-    queryKey: ["publishing", book_url],
-    queryFn: () => getPublishingById(book_url),
-  });
-
-  return {
-    publishing,
-    isPublishingLoading,
   };
 };
 

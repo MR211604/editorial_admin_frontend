@@ -63,13 +63,6 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
     }
   }, [publishing, reset, currentTranslation]);
 
-  useEffect(() => {
-    if (localStorage.getItem("magazineUpdateSuccess") === "1") {
-      toast.success("Revista actualizada exitosamente");
-      localStorage.removeItem("magazineUpdateSuccess");
-    }
-  }, []);
-
   const onSubmit = async (data) => {
     const authorsData = authorsTableRef.current.getAuthorsData();
     const formData = new FormData();
@@ -103,8 +96,7 @@ export default function MagazineUpdateForm({ publishing, languageShortName }) {
 
     updatePublishing(formData, {
       onSuccess: () => {
-        localStorage.setItem("magazineUpdateSuccess", "1");
-        navigate(0);
+        toast.success("Revista actualizada correctamente");
       },
       onError: (error) => {
         if (error.errors) {
