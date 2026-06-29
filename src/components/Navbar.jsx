@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { env } from "../config/env";
-import { getImagePath } from "../../../frontend-udb-editorial/src/helpers/imagePath";
+import { getImagePath } from "../utils/imagePath";
 
 export default function Navbar() {
   const {
