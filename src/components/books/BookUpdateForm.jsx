@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useUpdatePublishing } from "../../hooks/usePublishings";
-import AuthorsTable from "../publishings/AuthorsTable";
-import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 import toast from "react-hot-toast";
-import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
-import { getImageURL } from "../../helpers/getImageURL";
+import { useNavigate } from "react-router-dom";
 import { formatErrors } from "../../helpers/formatErrors";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
+import { getImageURL } from "../../helpers/getImageURL";
+import { useUpdatePublishing } from "../../hooks/usePublishings";
+import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
+import AuthorsTable from "../publishings/AuthorsTable";
+import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 
 export default function BookUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
@@ -211,7 +211,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                 {errors.publish_code?.message}
               </Form.Control.Feedback>
               <Form.Text className="text-muted">
-                Formato requerido: ###-##-####-###-#
+                Formato requerido: ###-#####-##-##-#
               </Form.Text>
             </Form.Group>
           </Col>
@@ -252,7 +252,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
               <Form.Label>Imagen de portada</Form.Label>
               <div className="mb-3 text-center">
                 <img
-                  src={getImageURL(publishing?.data.cover)}
+                  src={getImageURL(publishing?.data)}
                   alt="Portada actual"
                   style={{
                     maxWidth: "200px",

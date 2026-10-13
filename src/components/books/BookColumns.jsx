@@ -53,18 +53,27 @@ export const BookColumns = (onEdit, onArchive, onDelete) => [
     accessorKey: "operations",
     cell: ({ row }) => (
       <div className="d-flex gap-2 align-items-center justify-content-center">
-        <button className="btn btn-primary btn-sm" onClick={() => onEdit(row)}>
+        <button
+          className="btn btn-primary btn-sm"
+          type="button"
+          onClick={() => onEdit(row)}
+        >
           <i className="bi bi-pencil-square"></i>
         </button>
         {row.original.state === 0 ? (
           <button
+            type="button"
             className="btn btn-danger btn-sm"
             onClick={() => onDelete(row)}
           >
             <i className="bi bi-trash"></i>
           </button>
         ) : null}
-        <button className="btn btn-info btn-sm" onClick={() => onArchive(row)}>
+        <button
+          type="button"
+          className="btn btn-info btn-sm"
+          onClick={() => onArchive(row)}
+        >
           <i className="bi bi-archive"></i>
         </button>
       </div>
