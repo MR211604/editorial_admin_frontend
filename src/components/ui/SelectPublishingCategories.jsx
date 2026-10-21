@@ -1,5 +1,7 @@
 import { useCategories } from "../../hooks/useCategories";
 import { useCategoryTypes } from "../../hooks/useCategoryTypes";
+import HierarchicalCategorySelect from "./HierarchicalCategorySelect";
+import { flattenCategories } from "./utils/flattenCategories";
 
 //Esto trae los datos de las categorias con los children_recursive
 
@@ -32,63 +34,38 @@ export default function SelectPublishingCategories({
   );
 
   // Filtar las categorías según el tipo de categoría, agregando adicionalmente "Sin Categoria"
-  const filteredCategories = allCategories?.data
-    ?.filter((category) => {
-      return (
-        category.category_type === matchedCategoryType?.idCategoryType ||
-        category.title === "Sin categoria"
-      );
-    })
-    .map((category) => {
-      if (filterActiveCategories) {
-        // Filtrar hijos activos
-        const activeChildren = category.children_recursive.filter(
-          (child) => child.state === 1,
-        );
+  const filteredCategories = allCategories?.data?.filter((category) => {
+    return (
+      category.category_type === matchedCategoryType?.idCategoryType ||
+      category.title === "Sin categoria"
+    );
+  });
 
-        // Si la categoría padre está activa O tiene hijos activos
-        if (category.state === 1 || activeChildren.length > 0) {
-          return {
-            ...category,
-            children_recursive: activeChildren,
-          };
-        }
-        return null;
-      }
-      return category;
-    })
-    .filter(Boolean);
+  const categoryOptions = flattenCategories(filteredCategories, {
+    onlyActive: filterActiveCategories,
+  });
 
-  console.log("filteredCategories", filteredCategories);
+  const options = [
+    ...(enableAllCategoriesOption
+      ? [{ value: "", label: "Todas las categorías" }]
+      : []),
+    ...(enableDefaultValue
+      ? [{ value: defaultValue, label: defaultLabel, disabled: true }]
+      : []),
+    ...categoryOptions.map((category) => ({
+      value: category.idCategory,
+      label: category.title,
+      depth: category.depth,
+      hasChildren: category.hasChildren,
+    })),
+  ];
 
   return (
-    <select {...props} value={selectedCategory} onChange={onCategoryChange}>
-      {enableAllCategoriesOption && (
-        <option value="">Todas las categorías</option>
-      )}
-      {enableDefaultValue && (
-        <option value={defaultValue} disabled>
-          {defaultLabel}
-        </option>
-      )}
-      {filteredCategories?.map((category) =>
-        category.children_recursive.length > 0 ? (
-          <optgroup
-            key={category.idCategory + category.title}
-            label={category.title}
-          >
-            {category.children_recursive.map((child) => (
-              <option key={child.idCategory} value={child.idCategory}>
-                {child.title}
-              </option>
-            ))}
-          </optgroup>
-        ) : (
-          <option key={category.idCategory} value={category.idCategory}>
-            {category.title}
-          </option>
-        ),
-      )}
-    </select>
+    <HierarchicalCategorySelect
+      {...props}
+      options={options}
+      selectedValue={selectedCategory}
+      onChange={onCategoryChange}
+    />
   );
 }

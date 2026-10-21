@@ -9,6 +9,7 @@ import { getImageURL } from "../../helpers/getImageURL";
 import { useUpdatePublishing } from "../../hooks/usePublishings";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import AuthorsTable from "../publishings/AuthorsTable";
+import FormDropdownSelect from "../ui/FormDropdownSelect";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 
 export default function BookUpdateForm({ publishing, languageShortName }) {
@@ -310,10 +311,10 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
                 name="is_new_arrival"
                 control={control}
                 render={({ field }) => (
-                  <Form.Select {...field}>
+                  <FormDropdownSelect {...field}>
                     <option value={1}>Sí</option>
                     <option value={0}>No</option>
-                  </Form.Select>
+                  </FormDropdownSelect>
                 )}
               />
               <Form.Text className="text-muted">

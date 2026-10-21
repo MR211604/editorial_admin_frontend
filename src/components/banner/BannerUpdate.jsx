@@ -6,6 +6,7 @@ import { formatErrors } from "../../helpers/formatErrors";
 import { Form } from "react-bootstrap";
 import { useEffect } from "react";
 import { isSupportedVideoURL } from "../../helpers/banner";
+import FormDropdownSelect from "../ui/FormDropdownSelect";
 
 export default function BannerUpdate({
   isOpen,
@@ -142,10 +143,10 @@ export default function BannerUpdate({
             name="state"
             control={control}
             render={({ field }) => (
-              <Form.Select {...field}>
+              <FormDropdownSelect {...field}>
                 <option value={1}>Activo</option>
                 <option value={0}>Inactivo</option>
-              </Form.Select>
+              </FormDropdownSelect>
             )}
           />
           <Form.Text className="text-muted">

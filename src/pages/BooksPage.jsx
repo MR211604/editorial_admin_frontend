@@ -81,20 +81,20 @@ export default function BooksPage() {
             selectName="Categoría: "
             optionSelectedValue="Todos los libros"
           >
-            <SelectPublishingCategories
-              categoryType={BOOK_PUBLISHING}
-              enableAllCategoriesOption={true}
-              onCategoryChange={handleCategoryChange}
-              selectedCategory={selectedCategory}
-              className="form-select form-select-md w-50 ms-2"
-            />
-            <CustomSelect
-              onSelectChange={handleArchivedFilterChange}
-              selectedValue={filterArchived}
-              className="form-select form-select-md w-25 ms-2"
-              optionValues={archivedPublishingSelectValues}
-              showDefaultOption={false}
-            />
+              <SelectPublishingCategories
+                categoryType={BOOK_PUBLISHING}
+                enableAllCategoriesOption={true}
+                onCategoryChange={handleCategoryChange}
+                selectedCategory={selectedCategory}
+                className="form-select form-select-md w-100 mx-2"
+              />
+              <CustomSelect
+                onSelectChange={handleArchivedFilterChange}
+                selectedValue={filterArchived}
+                optionValues={archivedPublishingSelectValues}
+                showDefaultOption={false}
+              />
+            
           </ToolBar>
 
           <Table

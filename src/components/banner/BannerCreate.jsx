@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
 import { Form } from "react-bootstrap";
 import { isSupportedVideoURL } from "../../helpers/banner";
+import FormDropdownSelect from "../ui/FormDropdownSelect";
 
 export default function BannerCreate({ isOpen, onClose, onSuccess }) {
   const { createBanner, isCreating } = useCreateBanner();
@@ -110,10 +111,10 @@ export default function BannerCreate({ isOpen, onClose, onSuccess }) {
             name="state"
             control={control}
             render={({ field }) => (
-              <Form.Select {...field}>
+              <FormDropdownSelect {...field}>
                 <option value={1}>Activo</option>
                 <option value={0}>Inactivo</option>
-              </Form.Select>
+              </FormDropdownSelect>
             )}
           />
           <Form.Text className="text-muted">

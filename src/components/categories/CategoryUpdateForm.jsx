@@ -1,10 +1,11 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { formatErrors } from "../../helpers/formatErrors";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
+import FormDropdownSelect from "../ui/FormDropdownSelect";
 import {
   useCategories,
   useUpdateCategory,
@@ -13,11 +14,10 @@ import {
 import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
-import { useEffect } from "react";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
-  const { allCategories } = useCategories({ getAll: true });
+  const { allCategories } = useCategories({ getAll: false });
   const { updateCategory } = useUpdateCategory(category?.data.idCategory);
   const { uploadCategory: uploadCategoryImage } = useUploadCategoryImage();
   const [pendingImages, setPendingImages] = useState({});
@@ -165,30 +165,24 @@ function CategoryUpdateForm({ category }) {
     </Row>
   );
 
-  const memoizedCategorySelect = useMemo(
-    () => (
-      <Controller
-        name="main_category"
-        control={control}
-        render={({ field }) => (
-          <SelectAllCategories
-            allCategories={allCategories}
-            onCategoryChange={handleCategoryChange(field.onChange)}
-            selectedCategory={field.value}
-            className="form-select"
-          />
-        )}
-      />
-    ),
-    [allCategories, control, handleCategoryChange],
-  );
-
   const renderConfigFields = () => (
     <Row className="mt-4">
       <Col lg={6} sm={12}>
         <Form.Group className="mb-3">
           <Form.Label>Categoría Padre</Form.Label>
-          {memoizedCategorySelect}
+          <Controller
+            name="main_category"
+            control={control}
+            render={({ field }) => (
+              <SelectAllCategories
+                allCategories={allCategories}
+                excludedCategoryId={category?.data.idCategory}
+                onCategoryChange={handleCategoryChange(field.onChange)}
+                selectedCategory={field.value}
+                className="form-select"
+              />
+            )}
+          />
           <Form.Text className="text-muted">
             Seleccione la categoría de la publicación
           </Form.Text>
@@ -202,10 +196,10 @@ function CategoryUpdateForm({ category }) {
             name="is_featured"
             control={control}
             render={({ field }) => (
-              <Form.Select {...field}>
+              <FormDropdownSelect {...field}>
                 <option value={1}>Sí</option>
                 <option value={0}>No</option>
-              </Form.Select>
+              </FormDropdownSelect>
             )}
           />
           <Form.Text className="text-muted">

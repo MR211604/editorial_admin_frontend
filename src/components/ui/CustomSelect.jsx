@@ -1,3 +1,5 @@
+import FormDropdownSelect from "./FormDropdownSelect";
+
 export default function CustomSelect({
   onSelectChange,
   selectedValue,
@@ -7,9 +9,9 @@ export default function CustomSelect({
   ...props
 }) {
   return (
-    <select
+    <FormDropdownSelect
       name="archived"
-      id="archived"
+      id="archived"     
       onChange={onSelectChange}
       value={selectedValue}
       {...props}
@@ -24,6 +26,6 @@ export default function CustomSelect({
           {option.label}
         </option>
       ))}
-    </select>
+    </FormDropdownSelect>
   );
 }
