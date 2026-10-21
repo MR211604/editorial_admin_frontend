@@ -6,8 +6,8 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/authContext";
 import { env } from "../config/env";
+import { AuthContext } from "../context/authContext";
 import { getImagePath } from "../utils/imagePath";
 
 export default function Navbar() {

@@ -1,7 +1,7 @@
-import Nav from "react-bootstrap/Nav";
-import CustomLink from "./ui/CustomLink";
-import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
+import Nav from "react-bootstrap/Nav";
+import { AuthContext } from "../context/authContext";
+import CustomLink from "./ui/CustomLink";
 
 export default function Sidebar() {
   const { auth } = useContext(AuthContext);

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
 import { Form } from "react-bootstrap";
 import { useEffect } from "react";
+import { isSupportedVideoURL } from "../../helpers/banner";
 
 export default function BannerUpdate({
   isOpen,
@@ -50,11 +51,11 @@ export default function BannerUpdate({
   const nameValue = watch("title");
   const lastnameValue = watch("resourceURL");
   useEffect(() => {
-    if (errors.name?.type === "server") clearErrors("title");
-  }, [nameValue, clearErrors, errors.name]);
+    if (errors.title?.type === "server") clearErrors("title");
+  }, [nameValue, clearErrors, errors.title]);
   useEffect(() => {
-    if (errors.lastname?.type === "server") clearErrors("resourceURL");
-  }, [lastnameValue, clearErrors, errors.lastname]);
+    if (errors.resourceURL?.type === "server") clearErrors("resourceURL");
+  }, [lastnameValue, clearErrors, errors.resourceURL]);
 
   const onSubmit = (data) => {
     const updateData = {
@@ -98,7 +99,7 @@ export default function BannerUpdate({
             {...register("title", {
               required: "El nombre del recurso es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
-              maxLength: { value: 50, message: "Máximo 50 caracteres" },
+              maxLength: { value: 255, message: "Máximo 255 caracteres" },
               validate: (v) =>
                 v?.trim().length
                   ? true
@@ -106,25 +107,30 @@ export default function BannerUpdate({
             })}
           />
           <Form.Control.Feedback type="invalid">
-            {errors.name?.message}
+            {errors.title?.message}
           </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label htmlFor="editResourceURL">URL del recurso</Form.Label>
+          <Form.Label htmlFor="editResourceURL">Enlace del video</Form.Label>
           <Form.Control
-            type="text"
+            type="url"
             id="editResourceURL"
             isInvalid={!!errors.resourceURL}
             disabled={isUpdating}
             {...register("resourceURL", {
               required: "La URL del recurso es obligatoria",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
-              maxLength: { value: 50, message: "Máximo 50 caracteres" },
-              validate: (v) =>
-                v?.trim().length ? true : "La URL del recurso es obligatoria",
+              maxLength: { value: 255, message: "Máximo 255 caracteres" },
+              validate: (value) =>
+                isSupportedVideoURL(value) ||
+                "Ingresa un enlace válido de YouTube, TikTok, Facebook o Instagram",
             })}
           />
+          <Form.Text className="text-muted">
+            Pega el enlace de un video de YouTube, TikTok, Facebook o Instagram.
+            Para TikTok usa el enlace directo que incluye “/video/”.
+          </Form.Text>
           <Form.Control.Feedback type="invalid">
             {errors.resourceURL?.message}
           </Form.Control.Feedback>
@@ -142,7 +148,10 @@ export default function BannerUpdate({
               </Form.Select>
             )}
           />
-          <Form.Text className="text-muted">Estado del recurso</Form.Text>
+          <Form.Text className="text-muted">
+            Solo puede haber un video activo; al activar este, se desactivará el
+            actual.
+          </Form.Text>
         </Form.Group>
       </Form>
     </Modal>

@@ -43,7 +43,7 @@ export default function BannerChangeState({
       <p>
         {selectedBanner?.state === 1
           ? `¿Está seguro que desea desactivar el banner "${selectedBanner?.title}"?`
-          : `¿Está seguro que desea activar el banner "${selectedBanner?.title}"?`}
+          : `¿Está seguro que desea activar el video "${selectedBanner?.title}"? Al hacerlo, cualquier otro video activo se desactivará.`}
       </p>
     </Modal>
   );

@@ -1,4 +1,5 @@
 import { Badge } from "react-bootstrap";
+import { getBannerPlatform } from "../../helpers/banner";
 
 export const BannerColumns = (onEdit, onToggleState) => [
   {
@@ -10,8 +11,13 @@ export const BannerColumns = (onEdit, onToggleState) => [
     accessorKey: "title",
   },
   {
-    header: "URL del recurso",
+    header: "Plataforma",
     accessorKey: "resourceURL",
+    cell: ({ row }) => (
+      <a href={row.original.resourceURL} target="_blank" rel="noreferrer">
+        {getBannerPlatform(row.original.resourceURL)}
+      </a>
+    ),
   },
   {
     header: "Estado",

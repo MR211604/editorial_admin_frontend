@@ -50,8 +50,9 @@ export default function BannerPage() {
       <h1>Banner</h1>
       <hr />
       <p>
-        Aqui puedes encontrar una lista de todos los banner registrados dentro
-        de la aplicación para su uso en la HomePage.
+        Aquí puedes administrar los videos que se muestran en la página
+        principal. Puedes usar enlaces de YouTube, TikTok, Facebook o Instagram;
+        solo se permite tener un video activo a la vez.
       </p>
 
       <div className="card">
