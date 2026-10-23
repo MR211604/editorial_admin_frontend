@@ -7,6 +7,10 @@ import { generateUrlFromTitle } from "../../helpers/generateURL";
 import { useDocumentMutations } from "../../hooks/useDocuments";
 import MDXEditorField from "../ui/MDXEditorField";
 import Modal from "../ui/modal/Modal";
+import {
+  replaceMdxImageUrls,
+  uploadPendingMdxImages,
+} from "../../helpers/mdxImages";
 
 const createSlug = (title) => generateUrlFromTitle(title).replace(/_/g, "-");
 
@@ -70,22 +74,14 @@ export default function DocumentForm({
     const documentData = { ...formValues };
 
     try {
-      const uploadedImages = await Promise.all(
-        Object.entries(pendingImages).map(async ([localUrl, file]) => {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("title", file.name.replace(/\.[^/.]+$/, ""));
-          const { data } = await uploadDocumentImage(formData);
-          return { localUrl, serverUrl: data.url };
-        }),
+      const uploadedImages = await uploadPendingMdxImages(
+        pendingImages,
+        uploadDocumentImage,
       );
-
-      uploadedImages.forEach(({ localUrl, serverUrl }) => {
-        documentData.content = documentData.content.replaceAll(
-          localUrl,
-          serverUrl,
-        );
-      });
+      documentData.content = replaceMdxImageUrls(
+        documentData.content,
+        uploadedImages,
+      );
 
       if (document?.idDocument) {
         await updateDocument({ id: document.idDocument, documentData });

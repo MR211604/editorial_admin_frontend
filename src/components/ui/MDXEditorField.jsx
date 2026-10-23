@@ -28,6 +28,7 @@ import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useMemo } from "react";
 import { useCallback } from "react";
+import { resolveMdxImageUrls } from "../../helpers/mdxImages";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB en bytes
 
@@ -120,7 +121,7 @@ export default function MDXEditorField({
         render={({ field }) => (
           <MDXEditor
             ref={editorRef}
-            markdown={field.value || placeholder}
+            markdown={resolveMdxImageUrls(field.value || placeholder)}
             onChange={(value) => {
               field.onChange(value);
             }}

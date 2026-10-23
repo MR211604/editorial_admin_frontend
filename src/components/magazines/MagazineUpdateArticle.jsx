@@ -1,11 +1,17 @@
+import { useCallback, useState } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import MDXEditorField from "../ui/MDXEditorField";
 import Modal from "../ui/modal/Modal";
 import { useUpdatePublishingDetail } from "../../hooks/usePublishingsDetails";
+import { useDocumentMutations } from "../../hooks/useDocuments";
 import { useNavigate } from "react-router-dom";
 import { formatErrors } from "../../helpers/formatErrors";
 import toast from "react-hot-toast";
+import {
+  replaceMdxImageUrls,
+  uploadPendingMdxImages,
+} from "../../helpers/mdxImages";
 
 export default function MagazineUpdateArticle({
   isOpen,
@@ -16,6 +22,8 @@ export default function MagazineUpdateArticle({
   const { updatePublishingDetail } = useUpdatePublishingDetail(
     article?.idPublishingDetail,
   );
+  const { uploadDocumentImage } = useDocumentMutations();
+  const [pendingImages, setPendingImages] = useState({});
 
   const navigate = useNavigate();
 
@@ -33,25 +41,38 @@ export default function MagazineUpdateArticle({
     },
   });
 
-  const onSubmit = (data) => {
-    const updateData = {
-      ...data,
-      repository_URL: data.URL,
-      publishing_id: article.publishing_id,
-    };
-    updatePublishingDetail(updateData, {
-      onSuccess: () => {
-        onEditSuccess();
-        navigate(0);
-      },
-      onError: (error) => {
-        if (error.errors) {
-          formatErrors(error, setError);
-        } else {
-          toast.error(error.message || "Error al crear publicación");
-        }
-      },
-    });
+  const handleImageAdded = useCallback((url, file) => {
+    setPendingImages((previous) => ({ ...previous, [url]: file }));
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      const uploadedImages = await uploadPendingMdxImages(
+        pendingImages,
+        uploadDocumentImage,
+      );
+      const updateData = {
+        ...data,
+        summary: replaceMdxImageUrls(data.summary, uploadedImages),
+        repository_URL: data.URL,
+        publishing_id: article.publishing_id,
+      };
+      updatePublishingDetail(updateData, {
+        onSuccess: () => {
+          onEditSuccess();
+          navigate(0);
+        },
+        onError: (error) => {
+          if (error.errors) {
+            formatErrors(error, setError);
+          } else {
+            toast.error(error.message || "Error al actualizar publicación");
+          }
+        },
+      });
+    } catch (error) {
+      toast.error(error.message || "Error al subir imágenes del artículo");
+    }
   };
 
   return (
@@ -113,6 +134,7 @@ export default function MagazineUpdateArticle({
               control={control}
               label={"Resumen"}
               error={errors.summary?.message}
+              onImageAdded={handleImageAdded}
             />
           </Row>
         </Form>

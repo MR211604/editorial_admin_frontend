@@ -14,6 +14,10 @@ import {
 import MDXEditorField from "../ui/MDXEditorField";
 import SelectAllCategories from "../ui/SelectAllCategories";
 import { mdxEditorFields } from "../ui/utils/mdxEditorFields";
+import {
+  replaceMdxImageUrls,
+  uploadPendingMdxImages,
+} from "../../helpers/mdxImages";
 
 function CategoryUpdateForm({ category }) {
   const navigate = useNavigate();
@@ -77,32 +81,19 @@ function CategoryUpdateForm({ category }) {
   const onSubmit = async (data) => {
     let finalData = { ...data };
 
-    const uploadPromises = Object.entries(pendingImages).map(
-      async ([localUrl, file]) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("title", file.name.replace(/\.[^/.]+$/, ""));
-
-        const { data: uploadInfo } = await uploadCategoryImage(formData);
-        return { localUrl, serverUrl: uploadInfo.url };
-      },
-    );
-
     try {
-      const uploadedImages = await Promise.all(uploadPromises);
-      uploadedImages.forEach(({ localUrl, serverUrl }) => {
-        Object.keys(finalData).forEach((key) => {
-          if (
-            typeof finalData[key] === "string" &&
-            finalData[key].includes(localUrl)
-          ) {
-            finalData[key] = finalData[key].replaceAll(localUrl, serverUrl);
-          }
-        });
+      const uploadedImages = await uploadPendingMdxImages(
+        pendingImages,
+        uploadCategoryImage,
+      );
+      Object.keys(finalData).forEach((key) => {
+        if (typeof finalData[key] === "string") {
+          finalData[key] = replaceMdxImageUrls(finalData[key], uploadedImages);
+        }
       });
-    } catch (error) {
+    } catch {
       toast.error("Error al subir las imágenes durante el guardado.");
-      throw error;
+      return;
     }
 
     const categoryData = {

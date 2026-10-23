@@ -1,11 +1,17 @@
+import { useCallback, useState } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useCreatePublishingDetail } from "../../hooks/usePublishingsDetails";
+import { useDocumentMutations } from "../../hooks/useDocuments";
 import MDXEditorField from "../ui/MDXEditorField";
 import Modal from "../ui/modal/Modal";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
+import {
+  replaceMdxImageUrls,
+  uploadPendingMdxImages,
+} from "../../helpers/mdxImages";
 
 export default function MagazineCreateArticle({
   publishing,
@@ -15,6 +21,8 @@ export default function MagazineCreateArticle({
   onCreateSuccess,
 }) {
   const { createPublishingDetail } = useCreatePublishingDetail();
+  const { uploadDocumentImage } = useDocumentMutations();
+  const [pendingImages, setPendingImages] = useState({});
 
   const navigate = useNavigate();
 
@@ -32,27 +40,40 @@ export default function MagazineCreateArticle({
     },
   });
 
-  const onSubmit = (data) => {
-    const articleData = {
-      ...data,
-      language_id: languageId,
-      repository_URL: data.URL,
-      publishing_id: publishing?.data?.idPublishing,
-    };
-    createPublishingDetail(articleData, {
-      onSuccess: () => {
-        toast.success("Artículo creado exitosamente");
-        onCreateSuccess();
-        navigate(0);
-      },
-      onError: (error) => {
-        if (error.errors) {
-          formatErrors(error, setError);
-        } else {
-          toast.error(error.message || "Error al crear publicación");
-        }
-      },
-    });
+  const handleImageAdded = useCallback((url, file) => {
+    setPendingImages((previous) => ({ ...previous, [url]: file }));
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      const uploadedImages = await uploadPendingMdxImages(
+        pendingImages,
+        uploadDocumentImage,
+      );
+      const articleData = {
+        ...data,
+        summary: replaceMdxImageUrls(data.summary, uploadedImages),
+        language_id: languageId,
+        repository_URL: data.URL,
+        publishing_id: publishing?.data?.idPublishing,
+      };
+      createPublishingDetail(articleData, {
+        onSuccess: () => {
+          toast.success("Artículo creado exitosamente");
+          onCreateSuccess();
+          navigate(0);
+        },
+        onError: (error) => {
+          if (error.errors) {
+            formatErrors(error, setError);
+          } else {
+            toast.error(error.message || "Error al crear publicación");
+          }
+        },
+      });
+    } catch (error) {
+      toast.error(error.message || "Error al subir imágenes del artículo");
+    }
   };
 
   return (
@@ -114,6 +135,7 @@ export default function MagazineCreateArticle({
               control={control}
               label={"Resumen"}
               error={errors.summary?.message}
+              onImageAdded={handleImageAdded}
             />
           </Row>
         </Form>

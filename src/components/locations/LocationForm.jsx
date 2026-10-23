@@ -3,7 +3,10 @@ import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { formatErrors } from "../../helpers/formatErrors";
-import { getLocationImageUrl } from "../../helpers/locationImage";
+import {
+  getLocationImageUrl,
+  getRelativeLocationImagePath,
+} from "../../helpers/locationImage";
 import { useLocationMutations } from "../../hooks/useLocations";
 import Modal from "../ui/modal/Modal";
 
@@ -79,7 +82,7 @@ export default function LocationForm({
       ...values,
       state: Number(values.state),
       sort_order: Number(values.sort_order),
-      image: location?.image || "",
+      image: getRelativeLocationImagePath(location?.image),
     };
 
     try {
@@ -88,7 +91,11 @@ export default function LocationForm({
         formData.append("file", logoFile);
         formData.append("name", values.name);
         const uploadedImage = await uploadLocationImage(formData);
-        locationData.image = uploadedImage.data.url || uploadedImage.data.path;
+        locationData.image = getRelativeLocationImagePath(
+          uploadedImage.data.filename ||
+            uploadedImage.data.path ||
+            uploadedImage.data.url,
+        );
       }
 
       if (location?.idLocation) {
