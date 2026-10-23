@@ -13,6 +13,22 @@ export default function Sidebar() {
           Inicio
         </CustomLink>
 
+        <CustomLink
+          to="/dashboard/documents"
+          icon="bi-file-earmark-text"
+          data-tooltip="Documentos"
+        >
+          Documentos
+        </CustomLink>
+
+        <CustomLink
+          to="/dashboard/locations"
+          icon="bi-geo-alt"
+          data-tooltip="Ubicaciones"
+        >
+          Ubicaciones
+        </CustomLink>
+
         <CustomLink to="/dashboard/books" icon="bi-book" data-tooltip="Libros">
           Libros
         </CustomLink>

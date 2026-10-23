@@ -16,6 +16,8 @@ import MagazineUpdate from "../pages/magazines/MagazineUpdate";
 import ProtectedRoute from "./ProtectedRoute";
 import BannerPage from "../pages/BannerPage";
 import EmailsPage from "../pages/EmailsPage";
+import DocumentsPage from "../pages/DocumentsPage";
+import LocationsPage from "../pages/LocationsPage";
 
 export default function AppRouter() {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -57,6 +59,8 @@ export default function AppRouter() {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="documents" element={<DocumentsPage />} />
+        <Route path="locations" element={<LocationsPage />} />
         <Route path="authors" element={<AuthorsPage />} />
         <Route path="books">
           <Route index element={<BooksPage />} />
