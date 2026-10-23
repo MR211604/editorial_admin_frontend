@@ -44,6 +44,9 @@ export const useDocumentMutations = () => {
     updateDocument: updateMutation.mutateAsync,
     toggleDocumentState: toggleMutation.mutateAsync,
     uploadDocumentImage: uploadImageMutation.mutateAsync,
-    isSaving: createMutation.isPending || updateMutation.isPending,
+    isSaving:
+      createMutation.isPending ||
+      updateMutation.isPending ||
+      uploadImageMutation.isPending,
   };
 };

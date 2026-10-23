@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import DocumentForm from "../components/documents/DocumentForm";
 import Modal from "../components/ui/modal/Modal";
 import { useDocumentMutations, useDocuments } from "../hooks/useDocuments";
+import { useDebounce } from "../hooks/utils/useDebounce";
 
 export default function DocumentsPage() {
   const { documents, isLoading, error } = useDocuments();
@@ -11,13 +12,14 @@ export default function DocumentsPage() {
   const [documentToChangeState, setDocumentToChangeState] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
 
   const filteredDocuments = useMemo(() => {
-    const query = search.trim().toLocaleLowerCase();
+    const query = debouncedSearch.trim().toLocaleLowerCase();
     return (documents?.data || []).filter((document) =>
       `${document.title} ${document.slug}`.toLocaleLowerCase().includes(query),
     );
-  }, [documents, search]);
+  }, [documents, debouncedSearch]);
   const defaultSortOrder = (documents?.data || []).reduce(
     (highestOrder, document) =>
       Math.max(highestOrder, Number(document.sort_order) || 0),

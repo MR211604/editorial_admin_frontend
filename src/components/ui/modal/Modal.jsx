@@ -9,6 +9,8 @@ export default function Modal({
   onSave,
   saveButtonText = "Guardar",
   closeButtonText = "Cancelar",
+  saveButtonDisabled = false,
+  closeButtonDisabled = false,
   showFooter = true,
   size = "", // "", "modal-sm", "modal-lg", "modal-xl"
   ...props
@@ -30,11 +32,19 @@ export default function Modal({
         <BootstrapModal.Body>{children}</BootstrapModal.Body>
         {showFooter && (
           <BootstrapModal.Footer>
-            <Button variant="secondary" onClick={onClose}>
+            <Button
+              variant="secondary"
+              onClick={onClose}
+              disabled={closeButtonDisabled}
+            >
               {closeButtonText}
             </Button>
             {onSave && (
-              <Button variant="primary" onClick={onSave}>
+              <Button
+                variant="primary"
+                onClick={onSave}
+                disabled={saveButtonDisabled}
+              >
                 {saveButtonText}
               </Button>
             )}

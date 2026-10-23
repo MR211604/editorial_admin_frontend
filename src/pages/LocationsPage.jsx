@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import LocationForm from "../components/locations/LocationForm";
 import Modal from "../components/ui/modal/Modal";
 import { useLocationMutations, useLocations } from "../hooks/useLocations";
+import { useDebounce } from "../hooks/utils/useDebounce";
 
 const EMPTY_LOCATIONS = [];
 
@@ -13,16 +14,17 @@ export default function LocationsPage() {
   const [locationToToggle, setLocationToToggle] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const locations = response?.data || EMPTY_LOCATIONS;
 
   const filteredLocations = useMemo(() => {
-    const query = search.trim().toLocaleLowerCase();
+    const query = debouncedSearch.trim().toLocaleLowerCase();
     return locations.filter((location) =>
       `${location.name} ${location.address} ${location.mapsQuery}`
         .toLocaleLowerCase()
         .includes(query),
     );
-  }, [locations, search]);
+  }, [locations, debouncedSearch]);
 
   const defaultSortOrder =
     locations.reduce(

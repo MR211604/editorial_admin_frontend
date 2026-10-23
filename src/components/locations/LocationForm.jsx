@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -24,6 +24,9 @@ export default function LocationForm({
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
   const [logoError, setLogoError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitLock = useRef(false);
+  const isFormSaving = isSaving || isSubmitting;
   const {
     register,
     handleSubmit,
@@ -63,11 +66,15 @@ export default function LocationForm({
   }, [logoFile]);
 
   const onSubmit = async (values) => {
+    if (submitLock.current) return;
+
     if (!location && !logoFile) {
       setLogoError("Debes seleccionar un logo.");
       return;
     }
 
+    submitLock.current = true;
+    setIsSubmitting(true);
     const locationData = {
       ...values,
       state: Number(values.state),
@@ -99,6 +106,9 @@ export default function LocationForm({
       } else {
         toast.error(error.message || "Error guardando la ubicación");
       }
+    } finally {
+      submitLock.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -110,8 +120,10 @@ export default function LocationForm({
       onClose={onClose}
       title={location?.idLocation ? "Editar ubicación" : "Agregar ubicación"}
       onSave={handleSubmit(onSubmit)}
-      saveButtonText={isSaving ? "Guardando..." : "Guardar ubicación"}
+      saveButtonText={isFormSaving ? "Guardando..." : "Guardar ubicación"}
       closeButtonText="Cancelar"
+      saveButtonDisabled={isFormSaving}
+      closeButtonDisabled={isFormSaving}
       size="lg"
       showFooter
     >
@@ -121,7 +133,7 @@ export default function LocationForm({
           <Form.Control
             type="text"
             isInvalid={!!errors.name}
-            disabled={isSaving}
+            disabled={isFormSaving}
             {...register("name", {
               required: "El nombre es obligatorio",
               maxLength: { value: 255, message: "Máximo 255 caracteres" },
@@ -138,7 +150,7 @@ export default function LocationForm({
             as="textarea"
             rows={2}
             isInvalid={!!errors.address}
-            disabled={isSaving}
+            disabled={isFormSaving}
             {...register("address", {
               required: "La dirección es obligatoria",
               maxLength: { value: 500, message: "Máximo 500 caracteres" },
@@ -154,7 +166,7 @@ export default function LocationForm({
           <Form.Control
             type="text"
             isInvalid={!!errors.mapsQuery}
-            disabled={isSaving}
+            disabled={isFormSaving}
             {...register("mapsQuery", {
               required: "El término de búsqueda es obligatorio",
               maxLength: { value: 500, message: "Máximo 500 caracteres" },
@@ -175,7 +187,7 @@ export default function LocationForm({
               type="number"
               min="0"
               isInvalid={!!errors.sort_order}
-              disabled={isSaving}
+              disabled={isFormSaving}
               {...register("sort_order", {
                 required: "El orden es obligatorio",
                 valueAsNumber: true,
@@ -190,7 +202,7 @@ export default function LocationForm({
           <Form.Group className="col-md-4 mb-3">
             <Form.Label>Estado</Form.Label>
             <Form.Select
-              disabled={isSaving}
+              disabled={isFormSaving}
               {...register("state", { setValueAs: (value) => Number(value) })}
             >
               <option value={1}>Visible</option>
@@ -218,7 +230,7 @@ export default function LocationForm({
           <Form.Control
             type="file"
             accept="image/jpeg,image/png,image/gif,image/webp"
-            disabled={isSaving}
+            disabled={isFormSaving}
             isInvalid={!!logoError}
             onChange={(event) => {
               const file = event.target.files?.[0] || null;

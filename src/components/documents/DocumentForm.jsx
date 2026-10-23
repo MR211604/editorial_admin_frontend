@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -25,6 +25,9 @@ export default function DocumentForm({
   } = useDocumentMutations();
   const [pendingImages, setPendingImages] = useState({});
   const [slugEdited, setSlugEdited] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitLock = useRef(false);
+  const isFormSaving = isSaving || isSubmitting;
   const {
     register,
     handleSubmit,
@@ -60,6 +63,10 @@ export default function DocumentForm({
   };
 
   const onSubmit = async (formValues) => {
+    if (submitLock.current) return;
+
+    submitLock.current = true;
+    setIsSubmitting(true);
     const documentData = { ...formValues };
 
     try {
@@ -96,6 +103,9 @@ export default function DocumentForm({
       } else {
         toast.error(error.message || "Error guardando el documento");
       }
+    } finally {
+      submitLock.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -125,8 +135,10 @@ export default function DocumentForm({
       onClose={onClose}
       title={document?.idDocument ? "Editar documento" : "Crear documento"}
       onSave={handleSubmit(onSubmit)}
-      saveButtonText={isSaving ? "Guardando..." : "Guardar documento"}
+      saveButtonText={isFormSaving ? "Guardando..." : "Guardar documento"}
       closeButtonText="Cancelar"
+      saveButtonDisabled={isFormSaving}
+      closeButtonDisabled={isFormSaving}
       size="xl"
       showFooter
     >
@@ -136,7 +148,7 @@ export default function DocumentForm({
           <Form.Control
             type="text"
             isInvalid={!!errors.title}
-            disabled={isSaving}
+            disabled={isFormSaving}
             {...titleField}
           />
           <Form.Control.Feedback type="invalid">
@@ -152,7 +164,7 @@ export default function DocumentForm({
               <Form.Control
                 type="text"
                 isInvalid={!!errors.slug}
-                disabled={isSaving}
+                disabled={isFormSaving}
                 {...slugField}
                 onChange={(event) => {
                   setSlugEdited(true);
@@ -174,7 +186,7 @@ export default function DocumentForm({
               type="number"
               min="0"
               isInvalid={!!errors.sort_order}
-              disabled={isSaving}
+              disabled={isFormSaving}
               {...register("sort_order", {
                 required: "El orden es obligatorio",
                 valueAsNumber: true,
@@ -188,7 +200,7 @@ export default function DocumentForm({
 
           <Form.Group className="col-md-2 mb-3">
             <Form.Label>Estado</Form.Label>
-            <Form.Select disabled={isSaving} {...register("state")}>
+            <Form.Select disabled={isFormSaving} {...register("state")}>
               <option value={1}>Activo</option>
               <option value={0}>Inactivo</option>
             </Form.Select>
