@@ -25,9 +25,7 @@ import {
 import { Form } from "react-bootstrap";
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useRef } from "react";
-import { useMemo } from "react";
-import { useCallback } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { resolveMdxImageUrls } from "../../helpers/mdxImages";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB en bytes
@@ -41,6 +39,10 @@ export default function MDXEditorField({
   placeholder = "Inserte su contenido aquí",
 }) {
   const editorRef = useRef(null);
+  const [overlayContainer, setOverlayContainer] = useState(null);
+  const setOverlayContainerRef = useCallback((element) => {
+    if (element) setOverlayContainer(element);
+  }, []);
 
   const handleInputImageUpload = useCallback(
     async (image) => {
@@ -115,21 +117,26 @@ export default function MDXEditorField({
   return (
     <Form.Group className="mb-3">
       <Form.Label>{label}</Form.Label>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <MDXEditor
-            ref={editorRef}
-            markdown={resolveMdxImageUrls(field.value || placeholder)}
-            onChange={(value) => {
-              field.onChange(value);
-            }}
-            contentEditableClassName="mdx-editor-content"
-            plugins={plugins}
+      <div ref={setOverlayContainerRef}>
+        {overlayContainer && (
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <MDXEditor
+                ref={editorRef}
+                markdown={resolveMdxImageUrls(field.value || placeholder)}
+                onChange={(value) => {
+                  field.onChange(value);
+                }}
+                contentEditableClassName="mdx-editor-content"
+                overlayContainer={overlayContainer}
+                plugins={plugins}
+              />
+            )}
           />
         )}
-      />
+      </div>
       <Form.Text className="text-muted">{helpText}</Form.Text>
     </Form.Group>
   );

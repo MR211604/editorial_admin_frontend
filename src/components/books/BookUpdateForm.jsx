@@ -8,6 +8,10 @@ import { generateUrlFromTitle } from "../../helpers/generateURL";
 import { getImageURL } from "../../helpers/getImageURL";
 import { useUpdatePublishing } from "../../hooks/usePublishings";
 import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
+import {
+  validateCoverFileSize,
+  validateCoverFileType,
+} from "../../utils/coverValidation";
 import AuthorsTable from "../publishings/AuthorsTable";
 import FormDropdownSelect from "../ui/FormDropdownSelect";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
@@ -268,29 +272,14 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
               </div>
               <Form.Control
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png"
                 isInvalid={!!errors.cover}
                 {...register("cover", {
                   required: false,
-                  // validate: {
-                  //   fileSize: (files) => {
-                  //     return (
-                  //       files[0].size <= 5000000 ||
-                  //       "El archivo debe ser menor a 5MB"
-                  //     );
-                  //   },
-                  //   fileType: (files) => {
-                  //     const validTypes = [
-                  //       "image/jpeg",
-                  //       "image/png",
-                  //       "image/jpg",
-                  //     ];
-                  //     return (
-                  //       validTypes.includes(files[0].type) ||
-                  //       "Solo se permiten imágenes JPG, JPEG o PNG"
-                  //     );
-                  //   },
-                  // },
+                  validate: {
+                    fileSize: validateCoverFileSize,
+                    fileType: validateCoverFileType,
+                  },
                 })}
               />
               <Form.Control.Feedback type="invalid">
