@@ -4,6 +4,7 @@ import CategoryCreate from "../components/categories/CategoryCreate";
 import { useCategories } from "../hooks/useCategories";
 import { useModalCRUD } from "../hooks/utils/useModalCRUD";
 import CategoryChangeStatus from "../components/categories/CategoryChangeStatus";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function CategoriesPage() {
   const { allCategories } = useCategories({ getAll: false });
@@ -153,6 +154,7 @@ export default function CategoriesPage() {
         Bienvenido a la sección de categorías. Aquí puedes encontrar información
         sobre las categorías de libros.
       </p>
+      <UserManualButton fileName="CATEGORIAS.pdf" moduleName="Categorías" />
       <div className="card">
         <div className="card-header">Listado de categorías</div>
         <div className="card-body">

@@ -7,6 +7,7 @@ import Table from "../components/ui/table/Table";
 import { useBanners } from "../hooks/useBanners";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function BannerPage() {
   const {
@@ -54,6 +55,7 @@ export default function BannerPage() {
         principal. Puedes usar enlaces de YouTube, TikTok, Facebook o Instagram;
         solo se permite tener un video activo a la vez.
       </p>
+      <UserManualButton fileName="BANNER.pdf" moduleName="Banner" />
 
       <div className="card">
         <div className="card-header">Listado de Banners</div>

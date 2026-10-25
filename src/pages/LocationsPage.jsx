@@ -4,6 +4,7 @@ import LocationForm from "../components/locations/LocationForm";
 import Modal from "../components/ui/modal/Modal";
 import { useLocationMutations, useLocations } from "../hooks/useLocations";
 import { useDebounce } from "../hooks/utils/useDebounce";
+import UserManualButton from "../components/ui/UserManualButton";
 
 const EMPTY_LOCATIONS = [];
 
@@ -63,6 +64,7 @@ export default function LocationsPage() {
         Administra las tarjetas de puntos de venta que se muestran en la página
         pública de ubicaciones.
       </p>
+      <UserManualButton fileName="UBICACIONES.pdf" moduleName="Ubicaciones" />
 
       <div className="card">
         <div className="card-header">Listado de ubicaciones</div>

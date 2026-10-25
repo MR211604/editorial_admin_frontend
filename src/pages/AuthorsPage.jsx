@@ -7,6 +7,7 @@ import ToolBar from "../components/ui/ToolBar";
 import { useAuthors, useDeleteAuthor } from "../hooks/useAuthors";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function AuthorsPage() {
   const {
@@ -58,6 +59,7 @@ export default function AuthorsPage() {
         Bienvenido a la sección de autores. Aquí puedes encontrar información
         sobre los autores.
       </p>
+      <UserManualButton fileName="AUTORES.pdf" moduleName="Autores" />
 
       <div className="card">
         <div className="card-header">Listado de autores</div>

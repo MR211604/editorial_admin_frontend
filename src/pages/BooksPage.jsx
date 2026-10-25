@@ -11,6 +11,7 @@ import { archivedPublishingSelectValues } from "../components/ui/utils/selectSta
 import { useDeletePublishing } from "../hooks/usePublishings";
 import { usePublishingsPage } from "./hooks/usePublishingsPage";
 import { BOOK_PUBLISHING } from "../constants/common";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function BooksPage() {
   const {
@@ -66,6 +67,7 @@ export default function BooksPage() {
       <h1>Libros</h1>
       <hr />
       <p>Aqui puedes encontrar una lista de todos los libros disponibles.</p>
+      <UserManualButton fileName="LIBROS.pdf" moduleName="Libros" />
 
       <div className="card">
         <div className="card-header">Listado de Libros</div>

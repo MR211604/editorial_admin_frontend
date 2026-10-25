@@ -4,6 +4,7 @@ import { usePage } from "./hooks/usePage";
 import ToolBar from "../components/ui/ToolBar";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import RolCreate from "../components/rol/RolCreate";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function RolPage() {
   const {
@@ -58,6 +59,7 @@ export default function RolPage() {
         Aqui puedes encontrar una lista de todos los roles dentro de la
         plataforma.
       </p>
+      <UserManualButton fileName="ROLES.pdf" moduleName="Roles" />
 
       <div className="card">
         <div className="card-header">Listado de roles</div>

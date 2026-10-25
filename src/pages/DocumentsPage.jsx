@@ -4,6 +4,7 @@ import DocumentForm from "../components/documents/DocumentForm";
 import Modal from "../components/ui/modal/Modal";
 import { useDocumentMutations, useDocuments } from "../hooks/useDocuments";
 import { useDebounce } from "../hooks/utils/useDebounce";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function DocumentsPage() {
   const { documents, isLoading, error } = useDocuments();
@@ -58,6 +59,7 @@ export default function DocumentsPage() {
         Administra los documentos y el contenido MDX que se muestra en la página
         principal de la Editorial.
       </p>
+      <UserManualButton fileName="DOCUMENTOS.pdf" moduleName="Documentos" />
 
       <div className="card">
         <div className="card-header">Listado de documentos</div>

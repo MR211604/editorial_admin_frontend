@@ -7,6 +7,7 @@ import UserUpdate from "../components/users/UserUpdate";
 import { useUsers } from "../hooks/useUsers";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function UserAccountsPage() {
   const {
@@ -52,6 +53,7 @@ export default function UserAccountsPage() {
         Aqui puedes encontrar una lista de todos los usuarios registrados dentro
         de esta plataforma.
       </p>
+      <UserManualButton fileName="USUARIOS.pdf" moduleName="Usuarios" />
 
       <div className="card">
         <div className="card-header">Listado de usuarios</div>

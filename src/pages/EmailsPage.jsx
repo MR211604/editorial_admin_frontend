@@ -4,6 +4,7 @@ import Table from "../components/ui/table/Table";
 import { useEmails } from "../hooks/useEmails";
 import { useDebounce } from "../hooks/utils/useDebounce";
 import { usePage } from "./hooks/usePage";
+import UserManualButton from "../components/ui/UserManualButton";
 
 export default function EmailsPage() {
   const {
@@ -36,6 +37,7 @@ export default function EmailsPage() {
         Aqui puedes encontrar una lista de todos los emails registrados a partir
         de la pagina de contacto de la web principal.
       </p>
+      <UserManualButton fileName="CORREOS.pdf" moduleName="Correos" />
 
       <div className="card">
         <div className="card-header">Listado de correos</div>
