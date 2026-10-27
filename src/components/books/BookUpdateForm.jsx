@@ -7,11 +7,11 @@ import { formatErrors } from "../../helpers/formatErrors";
 import { generateUrlFromTitle } from "../../helpers/generateURL";
 import { getImageURL } from "../../helpers/getImageURL";
 import { useUpdatePublishing } from "../../hooks/usePublishings";
-import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import {
   validateCoverFileSize,
   validateCoverFileType,
 } from "../../utils/coverValidation";
+import { formatISBN, ISBN_FORMAT_REGEX } from "../../utils/isbn";
 import AuthorsTable from "../publishings/AuthorsTable";
 import FormDropdownSelect from "../ui/FormDropdownSelect";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
@@ -46,7 +46,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
       URL: publishing?.data.URL,
       resource_URL: publishing?.data.resource_URL || "-",
       is_new_arrival: publishing?.data.is_new_arrival || 0,
-      cover: publishing?.data.cover || null,
+      cover: null,
     },
   });
 
@@ -61,7 +61,8 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
         URL: publishing?.data.URL,
         resource_URL: publishing?.data.resource_URL || "-",
         is_new_arrival: publishing.data.is_new_arrival || 0,
-        cover: publishing?.data.cover || null,
+        // El campo file representa una nueva imagen seleccionada, no la URL actual.
+        cover: null,
       });
     }
   }, [publishing, reset, currentTranslation]);
