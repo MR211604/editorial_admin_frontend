@@ -5,7 +5,7 @@ export default function UserManualButton({ fileName, moduleName }) {
 
   return (
     <a
-      className="btn btn-outline-primary mb-3"
+      className="btn btn-danger mb-3"
       href={`${resourcePath}/manuales_cms/${fileName}`}
       target="_blank"
       rel="noopener noreferrer"
