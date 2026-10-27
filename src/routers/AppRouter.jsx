@@ -2,22 +2,22 @@ import { useContext, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import AuthorsPage from "../pages/AuthorsPage";
-import BooksPage from "../pages/BooksPage";
-import CategoriesPage from "../pages/CategoriesPage";
-import Dashboard from "../pages/Dashboard";
-import MagazinesPage from "../pages/MagazinesPage";
-import RolPage from "../pages/RolPage";
-import UserAccountsPage from "../pages/UserAccountsPage";
 import LoginPage from "../pages/auth/LoginPage";
+import BannerPage from "../pages/BannerPage";
+import BooksPage from "../pages/BooksPage";
 import BookUpdate from "../pages/books/BookUpdate";
+import CategoriesPage from "../pages/CategoriesPage";
 import CategoryUpdate from "../pages/categories/CategoryUpdate";
+import Dashboard from "../pages/Dashboard";
+import DocumentsPage from "../pages/DocumentsPage";
+import EmailsPage from "../pages/EmailsPage";
+import LocationsPage from "../pages/LocationsPage";
+import MagazinesPage from "../pages/MagazinesPage";
 import MagazineArticles from "../pages/magazines/MagazineArticles";
 import MagazineUpdate from "../pages/magazines/MagazineUpdate";
+import RolPage from "../pages/RolPage";
+import UserAccountsPage from "../pages/UserAccountsPage";
 import ProtectedRoute from "./ProtectedRoute";
-import BannerPage from "../pages/BannerPage";
-import EmailsPage from "../pages/EmailsPage";
-import DocumentsPage from "../pages/DocumentsPage";
-import LocationsPage from "../pages/LocationsPage";
 
 export default function AppRouter() {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -66,11 +66,11 @@ export default function AppRouter() {
           <Route index element={<BooksPage />} />
           <Route path="edit/:id" element={<BookUpdate />} />
         </Route>
-        <Route path="magazines">
+        {/* <Route path="magazines">
           <Route index element={<MagazinesPage />} />
           <Route path="edit/:id" element={<MagazineUpdate />} />
           <Route path="articles/:id" element={<MagazineArticles />} />
-        </Route>
+        </Route>*/}
 
         {/* Los editores de publicaciones no pueden entrar a la seccion de categorias */}
         {auth.rol === "Editor de Publicaciones" ? null : (

@@ -33,13 +33,13 @@ export default function Sidebar() {
           Libros
         </CustomLink>
 
-        <CustomLink
+        {/* <CustomLink
           to="/dashboard/magazines"
           icon="bi-journal"
           data-tooltip="Revistas"
         >
           Revistas
-        </CustomLink>
+        </CustomLink>*/}
 
         <CustomLink
           to="/dashboard/authors"
