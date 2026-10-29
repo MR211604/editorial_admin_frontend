@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/admin/", // <- ESTO SE PONE EN PRODUCCION
+  base: "/editorial_cpanel/", // <- ESTO SE PONE EN PRODUCCION
   // base: "/",
   plugins: [react()],
 });
