@@ -16,6 +16,9 @@ import AuthorsTable from "../publishings/AuthorsTable";
 import FormDropdownSelect from "../ui/FormDropdownSelect";
 import SelectPublishingCategories from "../ui/SelectPublishingCategories";
 
+const getResourceURLValue = (resourceURL) =>
+  resourceURL && resourceURL !== "-" ? resourceURL : "";
+
 export default function BookUpdateForm({ publishing, languageShortName }) {
   const authorsTableRef = useRef();
 
@@ -44,7 +47,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
       publish_code: formatISBN(publishing?.data.publish_code || ""),
       category_id: publishing?.data.category_id || undefined,
       URL: publishing?.data.URL,
-      resource_URL: publishing?.data.resource_URL || "-",
+      resource_URL: getResourceURLValue(publishing?.data.resource_URL),
       is_new_arrival: publishing?.data.is_new_arrival || 0,
       cover: null,
     },
@@ -59,7 +62,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
         publish_code: formatISBN(publishing.data.publish_code || ""),
         category_id: publishing.data.category_id || undefined,
         URL: publishing?.data.URL,
-        resource_URL: publishing?.data.resource_URL || "-",
+        resource_URL: getResourceURLValue(publishing?.data.resource_URL),
         is_new_arrival: publishing.data.is_new_arrival || 0,
         // El campo file representa una nueva imagen seleccionada, no la URL actual.
         cover: null,
@@ -76,7 +79,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
     formData.append("publish_date", data.publish_date);
     formData.append("publish_code", data.publish_code);
     formData.append("category_id", data.category_id);
-    formData.append("resource_URL", data.resource_URL);
+    formData.append("resource_URL", data.resource_URL?.trim() || "");
     formData.append("is_new_arrival", data.is_new_arrival);
     formData.append("id", publishing?.data.idPublishing);
     formData.append("publishing_type", publishing?.data.publishing_type);
@@ -318,14 +321,7 @@ export default function BookUpdateForm({ publishing, languageShortName }) {
               <Form.Control
                 type="text"
                 isInvalid={!!errors.resource_URL}
-                {...register("resource_URL", {
-                  required: "La URL del recurso es obligatoria",
-                  minLength: {
-                    value: 3,
-                    message:
-                      "La URL del recurso debe tener al menos 3 caracteres",
-                  },
-                })}
+                {...register("resource_URL")}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.resource_URL?.message}
